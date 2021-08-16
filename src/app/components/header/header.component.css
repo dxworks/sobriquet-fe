@@ -1,0 +1,31 @@
+.header {
+  display: flex;
+  margin-top: 10px;
+}
+
+.menu {
+  flex: 0.5;
+  margin-top: 20px;
+}
+
+.image {
+  flex: 0.5;
+}
+
+.user-icon {
+  margin-top: 20px;
+}
+
+.mat-drawer-container {
+  background: #8F93D8;
+}
+
+.mat-drawer {
+  background: #8F93D8;
+}
+
+.example-sidenav {
+  padding-left: 20px;
+  font-size: large;
+  padding-right: 40px;
+}

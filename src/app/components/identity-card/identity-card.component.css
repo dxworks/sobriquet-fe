@@ -1,0 +1,9 @@
+.example-card {
+  border: 1px solid black;
+  float: left;
+  margin: 1px;
+  padding: 10px 30px;
+  width: 280px;
+  margin-left: 10px;
+  margin-top: 20px;
+}
