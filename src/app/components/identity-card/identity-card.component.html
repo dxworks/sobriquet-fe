@@ -1,0 +1,16 @@
+<mat-card class="example-card">
+  <mat-card-header>
+    <div mat-card-avatar class="example-header-image"></div>
+    <mat-card-title>{{identity.firstName}} {{identity.lastName}}</mat-card-title>
+  </mat-card-header>
+  <img mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" [width]="10">
+  <mat-card-content>
+    <span> Email address: {{identity.email}} </span>
+    <br>
+    <span> Username: {{identity.username}} </span>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-button (click)="deleteIdentity()">DELETE</button>
+  </mat-card-actions>
+</mat-card>
+
