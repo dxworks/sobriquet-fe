@@ -1,5 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {IdentityService} from "../../services/identity.service";
+import {Identity} from "../../data/identity";
 
 @Component({
   selector: 'app-identity-card',
@@ -9,7 +10,7 @@ import {IdentityService} from "../../services/identity.service";
 export class IdentityCardComponent implements OnInit {
 
   @Input()
-  identity: any;
+  identity: Identity;
 
   constructor(private identityService: IdentityService) {}
 

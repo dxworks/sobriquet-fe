@@ -4,7 +4,9 @@
       <mat-icon>menu</mat-icon>
     </button>
     <mat-menu #menu="matMenu">
-      <button mat-menu-item>Home</button>
+      <button mat-menu-item (click)="goTo('/home')">Home</button>
+      <button mat-menu-item (click)="goTo('/teams')">Teams</button>
+      <button mat-menu-item (click)="goTo('/engineers')">Engineers</button>
     </mat-menu>
   </div>
 

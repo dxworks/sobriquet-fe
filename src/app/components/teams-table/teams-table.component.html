@@ -1,0 +1,48 @@
+<div class="example-container mat-elevation-z8">
+  <div class="example-header">
+    <mat-form-field>
+      <input matInput (keyup)="applyFilter($event)" placeholder="Filter">
+    </mat-form-field>
+  </div>
+
+  <mat-table #table [dataSource]="teams">
+    <ng-container matColumnDef="name">
+      <mat-header-cell *matHeaderCellDef> Team name</mat-header-cell>
+      <mat-cell *matCellDef="let team"> {{team.name}} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="description">
+      <mat-header-cell *matHeaderCellDef> Description</mat-header-cell>
+      <mat-cell *matCellDef="let team"> {{team.description}} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="members">
+      <mat-header-cell *matHeaderCellDef> Members</mat-header-cell>
+      <mat-cell *matCellDef="let team">
+        <mat-chip-list
+          cdkDropList
+          class="mt-5 mb-5"
+          cdkDropListOrientation="horizontal">
+          <mat-chip *ngFor="let engineer of getTeamEngineers(team)">
+            {{engineer.firstName}} {{engineer.lastName}}
+          </mat-chip>
+        </mat-chip-list>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <mat-header-cell *matHeaderCellDef alignment="center"> Actions</mat-header-cell>
+      <mat-cell *matCellDef="let team">
+        <button mat-button (click)="addEngineerToTeam(team)">
+          <mat-icon>group_add</mat-icon>
+        </button>
+        <button mat-button (click)="deleteTeam(team)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+  </mat-table>
+</div>
