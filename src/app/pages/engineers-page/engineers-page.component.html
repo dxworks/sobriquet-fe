@@ -3,4 +3,8 @@
   <mat-icon>add</mat-icon>
   Add a new engineer
 </button>
-<app-engineer [engineers]="engineers"></app-engineer>
+<app-engineer
+  [engineers]="engineers"
+  (engineerDeletedEventEmitter)="getData()"
+  (teamLinkedEventEmitter)="getData()">
+</app-engineer>

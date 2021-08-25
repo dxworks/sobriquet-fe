@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Engineer} from "../../data/engineer";
 
 @Component({
@@ -10,6 +10,10 @@ export class EngineerComponent implements OnInit {
 
   @Input()
   engineers: Engineer[] = [];
+  @Output()
+  engineerDeletedEventEmitter = new EventEmitter();
+  @Output()
+  teamLinkedEventEmitter = new EventEmitter();
   constructor() { }
 
   ngOnInit(): void {}

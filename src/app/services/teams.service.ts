@@ -18,7 +18,7 @@ export class TeamsService {
     return this.httpClient.post(`${environment.apiUrl}/addTeam`, team);
   }
 
-  deleteTeam(id: number){
+  deleteTeam(id: string){
     return this.httpClient.delete(`${environment.apiUrl}/deleteTeam/${id}`);
   }
 }

@@ -21,6 +21,9 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .mb-5{
   margin-bottom: 5px;
 }
+.ml-25p{
+  margin-left: 25%!important;
+}
 .ml-45p{
   margin-left: 45%!important;
 }

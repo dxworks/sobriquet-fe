@@ -1,2 +1,9 @@
 <app-header></app-header>
-<app-teams-table [teams]="teams"></app-teams-table>
+<button mat-button class="white ml-45p mt-40" (click)="openDialog()">
+  <mat-icon>add</mat-icon>
+  Create a new team
+</button>
+<app-teams-table [teams]="teams"
+                 (teamDeleted)="getData()"
+                 (teamEdited)="getData()">
+</app-teams-table>
