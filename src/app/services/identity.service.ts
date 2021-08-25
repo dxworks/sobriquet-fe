@@ -11,7 +11,7 @@ export class IdentityService {
   constructor(private httpClient: HttpClient) {}
 
   getAllIdentities(){
-    return this.httpClient.get<any[]>(`${environment.apiUrl}/getAllIdentities`);
+    return this.httpClient.get<any[]>(`${environment.apiUrl}/identities`);
   }
 
   getIdentity(firstname: string, lastname: string){
@@ -23,6 +23,6 @@ export class IdentityService {
   }
 
   addIdentity(identity: Identity){
-    return this.httpClient.post(`${environment.apiUrl}/identity`, identity);
+    return this.httpClient.post(`${environment.apiUrl}/addIdentity`, identity);
   }
 }

@@ -11,11 +11,11 @@ export class TeamsService {
   constructor(private httpClient: HttpClient) { }
 
   getAllTeams(){
-    return this.httpClient.get<any>(`${environment.apiUrl}/getAllTeams`);
+    return this.httpClient.get<any>(`${environment.apiUrl}/teams`);
   }
 
   addTeam(team: Team){
-    return this.httpClient.post(`${environment.apiUrl}/teams`, team);
+    return this.httpClient.post(`${environment.apiUrl}/addTeam`, team);
   }
 
   deleteTeam(id: number){
