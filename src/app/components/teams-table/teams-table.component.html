@@ -1,11 +1,11 @@
 <div class="example-container mat-elevation-z8">
   <div class="example-header">
     <mat-form-field>
-      <input matInput (keyup)="applyFilter($event)" placeholder="Filter">
+      <input matInput (keyup)="handleInput($event)" placeholder="Filter">
     </mat-form-field>
   </div>
 
-  <mat-table #table [dataSource]="teams">
+  <mat-table #table [dataSource]="dataSource">
     <ng-container matColumnDef="name">
       <mat-header-cell *matHeaderCellDef> Team name</mat-header-cell>
       <mat-cell *matCellDef="let team"> {{team.name}} </mat-cell>
@@ -33,7 +33,7 @@
     <ng-container matColumnDef="actions">
       <mat-header-cell *matHeaderCellDef alignment="center"> Actions</mat-header-cell>
       <mat-cell *matCellDef="let team">
-        <button mat-button (click)="addEngineerToTeam(team)">
+        <button mat-button (click)="openDialog(team)">
           <mat-icon>group_add</mat-icon>
         </button>
         <button mat-button (click)="deleteTeam(team)">

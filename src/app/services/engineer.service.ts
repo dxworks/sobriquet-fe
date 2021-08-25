@@ -21,4 +21,8 @@ export class EngineerService {
   linkTeam(engineerId: string, teamId: string){
     return this.httpClient.put(`${environment.apiUrl}/addTeam/${engineerId}/${teamId}`, null);
   }
+
+  delete(engineerId: String){
+   return this.httpClient.delete(`${environment.apiUrl}/deleteEngineer/${engineerId}`);
+  }
 }

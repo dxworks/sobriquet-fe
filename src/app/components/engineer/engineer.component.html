@@ -1,5 +1,7 @@
 <div *ngFor="let engineer of engineers">
   <app-engineer-card
-  [engineer]="engineer">
+  [engineer]="engineer"
+  (engineerDeletedEventEmitter)="engineerDeletedEventEmitter.emit()"
+  (teamLinkedEventEmitter)="engineerDeletedEventEmitter.emit()">
   </app-engineer-card>
 </div>
