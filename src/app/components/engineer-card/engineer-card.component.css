@@ -1,0 +1,19 @@
+.card-title{
+  font-size: x-large;
+}
+.card-content{
+  font-size: large;
+  margin: 20px;
+}
+.mat-chip{
+  background: rgb(143, 147, 216);
+}
+.mat-card{
+  border: 1px solid black;
+  float: left;
+  margin: 1px;
+  padding: 10px 30px;
+  width: 400px;
+  margin-left: 10px;
+  margin-top: 20px;
+}
