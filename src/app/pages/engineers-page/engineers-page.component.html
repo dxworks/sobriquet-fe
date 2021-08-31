@@ -1,10 +1,15 @@
 <app-header></app-header>
-<button mat-button class="white ml-45p mt-40" (click)="openDialog()">
-  <mat-icon>add</mat-icon>
-  Add a new engineer
-</button>
-<app-engineer
-  [engineers]="engineers"
-  (engineerDeletedEventEmitter)="getData()"
-  (teamLinkedEventEmitter)="getData()">
-</app-engineer>
+<div class="flex h100p">
+  <app-sidebar></app-sidebar>
+  <div class="w-100p">
+    <button mat-button class="white ml-38p mt-40 shadow" (click)="openDialog()">
+      <mat-icon>add</mat-icon>
+      Add a new engineer
+    </button>
+    <app-engineer
+      [engineers]="engineers"
+      (engineerDeletedEventEmitter)="getData()"
+      (teamLinkedEventEmitter)="getData()">
+    </app-engineer>
+  </div>
+</div>

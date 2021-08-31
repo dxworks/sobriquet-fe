@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit, Output, EventEmitter} from '@angular/core';
 import {IdentityService} from "../../services/identity.service";
 import {Identity} from "../../data/identity";
 
@@ -11,14 +11,15 @@ export class IdentityCardComponent implements OnInit {
 
   @Input()
   identity: Identity;
+  @Output()
+  identityDeleted = new EventEmitter();
 
   constructor(private identityService: IdentityService) {}
 
   ngOnInit(): void {}
 
   deleteIdentity(){
-    console.log(this.identity);
-    this.identityService.deleteIdentity(this.identity.id).subscribe();
+    this.identityService.deleteIdentity(this.identity.id).subscribe(() => this.identityDeleted.emit());
   }
 
 }

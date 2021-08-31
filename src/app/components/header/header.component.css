@@ -1,6 +1,8 @@
 .header {
   display: flex;
-  margin-top: 10px;
+  background: #003F63;
+  min-height: 70px;
+  filter: drop-shadow(2px 4px 6px black);
 }
 
 .menu {
@@ -9,7 +11,9 @@
 }
 
 .image {
-  flex: 0.5;
+  margin-left: 45%;
+  flex: 0.75;
+  margin-top: auto
 }
 
 .user-icon {
@@ -28,4 +32,11 @@
   padding-left: 20px;
   font-size: large;
   padding-right: 40px;
+}
+.logo{
+  filter: contrast(0.5);
+}
+.account-button{
+  left: 100%;
+  margin-left: 100%;
 }
