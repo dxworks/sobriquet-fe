@@ -9,24 +9,59 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .grid{
   display: grid!important;
 }
-.mr-10{
-  margin-right: 10px;
-}
+
 .mt-5{
   margin-top: 5px;
 }
 .mt-40{
   margin-top: 40px!important;
 }
+
 .mb-5{
   margin-bottom: 5px;
+}
+
+.mr-auto{
+  margin-right: auto!important;
+}
+.mr-10{
+  margin-right: 10px;
+}
+
+.ml-auto{
+  margin-left: auto!important;
 }
 .ml-25p{
   margin-left: 25%!important;
 }
+.ml-38p{
+  margin-left: 38%!important;
+}
 .ml-45p{
   margin-left: 45%!important;
 }
+
+.h100p{
+  height: 100%;
+}
+
+.w-80p{
+  width: 80%;
+}
+.w-100p{
+  width: 100%;
+}
+
 .white{
   background: white;
+}
+.sortinghat-yellow{
+  color: #F2B138;
+}
+.sortinghat-blue{
+  color: #003F63!important;
+}
+
+.shadow{
+  filter: drop-shadow(2px 4px 6px black);
 }

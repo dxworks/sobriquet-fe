@@ -14,6 +14,10 @@ export class IdentityComponent implements OnInit {
   constructor(private identityService: IdentityService) { }
 
   ngOnInit(): void {
+   this.getData();
+  }
+
+  getData(){
     this.identityService.getAllIdentities().subscribe(response => this.identities = response);
   }
 

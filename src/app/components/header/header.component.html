@@ -1,25 +1,18 @@
 <div class="header">
-  <div class="menu">
-    <button mat-button [matMenuTriggerFor]="menu">
-      <mat-icon>menu</mat-icon>
-    </button>
-    <mat-menu #menu="matMenu">
-      <button mat-menu-item (click)="goTo('/home')">Home</button>
-      <button mat-menu-item (click)="goTo('/teams')">Teams</button>
-      <button mat-menu-item (click)="goTo('/engineers')">Engineers</button>
-    </mat-menu>
-  </div>
-
   <div class="image">
-    <img src="../../../assets/logo.png" width="10%" (click)="goToHomePage()">
+    <img src="../../../assets/logo-yellow.png" width="10%" (click)="goToHomePage()" class="logo">
+    <img src="../../../assets/logo2.png" height="60px">
   </div>
 
   <div class="user-icon">
-    <button mat-button [matMenuTriggerFor]="userActions">
-      <mat-icon>account_circle</mat-icon>
+    <button mat-button [matMenuTriggerFor]="userActions" class="account-button">
+      <mat-icon class="sortinghat-yellow">account_circle</mat-icon>
     </button>
     <mat-menu #userActions="matMenu">
-      <button mat-menu-item (click)="logOut()">Log out</button>
+      <button mat-menu-item (click)="logOut()">
+        <mat-icon>exit_to_app</mat-icon>
+        Log out
+      </button>
     </mat-menu>
   </div>
 </div>
