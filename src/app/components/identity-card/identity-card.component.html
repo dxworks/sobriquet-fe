@@ -3,7 +3,7 @@
     <div mat-card-avatar class="example-header-image"></div>
     <mat-card-title>{{identity.firstName}} {{identity.lastName}}</mat-card-title>
   </mat-card-header>
-  <img mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" [width]="10">
+  <img mat-card-image [src]="identity.avatar" [width]="10">
   <mat-card-content>
     <span> Email address: {{identity.email}} </span>
     <br>

@@ -7,6 +7,7 @@ import {
 } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import {AuthService} from "../services/auth.service";
+import {GithubService} from "../services/ToolsService/github.service";
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
@@ -14,7 +15,7 @@ export class AuthInterceptor implements HttpInterceptor {
   constructor(private authService: AuthService) {}
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-    if (this.authService.authToken) {
+    if (this.authService.authToken && !request.url.includes('github')) {
         request = request.clone({setHeaders: {Authorization: `Basic ${this.authService.authToken}`}});
     }
     return next.handle(request);

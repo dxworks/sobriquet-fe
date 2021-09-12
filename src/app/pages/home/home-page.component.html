@@ -1,5 +1,11 @@
 <app-header></app-header>
 <div class="flex h100p">
   <app-sidebar></app-sidebar>
-  <app-identity class="content"></app-identity>
+  <div class="w-100p">
+    <button mat-button class="white ml-38p mt-40 shadow" (click)="openDialog()">
+      <mat-icon>search</mat-icon>
+      Github
+    </button>
+  <app-identity class="content" [identities]="identities" (identityDeleted)="getData()"></app-identity>
+  </div>
 </div>

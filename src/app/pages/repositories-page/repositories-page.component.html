@@ -1,0 +1,11 @@
+<app-header></app-header>
+<div class="flex h100p">
+  <app-sidebar></app-sidebar>
+  <div class="w-100p">
+    <button mat-button class="white ml-38p mt-40 shadow mb-40" (click)="openDialog()">
+      <mat-icon>add</mat-icon>
+      Add a new repository
+    </button>
+    <app-repository [repositories]="repositories"></app-repository>
+  </div>
+</div>

@@ -31,6 +31,10 @@ import {MatSelectModule} from "@angular/material/select";
 import { TeamLinkerPopupComponent } from './components/popups/team-linker-popup/team-linker-popup.component';
 import { NewTeamPopupComponent } from './components/popups/new-team-popup/new-team-popup.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
+import { RepositoryPickerPopupComponent } from './components/popups/repository-picker-popup/repository-picker-popup.component';
+import { RepositoriesPageComponent } from './pages/repositories-page/repositories-page.component';
+import { NewRepositoryPopupComponent } from './components/popups/new-repository-popup/new-repository-popup.component';
+import { RepositoryComponent } from './components/repository/repository.component';
 
 @NgModule({
   declarations: [
@@ -48,7 +52,11 @@ import { SidebarComponent } from './components/sidebar/sidebar.component';
     NewEngineerPopupComponent,
     TeamLinkerPopupComponent,
     NewTeamPopupComponent,
-    SidebarComponent
+    SidebarComponent,
+    RepositoryPickerPopupComponent,
+    RepositoriesPageComponent,
+    NewRepositoryPopupComponent,
+    RepositoryComponent
   ],
   imports: [
     BrowserModule,

@@ -1,6 +1,6 @@
 <div *ngFor="let identity of identities">
   <app-identity-card
   [identity]="identity"
-  (identityDeleted)="getData()">
+  (identityDeleted)="identityDeleted.emit()">
   </app-identity-card>
 </div>

@@ -17,4 +17,10 @@
     <mat-icon class="sortinghat-blue">people</mat-icon>
     Engineers
   </button>
+  <button mat-menu-item class="menu-button sortinghat-blue w-80p"
+          [class.selected]="urlPath === '/repositories'"
+          (click)="goTo('/repositories')">
+    <mat-icon class="sortinghat-blue">markunread_mailbox</mat-icon>
+    Repositories
+  </button>
 </div>
