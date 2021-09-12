@@ -6,11 +6,10 @@ import {AfterViewInit, Component, ElementRef} from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements AfterViewInit{
-  title = 'sortinghat-fe';
   constructor(private elementRef: ElementRef) {
   }
   ngAfterViewInit() {
     this.elementRef.nativeElement.ownerDocument
-      .body.style.backgroundColor = '#C9C9C9';
+      .body.style.backgroundColor = '#FFFFFF';
   }
 }

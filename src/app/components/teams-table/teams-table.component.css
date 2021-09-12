@@ -6,7 +6,7 @@
   width: 95%;
   margin-left: auto;
   margin-right: auto;
-  filter: drop-shadow(2px 4px 6px black);
+  border: 1px solid #FD8947;
 }
 
 .header {
