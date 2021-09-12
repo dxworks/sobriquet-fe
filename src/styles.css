@@ -13,9 +13,6 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .mt-5{
   margin-top: 5px;
 }
-.mt-40{
-  margin-top: 40px!important;
-}
 
 .mb-5{
   margin-bottom: 5px;
@@ -34,12 +31,6 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .ml-25p{
   margin-left: 25%!important;
 }
-.ml-38p{
-  margin-left: 38%!important;
-}
-.ml-45p{
-  margin-left: 45%!important;
-}
 
 .h100p{
   height: 100%;
@@ -51,17 +42,16 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .w-100p{
   width: 100%;
 }
-
-.white{
-  background: white;
+.sortinghat-orange{
+  color: #FD8947;
 }
-.sortinghat-yellow{
-  color: #F2B138;
+.sortinghat-cyan{
+  color: #1FAFA9!important;
 }
-.sortinghat-blue{
-  color: #003F63!important;
+.sortinghat-cyan-bg{
+  background: #1FAFA9;
 }
-
-.shadow{
-  filter: drop-shadow(2px 4px 6px black);
+.add-button{
+  color:white;
+  margin-left: 45%!important;
 }
