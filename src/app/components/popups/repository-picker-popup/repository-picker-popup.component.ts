@@ -40,7 +40,6 @@ export class RepositoryPickerPopupComponent implements OnInit {
   }
 
   onCancelClick(): void {
-    console.log('close');
     this.dialogRef.close();
   }
 

@@ -5,4 +5,5 @@ export interface Identity {
   username: string;
   avatar: string;
   email: string;
+  source: string;
 }

@@ -11,6 +11,9 @@ import {IdentityService} from "../../services/identity.service";
 })
 export class HomePageComponent implements OnInit {
 
+  githubIdentities: Identity[] = [];
+  jiraIdentities: Identity[] = [];
+  jenkinsIdentities: Identity[] =[];
   identities: Identity[] = [];
 
   constructor(public dialog: MatDialog,
@@ -22,6 +25,20 @@ export class HomePageComponent implements OnInit {
 
   getData(){
     this.identityService.getAllIdentities().subscribe(response => this.identities = response);
+    this.githubIdentities = this.getGithubIdentities();
+    this.jiraIdentities
+  }
+
+  getGithubIdentities(){
+    return this.identities.filter(identity => identity.source === 'github');
+  }
+
+  getJiraIdentities(){
+    return this.identities.filter(identity => identity.source === 'jira');
+  }
+
+  getJenkinsIdentities(){
+    return this.identities.filter(identity => identity.source === 'jenkins');
   }
 
   openDialog(){

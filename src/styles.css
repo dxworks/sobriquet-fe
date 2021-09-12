@@ -1,60 +1,101 @@
 /* You can add global styles to this file, and also import other style files */
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html, body {
+  height: 100%;
+}
 
-.flex{
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.flex {
   display: flex;
 }
-.grid{
-  display: grid!important;
+
+.grid {
+  display: grid !important;
 }
 
-.mt-5{
+.mt-5 {
   margin-top: 5px;
 }
 
-.mb-5{
+.mb-5 {
   margin-bottom: 5px;
 }
-.mb-40{
-  margin-bottom: 40px!important;
+
+.mb-40 {
+  margin-bottom: 40px !important;
 }
 
-.mr-auto{
-  margin-right: auto!important;
+.mr-auto {
+  margin-right: auto !important;
 }
-.mr-10{
+
+.mr-10 {
   margin-right: 10px;
 }
 
-.ml-auto{
-  margin-left: auto!important;
-}
-.ml-25p{
-  margin-left: 25%!important;
+.ml-auto {
+  margin-left: auto !important;
 }
 
-.h100p{
+.ml-10p {
+  margin-left: 10%;
+}
+
+.ml-25p {
+  margin-left: 25% !important;
+}
+
+.ml-40p {
+  margin-left: 40% !important;
+}
+
+.h100p {
   min-height: 100%;
 }
 
-.w-80p{
+.w-80p {
   width: 80%;
 }
-.w-100p{
+
+.w-100p {
   width: 100%;
 }
-.sortinghat-orange{
+
+.sortinghat-orange {
   color: #FD8947;
 }
-.sortinghat-cyan{
-  color: #1FAFA9!important;
+
+.sortinghat-orange-bg {
+  background: #FD8947;
+  color: white;
 }
-.sortinghat-cyan-bg{
+
+.sortinghat-cyan {
+  color: #1FAFA9 !important;
+}
+
+.sortinghat-cyan-bg {
   background: #1FAFA9;
+  color: white;
 }
-.add-button{
-  color:white;
-  margin-left: 45%!important;
+
+.add-button {
+  color: white;
+  margin-left: 45% !important;
+}
+
+.font-style-smaller {
+  font: normal normal normal 20px/60px Muli;
+}
+
+.font-style {
+  font: normal normal normal 25px/75px Muli;
+}
+
+.font-style-bigger {
+  font: normal normal bold 30px/35px GT Walsheim Pro;
 }

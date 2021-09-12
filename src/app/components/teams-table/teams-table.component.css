@@ -24,3 +24,8 @@
   overflow: auto;
   max-height: 500px;
 }
+
+.mat-chip{
+  background: #1FAFA9;
+  color: white;
+}
