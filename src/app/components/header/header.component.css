@@ -1,42 +1,49 @@
 .header {
+  height: 100px;
+  border-bottom: 2px solid #DBDDDD;
+  width: 100%;
+  padding-bottom: 40px;
   display: flex;
-  background: #003F63;
-  min-height: 70px;
-  filter: drop-shadow(2px 4px 6px black);
-}
-
-.menu {
-  flex: 0.5;
-  margin-top: 20px;
-}
-
-.image {
-  margin-left: 45%;
-  flex: 0.75;
-  margin-top: auto
 }
 
 .user-icon {
+  width: 20px;
   margin-top: 20px;
 }
 
-.mat-drawer-container {
-  background: #8F93D8;
+.logo {
+  left: 0;
+  top: 0;
+  height: 150px;
+  width: 200px;
 }
 
-.mat-drawer {
-  background: #8F93D8;
+.buttons-container {
+  margin-top: 3%;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-.example-sidenav {
-  padding-left: 20px;
-  font-size: large;
-  padding-right: 40px;
+.menu-button {
+  text-align: center;
+  font: normal normal bold 25px/75px Muli;
+  letter-spacing: 0px;
+  color: #4A4343;
+  opacity: 1;
+  background: white;
+  border: none;
+  margin-right: 25px;
 }
-.logo{
-  filter: contrast(0.5);
+
+.selected {
+  color: #FD8947;
 }
-.account-button{
-  left: 100%;
-  margin-left: 100%;
+
+.menu-button:hover {
+  background: #FD8947;
+  border-radius: 5px;
+}
+
+.icon {
+  margin-top: 4.5%;
 }

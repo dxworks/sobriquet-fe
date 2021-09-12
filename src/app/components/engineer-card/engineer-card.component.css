@@ -6,16 +6,16 @@
   margin: 20px;
 }
 .mat-chip{
-  background: #003F63;
+  background: #1FAFA9;
   color: white;
 }
 .mat-card{
-  border: 1px solid black;
+  border: 1px solid #FD8947;
   float: left;
   margin: 1px;
   padding: 10px 30px;
   width: 470px;
-  margin-left: 50px;
+  margin-left: 10%;
   margin-top: 20px;
   filter: drop-shadow(2px 4px 6px black);
 }

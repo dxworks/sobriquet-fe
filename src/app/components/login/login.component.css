@@ -8,13 +8,14 @@
 }
 .image{
   margin: 40%;
+  margin-left: 20%;
   margin-bottom: 10%;
   margin-top: 20%;
   filter: drop-shadow(2px 4px 6px #3E4754);
 }
 .button{
   display: inline-block;
-  background-color: #003F63;
+  background-color: #FD8947;
   color: #eeeeee;
   text-align: center;
   border: currentColor;
