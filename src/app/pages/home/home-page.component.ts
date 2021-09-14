@@ -26,7 +26,6 @@ export class HomePageComponent implements OnInit {
   getData(){
     this.identityService.getAllIdentities().subscribe(response => this.identities = response);
     this.githubIdentities = this.getGithubIdentities();
-    this.jiraIdentities
   }
 
   getGithubIdentities(){

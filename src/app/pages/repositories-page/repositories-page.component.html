@@ -5,6 +5,6 @@
       <mat-icon>add</mat-icon>
       Add a new repository
     </button>
-    <app-repository [repositories]="repositories"></app-repository>
+    <app-repository [repositories]="repositories" (repositoryDeleted)="getData()"></app-repository>
   </div>
 </div>

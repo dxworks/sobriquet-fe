@@ -1,4 +1,8 @@
 <div *ngFor="let repo of repositories" class="card">
   <mat-card>
-    {{repo.name}}    owned by    {{repo.owner}}</mat-card>
+    {{repo.name}}    owned by    {{repo.owner}}
+    <button mat-button class="add-button sortinghat-cyan-bg font-style-smaller" (click)="deleteRepository(repo.id)">
+      <mat-icon>delete</mat-icon>
+    </button>
+  </mat-card>
 </div>

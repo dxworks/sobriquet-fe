@@ -60,11 +60,11 @@ export class RepositoryPickerPopupComponent implements OnInit {
 
   buildIdentity(collaborator){
     return {
-      firstName: collaborator.login,
-      lastName: collaborator.login,
+      firstName: '',
+      lastName: '',
       username: collaborator.login,
       avatar: collaborator.avatar_url,
-      email: collaborator.login
+      email: ''
     } as Identity;
   }
 }

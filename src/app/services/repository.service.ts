@@ -17,4 +17,8 @@ export class RepositoryService {
   addRepo(repository: Repository){
     return this.httpClient.post(`${environment.apiUrl}/addRepository`, repository);
   }
+
+  deleteRepo(repositoryId: string){
+    return this.httpClient.delete(`${environment.apiUrl}/deleteRepository/${repositoryId}`);
+  }
 }

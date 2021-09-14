@@ -16,7 +16,7 @@
     <div class="grid">
       <div>
         <span class="font-style-bigger sortinghat-orange ml-10p">Github</span>
-        <app-identity class="content" [identities]="githubIdentities" (identityDeleted)="getData()"></app-identity>
+        <app-identity class="content" [identities]="identities" (identityDeleted)="getData()"></app-identity>
       </div>
       <div><span class="font-style-bigger sortinghat-orange ml-10p">Jira</span></div>
       <app-identity class="content" [identities]="jiraIdentities" (identityDeleted)="getData()"></app-identity>

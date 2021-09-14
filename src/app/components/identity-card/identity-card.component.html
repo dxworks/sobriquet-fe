@@ -1,16 +1,20 @@
 <mat-card class="example-card">
   <mat-card-header>
     <div mat-card-avatar class="example-header-image"></div>
-    <mat-card-title>{{identity.firstName}} {{identity.lastName}}</mat-card-title>
+    <mat-card-title
+      *ngIf="identity.firstName && identity.lastName">{{identity.firstName}} {{identity.lastName}}</mat-card-title>
   </mat-card-header>
   <img mat-card-image [src]="identity.avatar" [width]="10">
   <mat-card-content>
-    <span> Email address: {{identity.email}} </span>
+    <span *ngIf="identity.email"> Email address: {{identity.email}} </span>
     <br>
     <span> Username: {{identity.username}} </span>
+    <br><br>
+    <mat-progress-bar mode="determinate" [value]="progressValue"></mat-progress-bar>
   </mat-card-content>
   <mat-card-actions>
     <button mat-button (click)="deleteIdentity()">DELETE</button>
+    <button mat-button (click)="linkIdentity()">LINK IDENTITY</button>
   </mat-card-actions>
 </mat-card>
 

@@ -34,6 +34,8 @@ import { RepositoryPickerPopupComponent } from './components/popups/repository-p
 import { RepositoriesPageComponent } from './pages/repositories-page/repositories-page.component';
 import { NewRepositoryPopupComponent } from './components/popups/new-repository-popup/new-repository-popup.component';
 import { RepositoryComponent } from './components/repository/repository.component';
+import {MatProgressBarModule} from "@angular/material/progress-bar";
+import { ConfirmationPopupComponent } from './components/popups/confirmation-popup/confirmation-popup.component';
 
 @NgModule({
   declarations: [
@@ -54,7 +56,8 @@ import { RepositoryComponent } from './components/repository/repository.componen
     RepositoryPickerPopupComponent,
     RepositoriesPageComponent,
     NewRepositoryPopupComponent,
-    RepositoryComponent
+    RepositoryComponent,
+    ConfirmationPopupComponent
   ],
   imports: [
     BrowserModule,
@@ -72,7 +75,8 @@ import { RepositoryComponent } from './components/repository/repository.componen
     MatDialogModule,
     FormsModule,
     MatSelectModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatProgressBarModule
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true}],
