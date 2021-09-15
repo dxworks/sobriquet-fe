@@ -16,6 +16,11 @@
       (click)="goTo('/engineers')">
       Engineers
     </button>
+    <button class="menu-button"
+            [class.selected]="urlPath === '/repositories'"
+            (click)="goTo('/repositories')">
+      Repositories
+    </button>
   </div>
 
   <div class="icon">

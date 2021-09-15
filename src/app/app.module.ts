@@ -30,6 +30,13 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MatSelectModule} from "@angular/material/select";
 import { TeamLinkerPopupComponent } from './components/popups/team-linker-popup/team-linker-popup.component';
 import { NewTeamPopupComponent } from './components/popups/new-team-popup/new-team-popup.component';
+import { RepositoryPickerPopupComponent } from './components/popups/repository-picker-popup/repository-picker-popup.component';
+import { RepositoriesPageComponent } from './pages/repositories-page/repositories-page.component';
+import { NewRepositoryPopupComponent } from './components/popups/new-repository-popup/new-repository-popup.component';
+import { RepositoryComponent } from './components/repository/repository.component';
+import {MatProgressBarModule} from "@angular/material/progress-bar";
+import { ConfirmationPopupComponent } from './components/popups/confirmation-popup/confirmation-popup.component';
+import {MatSnackBarModule} from "@angular/material/snack-bar";
 
 @NgModule({
   declarations: [
@@ -46,7 +53,12 @@ import { NewTeamPopupComponent } from './components/popups/new-team-popup/new-te
     EngineerCardComponent,
     NewEngineerPopupComponent,
     TeamLinkerPopupComponent,
-    NewTeamPopupComponent
+    NewTeamPopupComponent,
+    RepositoryPickerPopupComponent,
+    RepositoriesPageComponent,
+    NewRepositoryPopupComponent,
+    RepositoryComponent,
+    ConfirmationPopupComponent
   ],
   imports: [
     BrowserModule,
@@ -64,7 +76,9 @@ import { NewTeamPopupComponent } from './components/popups/new-team-popup/new-te
     MatDialogModule,
     FormsModule,
     MatSelectModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatProgressBarModule,
+    MatSnackBarModule
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true}],

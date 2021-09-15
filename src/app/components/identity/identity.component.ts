@@ -1,6 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit, EventEmitter, Output} from '@angular/core';
 import {Identity} from "../../data/identity";
-import {IdentityService} from "../../services/identity.service";
 
 @Component({
   selector: 'app-identity',
@@ -9,16 +8,15 @@ import {IdentityService} from "../../services/identity.service";
 })
 export class IdentityComponent implements OnInit {
 
+  @Input()
   identities: Identity[] = [];
+  @Output()
+  identityDeleted = new EventEmitter()
 
-  constructor(private identityService: IdentityService) { }
-
-  ngOnInit(): void {
-   this.getData();
+  constructor() {
   }
 
-  getData(){
-    this.identityService.getAllIdentities().subscribe(response => this.identities = response);
+  ngOnInit(): void {
   }
 
 }

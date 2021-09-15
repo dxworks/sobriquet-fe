@@ -5,6 +5,7 @@ import {EngineerService} from "../../../services/engineer.service";
 import {Team} from "../../../data/team";
 import {TeamsService} from "../../../services/teams.service";
 import {FormControl} from "@angular/forms";
+import {Affiliation} from "../../../data/affiliation";
 
 @Component({
   selector: 'app-new-engineer-popup',
@@ -29,6 +30,8 @@ export class NewEngineerPopupComponent implements OnInit {
     phone: string;
     position: string;
     teams: string[];
+    affiliations: Affiliation[];
+    email: string
   };
 
   constructor(public dialogRef: MatDialogRef<NewEngineerPopupComponent>,
@@ -39,6 +42,7 @@ export class NewEngineerPopupComponent implements OnInit {
   ngOnInit(): void {
     this.teamsService.getAllTeams().subscribe(response => this.teams = response);
     this.newEngineer.teams = [];
+    this.newEngineer.affiliations = [];
     this.teamsFormControl.valueChanges.subscribe(response => response.forEach(element => {
       if (!this.newEngineer?.teams.includes(element.id)){
         this.newEngineer?.teams.push(element.id);

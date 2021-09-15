@@ -1,0 +1,17 @@
+<h1 mat-dialog-title>Add a new repository</h1>
+<div mat-dialog-content class="grid">
+  <mat-form-field appearance="fill">
+    <mat-label>Repository name</mat-label>
+    <input matInput [(ngModel)]="newRepository.name">
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Owner username</mat-label>
+    <input matInput [(ngModel)]="newRepository.owner">
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onCancelClick()">CANCEL</button>
+  <button mat-button cdkFocusInitial (click)="createRepository()" class="ml-auto">SAVE</button>
+</div>
+

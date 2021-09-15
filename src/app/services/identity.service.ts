@@ -25,4 +25,8 @@ export class IdentityService {
   addIdentity(identity: Identity){
     return this.httpClient.post(`${environment.apiUrl}/addIdentity`, identity);
   }
+
+  updateIdentity(identity: Identity){
+    return this.httpClient.put(`${environment.apiUrl}/editIdentity`, identity);
+  }
 }

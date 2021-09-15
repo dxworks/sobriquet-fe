@@ -1,4 +1,27 @@
 <app-header></app-header>
-<div class="flex h100p">
-  <app-identity class="content"></app-identity>
+<div class="flex h100p content">
+  <div class="w-100p">
+    <button mat-button class="sortinghat-cyan-bg ml-40p search-button font-style-smaller" (click)="openDialog()">
+      <mat-icon>search</mat-icon>
+      Github
+    </button>
+    <button mat-button class="sortinghat-orange-bg search-button font-style-smaller" (click)="openDialog()">
+      <mat-icon>search</mat-icon>
+      Jira
+    </button>
+    <button mat-button class="sortinghat-cyan-bg search-button font-style-smaller" (click)="openDialog()">
+      <mat-icon>search</mat-icon>
+      Jenkins
+    </button>
+    <div class="grid">
+      <div>
+        <span class="font-style-bigger sortinghat-orange ml-10p">Github</span>
+        <app-identity class="content" [identities]="identities" (identityDeleted)="getData()"></app-identity>
+      </div>
+      <div><span class="font-style-bigger sortinghat-orange ml-10p">Jira</span></div>
+      <app-identity class="content" [identities]="jiraIdentities" (identityDeleted)="getData()"></app-identity>
+      <div><span class="font-style-bigger sortinghat-orange ml-10p">Jenkins</span></div>
+      <app-identity class="content" [identities]="jenkinsIdentities" (identityDeleted)="getData()"></app-identity>
+    </div>
+  </div>
 </div>

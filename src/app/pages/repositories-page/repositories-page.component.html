@@ -3,12 +3,8 @@
   <div class="w-100p">
     <button mat-button class="add-button sortinghat-cyan-bg font-style-smaller" (click)="openDialog()">
       <mat-icon>add</mat-icon>
-      Add a new engineer
+      Add a new repository
     </button>
-    <app-engineer
-      [engineers]="engineers"
-      (engineerDeletedEventEmitter)="getData()"
-      (teamLinkedEventEmitter)="getData()">
-    </app-engineer>
+    <app-repository [repositories]="repositories" (repositoryDeleted)="getData()"></app-repository>
   </div>
 </div>
