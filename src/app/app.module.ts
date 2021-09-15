@@ -36,6 +36,7 @@ import { NewRepositoryPopupComponent } from './components/popups/new-repository-
 import { RepositoryComponent } from './components/repository/repository.component';
 import {MatProgressBarModule} from "@angular/material/progress-bar";
 import { ConfirmationPopupComponent } from './components/popups/confirmation-popup/confirmation-popup.component';
+import {MatSnackBarModule} from "@angular/material/snack-bar";
 
 @NgModule({
   declarations: [
@@ -76,7 +77,8 @@ import { ConfirmationPopupComponent } from './components/popups/confirmation-pop
     FormsModule,
     MatSelectModule,
     ReactiveFormsModule,
-    MatProgressBarModule
+    MatProgressBarModule,
+    MatSnackBarModule
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true}],

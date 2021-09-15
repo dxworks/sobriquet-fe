@@ -8,11 +8,7 @@
     </mat-select>
   </mat-form-field>
 
-  <mat-form-field appearance="fill">
-    <mat-label>Github username</mat-label>
-    <input matInput [(ngModel)]="ownerUsername">
-  </mat-form-field>
-
+ <p class="font-style-smaller">Authentication data</p>
   <mat-form-field appearance="fill">
     <mat-label>Email address</mat-label>
     <input matInput [(ngModel)]="emailAddress">
@@ -26,6 +22,6 @@
 </div>
 <div mat-dialog-actions>
   <button mat-button (click)="onCancelClick()">CANCEL</button>
-  <button mat-button cdkFocusInitial (click)="search()">SEARCH</button>
+  <button mat-button cdkFocusInitial (click)="search()" class="ml-auto">SEARCH</button>
 </div>
 

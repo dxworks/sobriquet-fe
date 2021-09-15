@@ -6,6 +6,7 @@ import {Engineer} from "../../data/engineer";
 import {EngineerService} from "../../services/engineer.service";
 import {MatDialog, MatDialogConfig} from "@angular/material/dialog";
 import {ConfirmationPopupComponent} from "../popups/confirmation-popup/confirmation-popup.component";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-identity-card',
@@ -23,10 +24,13 @@ export class IdentityCardComponent implements OnInit {
 
   progressValue: number;
 
+  linked = false;
+
   constructor(public dialog: MatDialog,
               private identityService: IdentityService,
               private linkerService: LinkerService,
-              private engineerService: EngineerService) {
+              private engineerService: EngineerService,
+              private snackBar: MatSnackBar) {
   }
 
   ngOnInit(): void {
@@ -37,8 +41,10 @@ export class IdentityCardComponent implements OnInit {
   setProgressNumber() {
     if (!this.identity.firstName && !this.identity.lastName) {
       this.progressValue = 35;
+      this.linked = false;
     } else {
       this.progressValue = 100;
+      this.linked = true;
     }
   }
 
@@ -51,6 +57,8 @@ export class IdentityCardComponent implements OnInit {
     if (engineer) {
       this.progressValue = 85;
       this.openConfirmationDialog(engineer);
+    } else {
+      this.openSnackBar('Looks like this identity cannot be linked to any engineer', 'OK');
     }
   }
 
@@ -64,6 +72,7 @@ export class IdentityCardComponent implements OnInit {
       if (result) {
         this.completeIdentityData(result);
         this.progressValue = 100;
+        this.linked = true;
       }
     });
   }
@@ -73,6 +82,12 @@ export class IdentityCardComponent implements OnInit {
     this.identity.lastName = engineer.lastName;
     this.identity.email = engineer.email;
     this.identityService.updateIdentity(this.identity).subscribe();
+  }
+
+  openSnackBar(message: string, action: string) {
+    this.snackBar.open(message, action, {
+      duration: 2000,
+    });
   }
 
 }

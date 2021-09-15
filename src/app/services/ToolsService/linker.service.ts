@@ -11,6 +11,9 @@ export class LinkerService {
   }
 
   linkIdentity(engineers: Engineer[], identity: Identity) {
-    return engineers.find(engineer => identity.username.includes(engineer.lastName.toLowerCase()) || identity.username.includes(engineer.firstName.toLowerCase()));
+    return engineers.find(engineer => identity.username.includes(engineer.lastName.toLowerCase())
+      || identity.username.includes(engineer.firstName.toLowerCase())
+      || identity.username.toLowerCase().includes(engineer.firstName.toLowerCase())
+      || identity.username.toLowerCase().includes(engineer.lastName.toLowerCase()));
   }
 }

@@ -8,3 +8,7 @@
   font: normal normal bold 20px/40px Muli;
   letter-spacing: 2px;
 }
+.delete-button{
+  left: 40%;
+  position: absolute;
+}

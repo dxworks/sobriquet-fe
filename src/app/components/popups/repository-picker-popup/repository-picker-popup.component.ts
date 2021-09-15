@@ -44,7 +44,7 @@ export class RepositoryPickerPopupComponent implements OnInit {
   }
 
   search() {
-    this.githubService.getCollaborators(this.ownerUsername, this.selectedRepository.name, this.emailAddress, this.token)
+    this.githubService.getCollaborators(this.selectedRepository.owner, this.selectedRepository.name, this.emailAddress, this.token)
       .subscribe(response => {
         this.collaborators = response;
         this.collaborators.forEach(collaborator => {
