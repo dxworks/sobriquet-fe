@@ -1,0 +1,15 @@
+<h1 mat-dialog-title class="font-style">Upload JSON</h1>
+<div mat-dialog-content class="grid">
+  <div class="file-upload">
+    <div class="button-wrap">
+      <label class="button" for="upload">Upload File</label>
+      <input id="upload" type="file" (change)="upload($event)">
+      <p *ngIf="selectedJSON">{{selectedJSON.name}}</p>
+    </div>
+  </div>
+  <span class="font-style-smaller ml-25p">Or select from <a (click)="goToArchive()">archive</a></span>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="closePopup()">REJECT</button>
+  <button mat-button cdkFocusInitial (click)="import()" class="ml-auto">IMPORT</button>
+</div>

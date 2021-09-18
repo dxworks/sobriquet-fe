@@ -1,0 +1,12 @@
+<app-header></app-header>
+<div class="content">
+  <div *ngFor="let file of files" class="ml-10p grid">
+    <a [href]="file.url">
+      <img src="assets/files.png" width="100px">
+    </a>
+    <span class="font-style">{{file.filename}}</span>
+    <a *ngIf="selectionEnabled" (click)="chooseFile(file)">
+      <mat-icon class="ml-40p">cloud_upload</mat-icon>
+    </a>
+  </div>
+</div>
