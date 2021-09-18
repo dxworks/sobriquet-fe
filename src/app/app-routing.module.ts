@@ -6,13 +6,15 @@ import {AuthGuard} from "./providers/auth.guard";
 import {TeamsPageComponent} from "./pages/teams-page/teams-page.component";
 import {EngineersPageComponent} from "./pages/engineers-page/engineers-page.component";
 import {RepositoriesPageComponent} from "./pages/repositories-page/repositories-page.component";
+import {ArchiveComponent} from "./pages/archive/archive.component";
 
 const routes: Routes = [
   {path: '', component: LoginComponent},
   {path: 'home', component: HomePageComponent, canActivate: [AuthGuard]},
   {path: 'teams', component: TeamsPageComponent, canActivate: [AuthGuard]},
   {path: 'engineers', component: EngineersPageComponent, canActivate: [AuthGuard]},
-  {path: 'repositories', component: RepositoriesPageComponent, canActivate: [AuthGuard]}
+  {path: 'repositories', component: RepositoriesPageComponent, canActivate: [AuthGuard]},
+  {path: 'archive', component: ArchiveComponent, canActivate: [AuthGuard]}
 ]
 
 @NgModule({
