@@ -1,0 +1,12 @@
+<app-header></app-header>
+<div class="flex h100p content">
+  <div class="w-100p">
+    <div class="grid">
+      <div class="title">
+        {{project.name}}
+      </div>
+      <app-suggestion-table [identities]="identities"></app-suggestion-table>
+      <app-engineers-table></app-engineers-table>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,21 @@
+<app-header></app-header>
+<div class="h100p content">
+  <div class="new-project-container grid">
+    <div class="input">
+      <mat-form-field appearance="fill">
+        <mat-label>Project name</mat-label>
+        <input matInput [(ngModel)]="projectName">
+      </mat-form-field>
+    </div>
+    <div class="file-upload">
+      <div class="button-wrap">
+        <label class="button" for="upload">Upload File</label>
+        <input id="upload" type="file" (change)="upload($event)">
+      </div>
+    </div>
+    <button mat-button class="sortinghat-orange-bg save-button font-style-smaller" (click)="save()">SAVE</button>
+  </div>
+  <div class="flex">
+    <app-project *ngFor="let project of projects" [project]="project"></app-project>
+  </div>
+</div>
