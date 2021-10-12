@@ -17,7 +17,8 @@
 
     <ng-container matColumnDef="position">
       <mat-header-cell *matHeaderCellDef class="font-style-smaller"> Position</mat-header-cell>
-      <mat-cell *matCellDef="let engineer"><input matInput [(ngModel)]="engineer.position">
+      <mat-cell *matCellDef="let engineer"><input matInput [(ngModel)]="engineer.position" *ngIf="!engineer.position">
+        <span *ngIf="engineer.position">{{engineer.position}}</span>
       </mat-cell>
     </ng-container>
 
@@ -30,13 +31,15 @@
 
     <ng-container matColumnDef="city">
       <mat-header-cell *matHeaderCellDef class="font-style-smaller"> City</mat-header-cell>
-      <mat-cell *matCellDef="let engineer"><input matInput [(ngModel)]="engineer.city">
+      <mat-cell *matCellDef="let engineer"><input matInput [(ngModel)]="engineer.city" *ngIf="!engineer.city">
+        <span *ngIf="engineer.city">{{engineer.city}}</span>
       </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="country">
       <mat-header-cell *matHeaderCellDef class="font-style-smaller"> Country</mat-header-cell>
       <mat-cell *matCellDef="let engineer"><input matInput [(ngModel)]="engineer.country">
+        <span *ngIf="engineer.country">{{engineer.country}}</span>
       </mat-cell>
     </ng-container>
 

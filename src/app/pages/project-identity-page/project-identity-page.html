@@ -6,7 +6,7 @@
         {{project.name}}
       </div>
       <app-suggestion-table [identities]="identities" (engineerEmitter)="engineer = $event"></app-suggestion-table>
-      <app-engineers-table [engineer]="engineer"></app-engineers-table>
+      <app-engineers-table [engineer]="engineer" [project]="project"></app-engineers-table>
     </div>
   </div>
 </div>

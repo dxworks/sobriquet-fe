@@ -7,7 +7,10 @@
         <input matInput [(ngModel)]="projectName">
       </mat-form-field>
     </div>
-    <div class="file-upload">
+    <div class="file-upload" appDragDropFileUpload (fileDropped)="fileDropped = true; upload($event)">
+      <img src="assets/upload.png" class="image">
+      <span class="info">Drag and drop file here</span>
+      <span class="info">Or</span>
       <div class="button-wrap">
         <label class="button" for="upload">Upload File</label>
         <input id="upload" type="file" (change)="upload($event)">

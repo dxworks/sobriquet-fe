@@ -1,4 +1,9 @@
-.content{
+.content {
   margin-top: 30px;
   width: 100%;
+}
+
+.toggle-view {
+  margin-left: 92% !important;
+  margin-top: 20px;
 }

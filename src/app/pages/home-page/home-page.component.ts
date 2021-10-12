@@ -12,6 +12,7 @@ export class HomePageComponent implements OnInit {
   selectedJSON: File;
   projectName = '';
   projects: Project[] = [];
+  fileDropped = false;
 
   constructor(private projectService: ProjectService) {
   }
@@ -25,7 +26,7 @@ export class HomePageComponent implements OnInit {
   }
 
   upload($event): void {
-    this.selectedJSON = $event.target.files[0];
+    this.fileDropped ? this.selectedJSON = $event[0] : this.selectedJSON = $event.target.files[0];
   }
 
   save() {

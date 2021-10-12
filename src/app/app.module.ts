@@ -38,6 +38,7 @@ import { ProjectComponent } from './components/project/project.component';
 import { SuggestionTableComponent } from './components/suggestion-table/suggestion-table.component';
 import {MatCheckboxModule} from "@angular/material/checkbox";
 import { EngineersTableComponent } from './components/engineers-table/engineers-table.component';
+import { DragAndDropDirective } from './providers/drag-and-drop.directive';
 
 @NgModule({
   declarations: [
@@ -59,7 +60,8 @@ import { EngineersTableComponent } from './components/engineers-table/engineers-
     HomePageComponent,
     ProjectComponent,
     SuggestionTableComponent,
-    EngineersTableComponent
+    EngineersTableComponent,
+    DragAndDropDirective
   ],
   imports: [
     BrowserModule,
