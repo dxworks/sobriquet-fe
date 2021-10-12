@@ -17,6 +17,9 @@ export class ProjectService {
 
   addProject(projectName: string, projectFiles: File) {
     return this.httpClient.post(`${environment.apiUrl}/addProject/${projectName}`, projectFiles);
+  }
 
+  delete(name: string){
+    return this.httpClient.delete(`${environment.apiUrl}/deleteProject/${name}`);
   }
 }

@@ -29,7 +29,7 @@
     <ng-container matColumnDef="actions">
       <mat-header-cell *matHeaderCellDef alignment="center" class="font-style-smaller"> Actions</mat-header-cell>
       <mat-cell *matCellDef="let identity">
-        <mat-checkbox></mat-checkbox>
+        <mat-checkbox (click)="getSuggestion(identity)"></mat-checkbox>
       </mat-cell>
     </ng-container>
 
@@ -37,7 +37,7 @@
     <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
   </mat-table>
   <div class="grid ml-auto">
-    <button class="sortinghat-orange-bg ml-auto" mat-button>Merge</button>
+    <button class="sortinghat-orange-bg ml-auto" mat-button (click)="merge()">Merge</button>
   </div>
 </div>
 

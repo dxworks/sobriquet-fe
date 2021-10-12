@@ -17,6 +17,10 @@ export class HomePageComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.getProjects();
+  }
+
+  getProjects() {
     this.projectService.getAllProjects().subscribe(response => this.projects = response);
   }
 
@@ -25,6 +29,6 @@ export class HomePageComponent implements OnInit {
   }
 
   save() {
-    this.projectService.addProject(this.projectName, this.selectedJSON).subscribe();
+    this.projectService.addProject(this.projectName, this.selectedJSON).subscribe(() => this.getProjects());
   }
 }

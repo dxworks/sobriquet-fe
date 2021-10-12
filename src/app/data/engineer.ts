@@ -1,7 +1,7 @@
 import {Affiliation} from "./affiliation";
 
 export interface Engineer{
-  id: string;
+  id?: string;
   firstName: string;
   lastName: string;
   position: string;
@@ -11,5 +11,6 @@ export interface Engineer{
   country: string;
   affiliations: Affiliation[];
   email: string;
+  projects: string[];
 
 }

@@ -16,6 +16,6 @@
     <button mat-button class="sortinghat-orange-bg save-button font-style-smaller" (click)="save()">SAVE</button>
   </div>
   <div class="flex">
-    <app-project *ngFor="let project of projects" [project]="project"></app-project>
+    <app-project *ngFor="let project of projects" [project]="project" (projectDeleted)="getProjects()"></app-project>
   </div>
 </div>

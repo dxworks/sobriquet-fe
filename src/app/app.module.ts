@@ -80,7 +80,7 @@ import { EngineersTableComponent } from './components/engineers-table/engineers-
     ReactiveFormsModule,
     MatProgressBarModule,
     MatSnackBarModule,
-    MatCheckboxModule
+    MatCheckboxModule,
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true}],

@@ -1,7 +1,7 @@
 <div (click)="showProjectIdentities()">
-  <mat-card>
-    {{project.name}}
-    <button mat-button class="add-button sortinghat-cyan-bg font-style-smaller delete-button">
+  <mat-card class="flex">
+    <span class="font-style-smaller">{{project.name}}</span>
+    <button mat-button class="add-button sortinghat-cyan-bg font-style-smaller delete-button" (click)="buttonClicked = true; delete()">
       <mat-icon>delete</mat-icon>
     </button>
   </mat-card>

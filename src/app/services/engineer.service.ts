@@ -25,4 +25,8 @@ export class EngineerService {
   delete(engineerId: String){
    return this.httpClient.delete(`${environment.apiUrl}/deleteEngineer/${engineerId}`);
   }
+
+  edit(engineer: Engineer){
+    return this.httpClient.put(`${environment.apiUrl}/editEngineer/${engineer.id}`, engineer);
+  }
 }
