@@ -42,6 +42,11 @@ export class SuggestionTableComponent implements OnInit {
   ngOnInit(): void {
     this.dataSource = new MatTableDataSource(this.identities);
     this.projectService.getAllProjects().subscribe(response => this.projects = response);
+    this.getSuggestions();
+  }
+
+  getSuggestions() {
+   this.suggestions = this.mergeSuggestionService.getMergeSuggestions(this.identities);
   }
 
   handleInput($event) {
@@ -53,23 +58,22 @@ export class SuggestionTableComponent implements OnInit {
     this.dataSource.filter = filterValue;
   }
 
-  getSuggestion(identity: Identity){
-    if (!this.suggestions.includes(identity)){
-      this.suggestions.push(identity);
-    }
+  checkIdentity(identity: Identity){
+      return !!this.suggestions.find(suggestion => suggestion === identity);
+
   }
 
-  merge(){
+  merge() {
     const data: Engineer = this.buildEngineer();
     this.engineersService.add(data).subscribe(() => {
       this.engineerEmitter.emit(data);
       this.updateTable();
-      this.suggestions = [];
+      this.getSuggestions();
     });
   }
 
-  buildEngineer(){
-     return {
+  buildEngineer() {
+    return {
       firstName: this.suggestions[0].firstName,
       lastName: this.suggestions[0].lastName,
       email: this.suggestions[0].email,
@@ -83,7 +87,7 @@ export class SuggestionTableComponent implements OnInit {
     }
   }
 
-  updateTable(){
+  updateTable() {
     this.suggestions.forEach(suggestion => {
       this.identities.splice(this.identities.indexOf(suggestion), 1);
     });

@@ -22,6 +22,8 @@ export class EngineersTableComponent implements OnInit, OnChanges {
 
   displayedColumns = ['firstname', 'lastname', 'email', 'position', 'phone', 'city', 'country', 'actions'];
 
+  valueSaved: Engineer[] = [];
+
   constructor(private engineerService: EngineerService) {
   }
 
@@ -52,6 +54,6 @@ export class EngineersTableComponent implements OnInit, OnChanges {
   }
 
   save(engineer: Engineer) {
-    this.engineerService.edit(engineer).subscribe();
+    this.engineerService.edit(engineer).subscribe(() => this.valueSaved.push(engineer));
   }
 }
