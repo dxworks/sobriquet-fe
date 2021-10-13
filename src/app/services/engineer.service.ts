@@ -11,7 +11,7 @@ export class EngineerService {
   constructor(private httpClient: HttpClient) { }
 
   getAll(){
-    return this.httpClient.get<any>(`${environment.apiUrl}/engineers`);
+    return this.httpClient.get<Engineer[]>(`${environment.apiUrl}/engineers`);
   }
 
   add(engineer: Engineer){

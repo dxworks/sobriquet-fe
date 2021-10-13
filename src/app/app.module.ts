@@ -33,12 +33,12 @@ import {RepositoryComponent} from './components/repository/repository.component'
 import {MatProgressBarModule} from "@angular/material/progress-bar";
 import {ConfirmationPopupComponent} from './components/popups/confirmation-popup/confirmation-popup.component';
 import {MatSnackBarModule} from "@angular/material/snack-bar";
-import { HomePageComponent } from './pages/home-page/home-page.component';
-import { ProjectComponent } from './components/project/project.component';
-import { SuggestionTableComponent } from './components/suggestion-table/suggestion-table.component';
+import {HomePageComponent} from './pages/home-page/home-page.component';
+import {ProjectComponent} from './components/project/project.component';
+import {SuggestionTableComponent} from './components/suggestion-table/suggestion-table.component';
 import {MatCheckboxModule} from "@angular/material/checkbox";
-import { EngineersTableComponent } from './components/engineers-table/engineers-table.component';
-import { DragAndDropDirective } from './providers/drag-and-drop.directive';
+import {EngineersTableComponent} from './components/engineers-table/engineers-table.component';
+import {DragAndDropDirective} from './providers/drag-and-drop.directive';
 
 @NgModule({
   declarations: [

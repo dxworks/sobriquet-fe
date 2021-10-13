@@ -1,8 +1,9 @@
-import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {Component, Input, OnChanges, OnInit, SimpleChanges, Output, EventEmitter} from '@angular/core';
 import {Engineer} from "../../data/engineer";
 import {EngineerService} from "../../services/engineer.service";
 import {Project} from "../../data/project";
 import {MatTableDataSource} from "@angular/material/table";
+import {Identity} from "../../data/identity";
 
 @Component({
   selector: 'app-engineers-table',
@@ -17,12 +18,21 @@ export class EngineersTableComponent implements OnInit, OnChanges {
   engineers: Engineer[] = [];
   @Input()
   project: Project;
+  @Input()
+  suggestions: Identity[] = [];
+
+  @Output()
+  suggestionDenied = new EventEmitter();
+  @Output()
+  suggestionAccepted = new EventEmitter();
 
   dataSource: MatTableDataSource<Engineer>;
 
-  displayedColumns = ['firstname', 'lastname', 'email', 'position', 'phone', 'city', 'country', 'actions'];
+  displayedColumns = ['firstname', 'lastname', 'email', 'position', 'phone', 'city', 'country'];
 
   valueSaved: Engineer[] = [];
+
+  allEngineers: Engineer[] = []
 
   constructor(private engineerService: EngineerService) {
   }
@@ -30,6 +40,7 @@ export class EngineersTableComponent implements OnInit, OnChanges {
   ngOnInit(): void {
     if (this.project) {
       this.engineerService.getAll().subscribe(engineers => {
+        this.allEngineers = engineers;
         engineers.forEach(engineer => {
           if (engineer.projects.some(prname => prname === this.project?.name)) {
             this.engineers.push(engineer);
@@ -37,8 +48,10 @@ export class EngineersTableComponent implements OnInit, OnChanges {
           }
         })
       });
+      this.displayedColumns.push('actions');
     } else {
       this.getTableData();
+      this.valueSaved = this.engineers;
     }
   }
 
@@ -53,7 +66,14 @@ export class EngineersTableComponent implements OnInit, OnChanges {
     this.dataSource = new MatTableDataSource(this.engineers);
   }
 
-  save(engineer: Engineer) {
-    this.engineerService.edit(engineer).subscribe(() => this.valueSaved.push(engineer));
+  acceptSuggestion(engineer: Engineer) {
+    this.engineerService.add(engineer).subscribe(() => this.suggestionAccepted.emit(this.suggestions));
+    this.suggestionAccepted.emit(this.suggestions);
+  }
+
+  denySuggestion(engineer: Engineer) {
+    this.engineers.splice(this.engineers.indexOf(engineer), 1);
+    this.getTableData();
+    this.suggestionDenied.emit(this.suggestions);
   }
 }

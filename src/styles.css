@@ -17,6 +17,10 @@ body {
   display: grid !important;
 }
 
+.block {
+  display: block !important;
+}
+
 .mt-5 {
   margin-top: 5px;
 }

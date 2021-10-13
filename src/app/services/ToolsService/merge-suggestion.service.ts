@@ -82,14 +82,17 @@ export class MergeSuggestionService {
   }
 
   splitData(identities: Identity[]) {
-    const modelIdentity = identities[0];
-    let partialIdentityArray = [modelIdentity];
-    identities.forEach(identity => {
-      if (this.identitiesAreSimilar(modelIdentity, identity)) {
-        partialIdentityArray.push(identity);
-      }
-    });
-    return partialIdentityArray;
+    if (identities) {
+      const modelIdentity = identities[0];
+      let partialIdentityArray = [modelIdentity];
+      identities.forEach(identity => {
+        if (this.identitiesAreSimilar(modelIdentity, identity)) {
+          partialIdentityArray.push(identity);
+        }
+      });
+      return partialIdentityArray;
+    }
+    return [];
   }
 
 }

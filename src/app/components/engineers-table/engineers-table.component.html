@@ -17,38 +17,40 @@
 
     <ng-container matColumnDef="position">
       <mat-header-cell *matHeaderCellDef class="font-style-smaller"> Position</mat-header-cell>
-      <mat-cell *matCellDef="let engineer"><input matInput [(ngModel)]="engineer.position" *ngIf="!valueSaved.includes(engineer)">
-        <span *ngIf="valueSaved.includes(engineer)"  class="font-style-smaller">{{engineer.position}}</span>
+      <mat-cell *matCellDef="let engineer"><input matInput [(ngModel)]="engineer.position" *ngIf="!valueSaved.includes(engineer) && project">
+        <span *ngIf="valueSaved.includes(engineer)"  class="font-style-smaller">{{engineer?.position}}</span>
       </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="phone">
       <mat-header-cell *matHeaderCellDef class="font-style-smaller"> Phone number</mat-header-cell>
-      <mat-cell *matCellDef="let engineer"><input matInput [(ngModel)]="engineer.phone" *ngIf="!valueSaved.includes(engineer)">
-        <span *ngIf="valueSaved.includes(engineer)"  class="font-style-smaller">{{engineer.phone}}</span>
+      <mat-cell *matCellDef="let engineer"><input matInput [(ngModel)]="engineer.phone" *ngIf="!valueSaved.includes(engineer) && project">
+        <span *ngIf="valueSaved.includes(engineer)"  class="font-style-smaller">{{engineer?.phone}}</span>
       </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="city">
       <mat-header-cell *matHeaderCellDef class="font-style-smaller"> City</mat-header-cell>
-      <mat-cell *matCellDef="let engineer"><input matInput [(ngModel)]="engineer.city" *ngIf="!valueSaved.includes(engineer)">
-        <span *ngIf="valueSaved.includes(engineer)"  class="font-style-smaller">{{engineer.city}}</span>
+      <mat-cell *matCellDef="let engineer"><input matInput [(ngModel)]="engineer.city" *ngIf="!valueSaved.includes(engineer) && project">
+        <span *ngIf="valueSaved.includes(engineer)"  class="font-style-smaller">{{engineer?.city}}</span>
       </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="country">
       <mat-header-cell *matHeaderCellDef class="font-style-smaller"> Country</mat-header-cell>
-      <mat-cell *matCellDef="let engineer"><input matInput [(ngModel)]="engineer.country" *ngIf="!valueSaved.includes(engineer)">
-        <span *ngIf="valueSaved.includes(engineer)"  class="font-style-smaller">{{engineer.country}}</span>
+      <mat-cell *matCellDef="let engineer"><input matInput [(ngModel)]="engineer.country" *ngIf="!valueSaved.includes(engineer) && project">
+        <span *ngIf="valueSaved.includes(engineer)"  class="font-style-smaller">{{engineer?.country}}</span>
       </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="actions">
-      <mat-header-cell *matHeaderCellDef alignment="center" class="font-style-smaller"> Save Changes</mat-header-cell>
+      <mat-header-cell *matHeaderCellDef alignment="center" class="font-style-smaller"> Accept/Deny </mat-header-cell>
       <mat-cell *matCellDef="let engineer">
-        <button mat-button (click)="save(engineer)"
-                [disabled]="!(engineer?.country || engineer?.city || engineer?.phone || engineer?.position)">
-          <mat-icon>save</mat-icon>
+        <button mat-button (click)="acceptSuggestion(engineer)" [disabled]="allEngineers.includes(engineer)">
+          <mat-icon>check_circle_outline</mat-icon>
+        </button>
+        <button mat-button (click)="denySuggestion(engineer)"  [disabled]="allEngineers.includes(engineer)">
+          <mat-icon>highlight_off</mat-icon>
         </button>
       </mat-cell>
     </ng-container>
