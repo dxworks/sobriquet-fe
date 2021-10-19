@@ -11,8 +11,8 @@ export class EngineersPageComponent implements OnInit {
 
   engineers: Engineer[] = [];
 
-  tableView = false;
-  cardsView = true;
+  tableView: boolean;
+  cardsView: boolean;
 
   constructor(private engineerService: EngineerService) {
   }
@@ -22,7 +22,11 @@ export class EngineersPageComponent implements OnInit {
   }
 
   getData() {
-    this.engineerService.getAll().subscribe(response => this.engineers = response);
+    this.engineerService.getAll().subscribe(response => {
+      this.engineers = response;
+      this.tableView = true;
+      this.cardsView = false;
+    });
   }
 
   changeView(){

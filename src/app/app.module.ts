@@ -31,7 +31,6 @@ import {RepositoriesPageComponent} from './pages/repositories-page/repositories-
 import {NewRepositoryPopupComponent} from './components/popups/new-repository-popup/new-repository-popup.component';
 import {RepositoryComponent} from './components/repository/repository.component';
 import {MatProgressBarModule} from "@angular/material/progress-bar";
-import {ConfirmationPopupComponent} from './components/popups/confirmation-popup/confirmation-popup.component';
 import {MatSnackBarModule} from "@angular/material/snack-bar";
 import {HomePageComponent} from './pages/home-page/home-page.component';
 import {ProjectComponent} from './components/project/project.component';
@@ -56,7 +55,6 @@ import {DragAndDropDirective} from './providers/drag-and-drop.directive';
     RepositoriesPageComponent,
     NewRepositoryPopupComponent,
     RepositoryComponent,
-    ConfirmationPopupComponent,
     HomePageComponent,
     ProjectComponent,
     SuggestionTableComponent,

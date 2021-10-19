@@ -1,11 +1,28 @@
-.container{
+.container {
   margin: 30px 40px;
   border: 1px solid #FD8947;
   border-radius: 2px;
 }
+
 .mat-column-firstname, .mat-column-lastname {
-  flex: 0 0 12% !important;
+  flex: 0 0 10% !important;
 }
+
 .mat-column-email {
-  flex: 0 0 20%!important;
+  flex: 0 0 15% !important;
+}
+
+.mat-chip {
+  background: #1FAFA9;
+  color: white;
+}
+.dropdown-input {
+  margin-top: 10px;
+  margin-left: 23px;
+  margin-bottom: 10px;
+}
+.action-button{
+  padding: 0px!important;
+  width: 30px!important;
+  min-width: auto;
 }

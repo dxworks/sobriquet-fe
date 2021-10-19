@@ -27,7 +27,7 @@ export class NewTeamPopupComponent implements OnInit {
   }
 
   createTeam(){
-    this.teamsService.addTeam(this.newTeam).subscribe(() => this.onCancelClick());
+    this.teamsService.addTeam(this.newTeam).subscribe(response => this.dialogRef.close(response));
   }
 
 }
