@@ -1,10 +1,6 @@
 <app-header></app-header>
 <div class="flex h100p content">
   <div class="w-100p">
-    <button mat-button class="add-button sortinghat-cyan-bg font-style-smaller" (click)="openDialog()">
-      <mat-icon>add</mat-icon>
-      Add a new engineer
-    </button>
     <app-engineer
       [engineers]="engineers"
       (engineerDeletedEventEmitter)="getData()"

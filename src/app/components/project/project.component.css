@@ -1,0 +1,12 @@
+::ng-deep .mat-card{
+  border: 1px solid #FD8947;
+  float: left;
+  margin: 1px;
+  padding: 10px 30px;
+  width: 150px;
+  margin-left: 20%;
+  margin-top: 20px;
+  margin-right: 40px;
+  filter: drop-shadow(2px 4px 6px lightgray);
+}
+
