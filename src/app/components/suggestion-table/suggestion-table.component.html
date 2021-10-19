@@ -18,18 +18,18 @@
 
     <ng-container matColumnDef="username">
       <mat-header-cell *matHeaderCellDef class="font-style-smaller"> Username</mat-header-cell>
-      <mat-cell *matCellDef="let identity">{{identity.username}}</mat-cell>
+      <mat-cell *matCellDef="let identity"  class="font-style-smaller">{{identity.username}}</mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="email">
       <mat-header-cell *matHeaderCellDef class="font-style-smaller"> Email address</mat-header-cell>
-      <mat-cell *matCellDef="let identity">{{identity.email}}</mat-cell>
+      <mat-cell *matCellDef="let identity"  class="font-style-smaller">{{identity.email}}</mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="actions">
       <mat-header-cell *matHeaderCellDef alignment="center" class="font-style-smaller"> Actions</mat-header-cell>
       <mat-cell *matCellDef="let identity">
-        <mat-checkbox></mat-checkbox>
+        <mat-checkbox [checked]="checkIdentity(identity)"></mat-checkbox>
       </mat-cell>
     </ng-container>
 
@@ -37,7 +37,7 @@
     <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
   </mat-table>
   <div class="grid ml-auto">
-    <button class="sortinghat-orange-bg ml-auto" mat-button>Merge</button>
+    <button class="sortinghat-orange-bg ml-auto" mat-button (click)="merge()">Merge</button>
   </div>
 </div>
 

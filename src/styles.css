@@ -10,11 +10,15 @@ body {
 }
 
 .flex {
-  display: flex;
+  display: flex!important;
 }
 
 .grid {
   display: grid !important;
+}
+
+.block {
+  display: block !important;
 }
 
 .mt-5 {

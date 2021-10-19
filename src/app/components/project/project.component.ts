@@ -1,6 +1,7 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit, Output, EventEmitter} from '@angular/core';
 import {Project} from "../../data/project";
 import {Router} from "@angular/router";
+import {ProjectService} from "../../services/project.service";
 
 @Component({
   selector: 'app-project',
@@ -10,16 +11,28 @@ import {Router} from "@angular/router";
 export class ProjectComponent implements OnInit {
 
   @Input()
-  project: Project
+  project: Project;
 
-  constructor(private router: Router) {
+  @Output()
+  projectDeleted = new EventEmitter()
+
+  buttonClicked = false;
+
+  constructor(private router: Router,
+              private projectService: ProjectService) {
   }
 
   ngOnInit(): void {
   }
 
-  showProjectIdentities(){
-    this.router.navigate(['/identities'], {queryParams: {project: JSON.stringify(this.project)}});
+  showProjectIdentities() {
+    if (!this.buttonClicked) {
+      this.router.navigate(['/identities'], {queryParams: {project: this.project.name}});
+    }
+  }
+
+  delete() {
+    this.projectService.delete(this.project.name).subscribe(() => this.projectDeleted.emit());
   }
 
 }

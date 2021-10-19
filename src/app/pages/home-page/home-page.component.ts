@@ -12,19 +12,24 @@ export class HomePageComponent implements OnInit {
   selectedJSON: File;
   projectName = '';
   projects: Project[] = [];
+  fileDropped = false;
 
   constructor(private projectService: ProjectService) {
   }
 
   ngOnInit(): void {
+    this.getProjects();
+  }
+
+  getProjects() {
     this.projectService.getAllProjects().subscribe(response => this.projects = response);
   }
 
   upload($event): void {
-    this.selectedJSON = $event.target.files[0];
+    this.fileDropped ? this.selectedJSON = $event[0] : this.selectedJSON = $event.target.files[0];
   }
 
   save() {
-    this.projectService.addProject(this.projectName, this.selectedJSON).subscribe();
+    this.projectService.addProject(this.projectName, this.selectedJSON).subscribe(() => this.getProjects());
   }
 }

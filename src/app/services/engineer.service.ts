@@ -11,7 +11,7 @@ export class EngineerService {
   constructor(private httpClient: HttpClient) { }
 
   getAll(){
-    return this.httpClient.get<any>(`${environment.apiUrl}/engineers`);
+    return this.httpClient.get<Engineer[]>(`${environment.apiUrl}/engineers`);
   }
 
   add(engineer: Engineer){
@@ -24,5 +24,9 @@ export class EngineerService {
 
   delete(engineerId: String){
    return this.httpClient.delete(`${environment.apiUrl}/deleteEngineer/${engineerId}`);
+  }
+
+  edit(engineer: Engineer){
+    return this.httpClient.put(`${environment.apiUrl}/editEngineer/${engineer.id}`, engineer);
   }
 }

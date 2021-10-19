@@ -1,11 +1,12 @@
 .file-upload {
   padding: 100px;
-  border: 2px solid #DBDDDD;
+  border: 2px dashed #DBDDDD;
   overflow: hidden;
   width: 500px;
   height: 100px;
   margin-left: auto;
   margin-right: auto;
+  display: grid;
 }
 
 input[type="file"] {
@@ -26,26 +27,47 @@ input[type="file"] {
   font-size: 16px;
   font-weight: bold;
   color: #fff;
-  margin-top: 10%;
-  margin-left: 40%;
+  margin-top: 5%;
+  margin-left: 46%;
 }
 
 .input {
   margin-left: auto;
   margin-right: auto;
   margin-top: 30px;
+  padding-left: 60px;
 }
 
-.save-button{
-  margin-left: auto;
+.save-button {
   margin-right: auto;
   margin-top: 20px;
+  padding-left: 80px;
+  padding-right: 80px;
+  margin-left: 45%;
 }
 
-.new-project-container{
+.new-project-container {
   border: 2px solid #DBDDDD;
   border-top: 0;
   margin-right: 40px;
   margin-left: 40px;
   padding-bottom: 30px;
+}
+
+.image {
+  width: 70px;
+  margin-left: auto;
+  margin-right: auto;
+  top: 35%;
+  position: absolute;
+}
+
+.info {
+  margin-top: 20px;
+  margin-left: auto;
+  margin-right: auto;
+  font-family: Muli;
+  font-size: x-large;
+  padding-left: 75px;
+  padding-top: 20px;
 }

@@ -1,23 +1,107 @@
 <div class="container mat-elevation-z8">
-  <mat-table #table [dataSource]="engineers">
+  <mat-table #table [dataSource]="dataSource">
     <ng-container matColumnDef="firstname">
       <mat-header-cell *matHeaderCellDef class="font-style-smaller"> First name</mat-header-cell>
-      <mat-cell *matCellDef="let engineer" class="font-style-smaller"> {{engineer.firstName}} </mat-cell>
+      <mat-cell *matCellDef="let engineer" class="font-style-smaller"> {{engineer?.firstName}} </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="lastname">
       <mat-header-cell *matHeaderCellDef class="font-style-smaller"> Last name</mat-header-cell>
-      <mat-cell *matCellDef="let engineer" class="font-style-smaller"> {{engineer.lastName}} </mat-cell>
+      <mat-cell *matCellDef="let engineer" class="font-style-smaller"> {{engineer?.lastName}} </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="email">
       <mat-header-cell *matHeaderCellDef class="font-style-smaller"> Email address</mat-header-cell>
-      <mat-cell *matCellDef="let engineer">{{engineer.email}}</mat-cell>
+      <mat-cell *matCellDef="let engineer" class="font-style-smaller">{{engineer?.email}}</mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="position">
       <mat-header-cell *matHeaderCellDef class="font-style-smaller"> Position</mat-header-cell>
-      <mat-cell *matCellDef="let engineer">{{engineer.position}}</mat-cell>
+      <mat-cell *matCellDef="let engineer"><input matInput [(ngModel)]="engineer.position"
+                                                  *ngIf="!valueSaved.includes(engineer) && project">
+        <span *ngIf="valueSaved.includes(engineer)" class="font-style-smaller">{{engineer?.position}}</span>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="phone">
+      <mat-header-cell *matHeaderCellDef class="font-style-smaller"> Phone number</mat-header-cell>
+      <mat-cell *matCellDef="let engineer"><input matInput [(ngModel)]="engineer.phone"
+                                                  *ngIf="!valueSaved.includes(engineer) && project">
+        <span *ngIf="valueSaved.includes(engineer)" class="font-style-smaller">{{engineer?.phone}}</span>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="city">
+      <mat-header-cell *matHeaderCellDef class="font-style-smaller"> City</mat-header-cell>
+      <mat-cell *matCellDef="let engineer"><input matInput [(ngModel)]="engineer.city"
+                                                  *ngIf="!valueSaved.includes(engineer) && project">
+        <span *ngIf="valueSaved.includes(engineer)" class="font-style-smaller">{{engineer?.city}}</span>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="country">
+      <mat-header-cell *matHeaderCellDef class="font-style-smaller"> Country</mat-header-cell>
+      <mat-cell *matCellDef="let engineer"><input matInput [(ngModel)]="engineer.country"
+                                                  *ngIf="!valueSaved.includes(engineer) && project">
+        <span *ngIf="valueSaved.includes(engineer)" class="font-style-smaller">{{engineer?.country}}</span>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="projects">
+      <mat-header-cell *matHeaderCellDef class="font-style-smaller"> Projects</mat-header-cell>
+      <mat-cell *matCellDef="let engineer">
+        <mat-chip-list
+          cdkDropList
+          cdkDropListOrientation="horizontal">
+          <mat-chip *ngFor="let project of engineer.projects">
+            {{project}}
+          </mat-chip>
+        </mat-chip-list>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="teams">
+      <mat-header-cell *matHeaderCellDef class="font-style-smaller"> Teams</mat-header-cell>
+      <mat-cell *matCellDef="let engineer">
+        <mat-chip-list
+          cdkDropList
+          cdkDropListOrientation="horizontal">
+          <mat-chip *ngFor="let team of engineer.teams">
+            {{getTeamName(team)}}
+          </mat-chip>
+        </mat-chip-list>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="teamsAction">
+      <mat-header-cell *matHeaderCellDef class="font-style-smaller"> Link another team</mat-header-cell>
+      <mat-cell *matCellDef="let engineer">
+        <mat-select [(ngModel)]="engineer.teams[0]" (ngModelChange)="selectTeam($event, engineer)">
+          <mat-form-field appearance="fill" class="dropdown-input">
+            <input matInput placeholder="Search or create team" (keyup)="onKey($event)">
+          </mat-form-field>
+          <mat-option *ngIf="filteredTeams.length === 0" (click)="manageSelection($event, engineer)">Create new team
+          </mat-option>
+          <mat-option *ngFor="let team of filteredTeams" [value]="team">{{team.name}}</mat-option>
+        </mat-select>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <mat-header-cell *matHeaderCellDef alignment="center" class="font-style-smaller"> Actions</mat-header-cell>
+      <mat-cell *matCellDef="let engineer">
+        <button mat-button class="action-button" (click)="acceptSuggestion(engineer)"
+                [disabled]="allEngineers.includes(engineer) || disableButtons">
+          <mat-icon>check_circle_outline</mat-icon>
+        </button>
+        <button mat-button class="action-button" (click)="denySuggestion(engineer)"
+                [disabled]="allEngineers.includes(engineer) || disableButtons">
+          <mat-icon>highlight_off</mat-icon>
+        </button>
+        <button mat-button class="action-button" (click)="saveChanges(engineer)">
+          <mat-icon>save</mat-icon>
+        </button>
+      </mat-cell>
     </ng-container>
 
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>

@@ -3,10 +3,10 @@
   float: left;
   margin: 1px;
   padding: 10px 30px;
-  width: 150px;
-  margin-left: 20%;
+  margin-left: 5%;
   margin-top: 20px;
   margin-right: 40px;
   filter: drop-shadow(2px 4px 6px lightgray);
+  cursor: pointer;
+  width: 300px;
 }
-

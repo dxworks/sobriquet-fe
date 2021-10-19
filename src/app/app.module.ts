@@ -31,13 +31,13 @@ import {RepositoriesPageComponent} from './pages/repositories-page/repositories-
 import {NewRepositoryPopupComponent} from './components/popups/new-repository-popup/new-repository-popup.component';
 import {RepositoryComponent} from './components/repository/repository.component';
 import {MatProgressBarModule} from "@angular/material/progress-bar";
-import {ConfirmationPopupComponent} from './components/popups/confirmation-popup/confirmation-popup.component';
 import {MatSnackBarModule} from "@angular/material/snack-bar";
-import { HomePageComponent } from './pages/home-page/home-page.component';
-import { ProjectComponent } from './components/project/project.component';
-import { SuggestionTableComponent } from './components/suggestion-table/suggestion-table.component';
+import {HomePageComponent} from './pages/home-page/home-page.component';
+import {ProjectComponent} from './components/project/project.component';
+import {SuggestionTableComponent} from './components/suggestion-table/suggestion-table.component';
 import {MatCheckboxModule} from "@angular/material/checkbox";
-import { EngineersTableComponent } from './components/engineers-table/engineers-table.component';
+import {EngineersTableComponent} from './components/engineers-table/engineers-table.component';
+import {DragAndDropDirective} from './providers/drag-and-drop.directive';
 
 @NgModule({
   declarations: [
@@ -55,11 +55,11 @@ import { EngineersTableComponent } from './components/engineers-table/engineers-
     RepositoriesPageComponent,
     NewRepositoryPopupComponent,
     RepositoryComponent,
-    ConfirmationPopupComponent,
     HomePageComponent,
     ProjectComponent,
     SuggestionTableComponent,
-    EngineersTableComponent
+    EngineersTableComponent,
+    DragAndDropDirective
   ],
   imports: [
     BrowserModule,
@@ -80,7 +80,7 @@ import { EngineersTableComponent } from './components/engineers-table/engineers-
     ReactiveFormsModule,
     MatProgressBarModule,
     MatSnackBarModule,
-    MatCheckboxModule
+    MatCheckboxModule,
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true}],

@@ -7,7 +7,10 @@
         <input matInput [(ngModel)]="projectName">
       </mat-form-field>
     </div>
-    <div class="file-upload">
+    <div class="file-upload" appDragDropFileUpload (fileDropped)="fileDropped = true; upload($event)">
+      <img src="assets/upload.png" class="image">
+      <span class="info">Drag and drop file here</span>
+      <span class="info">Or</span>
       <div class="button-wrap">
         <label class="button" for="upload">Upload File</label>
         <input id="upload" type="file" (change)="upload($event)">
@@ -15,7 +18,7 @@
     </div>
     <button mat-button class="sortinghat-orange-bg save-button font-style-smaller" (click)="save()">SAVE</button>
   </div>
-  <div class="flex">
-    <app-project *ngFor="let project of projects" [project]="project"></app-project>
+  <div class="block">
+    <app-project *ngFor="let project of projects" [project]="project" (projectDeleted)="getProjects()"></app-project>
   </div>
 </div>

@@ -1,10 +1,18 @@
 <app-header></app-header>
+<button mat-button class="toggle-view add-button sortinghat-cyan-bg font-style-smaller delete-button" (click)="changeView()">
+  <mat-icon *ngIf="tableView">view_comfy</mat-icon>
+  <mat-icon *ngIf="cardsView">view_compact</mat-icon>
+</button>
 <div class="flex h100p content">
-  <div class="w-100p">
+  <div class="w-100p" *ngIf="cardsView">
     <app-engineer
       [engineers]="engineers"
       (engineerDeletedEventEmitter)="getData()"
       (teamLinkedEventEmitter)="getData()">
     </app-engineer>
+  </div>
+  <div class="w-100p" *ngIf="tableView">
+    <app-engineers-table [engineers]="engineers">
+    </app-engineers-table>
   </div>
 </div>
