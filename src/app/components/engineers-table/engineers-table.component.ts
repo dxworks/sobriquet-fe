@@ -6,8 +6,6 @@ import {MatTableDataSource} from "@angular/material/table";
 import {Identity} from "../../data/identity";
 import {Team} from "../../data/team";
 import {TeamsService} from "../../services/teams.service";
-import {NewTeamPopupComponent} from "../popups/new-team-popup/new-team-popup.component";
-import {MatDialog} from "@angular/material/dialog";
 
 @Component({
   selector: 'app-engineers-table',
@@ -24,6 +22,8 @@ export class EngineersTableComponent implements OnInit, OnChanges {
   project: Project;
   @Input()
   suggestions: Identity[] = [];
+  @Input()
+  filter: Project;
 
   @Output()
   suggestionDenied = new EventEmitter();
@@ -44,9 +44,13 @@ export class EngineersTableComponent implements OnInit, OnChanges {
 
   disableButtons = false;
 
+  newTeamName: string = '';
+
+  shiftKeyUp = false;
+
+
   constructor(private engineerService: EngineerService,
-              private teamService: TeamsService,
-              public dialog: MatDialog) {
+              private teamService: TeamsService) {
   }
 
   ngOnInit(): void {
@@ -76,13 +80,20 @@ export class EngineersTableComponent implements OnInit, OnChanges {
       this.engineers.push(this.engineer);
       this.getTableData()
     }
+    if (!changes.filter?.firstChange){
+      this.applyFilter();
+    }
+  }
+
+  applyFilter(){
+    this.dataSource = new MatTableDataSource(this.engineers.filter(engineer => engineer.projects.find(project => project === this.filter.name)));
   }
 
   getTeams() {
     this.teamService.getAllTeams().subscribe(response => this.filteredTeams = this.teams = response);
   }
 
-  updateTableView(){
+  updateTableView() {
     this.engineerService.getAll().subscribe(response => {
       this.engineers = response;
       this.getTableData();
@@ -110,7 +121,7 @@ export class EngineersTableComponent implements OnInit, OnChanges {
   }
 
   selectTeam($event, engineer: Engineer) {
-    $event?.id ? this.linkTeamToEngineer($event.id, engineer.id) : this.openCreateNewTeamPopup(engineer);
+    $event?.id ? this.linkTeamToEngineer($event.id, engineer.id) : this.createTeam(engineer);
   }
 
   linkTeamToEngineer(teamId, engineerId) {
@@ -118,32 +129,40 @@ export class EngineersTableComponent implements OnInit, OnChanges {
   }
 
   onKey($event) {
-    let searchValue = ''
     if ($event.key === 'Backspace') {
-      searchValue = searchValue.substring(0, searchValue.length - 1);
+      this.newTeamName = this.newTeamName.substring(0, this.newTeamName.length - 1);
+    } else if ($event.key === 'Shift') {
+      this.shiftKeyUp = !this.shiftKeyUp;
+    } else if ($event.key === 'CapsLock') {
+      this.shiftKeyUp = false;
     } else {
-      searchValue += $event.key;
+      if (this.shiftKeyUp) {
+        this.newTeamName += $event.key.toUpperCase();
+        this.shiftKeyUp = false;
+      } else {
+        this.newTeamName += $event.key;
+      }
     }
-    this.filteredTeams = this.search(searchValue);
+    this.filteredTeams = this.search();
   }
 
-  search(value: string) {
-    let filter = value.toLowerCase();
+  search() {
+    let filter = this.newTeamName.toLowerCase();
     return this.teams.filter(option => option.name.toLowerCase().includes(filter));
-  }
-
-  openCreateNewTeamPopup(engineer) {
-    const dialogRef = this.dialog.open(NewTeamPopupComponent);
-
-    dialogRef.afterClosed().subscribe(response => {
-      this.getTeams();
-      this.linkTeamToEngineer(response.id, engineer.id);
-      this.updateTableView();
-    });
   }
 
   saveChanges(engineer) {
     this.engineerService.edit(engineer).subscribe(() => this.getTableData());
+  }
+
+  createTeam(engineer: Engineer) {
+    this.teamService.addTeam({name: this.newTeamName, description: ''}).subscribe(response => {
+      let data: any = response;
+      this.getTeams();
+      this.linkTeamToEngineer(data.id, engineer.id);
+      this.updateTableView();
+      this.newTeamName = '';
+    });
   }
 
   manageSelection($event, engineer) {

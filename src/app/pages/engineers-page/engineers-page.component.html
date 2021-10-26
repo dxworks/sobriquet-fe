@@ -1,5 +1,6 @@
 <app-header></app-header>
-<button mat-button class="toggle-view add-button sortinghat-cyan-bg font-style-smaller delete-button" (click)="changeView()">
+<button mat-button class="toggle-view add-button sortinghat-cyan-bg font-style-smaller delete-button"
+        (click)="changeView()">
   <mat-icon *ngIf="tableView">view_comfy</mat-icon>
   <mat-icon *ngIf="cardsView">view_compact</mat-icon>
 </button>
@@ -12,7 +13,14 @@
     </app-engineer>
   </div>
   <div class="w-100p" *ngIf="tableView">
-    <app-engineers-table [engineers]="engineers">
+    <mat-form-field appearance="fill" class="project-selection" >
+      <mat-label>Filter by project</mat-label>
+      <mat-select [(ngModel)]="project" (ngModelChange)="filterEngineersByProject($event)">
+        <mat-option *ngFor="let project of projects" [value]="project">{{project.name}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <app-engineers-table [engineers]="engineers" [filter]="project">
     </app-engineers-table>
   </div>
 </div>

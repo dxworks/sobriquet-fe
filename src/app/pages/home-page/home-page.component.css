@@ -71,3 +71,9 @@ input[type="file"] {
   padding-left: 75px;
   padding-top: 20px;
 }
+
+.filename {
+  position: absolute;
+  top: 63%;
+  left: 60%;
+}

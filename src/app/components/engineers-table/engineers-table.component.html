@@ -80,7 +80,9 @@
           <mat-form-field appearance="fill" class="dropdown-input">
             <input matInput placeholder="Search or create team" (keyup)="onKey($event)">
           </mat-form-field>
-          <mat-option *ngIf="filteredTeams.length === 0" (click)="manageSelection($event, engineer)">Create new team
+          <mat-option *ngIf="filteredTeams.length === 0" (click)="manageSelection($event, engineer)">
+            <mat-icon>add</mat-icon>
+            Create new team ({{newTeamName}})
           </mat-option>
           <mat-option *ngFor="let team of filteredTeams" [value]="team">{{team.name}}</mat-option>
         </mat-select>

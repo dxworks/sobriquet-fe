@@ -1,6 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {Engineer} from "../../data/engineer";
 import {EngineerService} from "../../services/engineer.service";
+import {ProjectService} from "../../services/project.service";
+import {Project} from "../../data/project";
 
 @Component({
   selector: 'app-engineers-page',
@@ -13,12 +15,16 @@ export class EngineersPageComponent implements OnInit {
 
   tableView: boolean;
   cardsView: boolean;
+  projects: Project[] = [];
+  project : Project;
 
-  constructor(private engineerService: EngineerService) {
+  constructor(private engineerService: EngineerService,
+              private projectsService: ProjectService) {
   }
 
   ngOnInit(): void {
     this.getData();
+    this.projectsService.getAllProjects().subscribe(response => this.projects = response);
   }
 
   getData() {
@@ -37,5 +43,9 @@ export class EngineersPageComponent implements OnInit {
        this.tableView = false;
        this.cardsView = true;
      }
+  }
+
+  filterEngineersByProject($event){
+    this.project = $event
   }
 }

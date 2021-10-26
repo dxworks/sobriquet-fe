@@ -7,3 +7,8 @@
   margin-left: 92% !important;
   margin-top: 20px;
 }
+
+.project-selection {
+  margin: 0 40px;
+  width: -webkit-fill-available;
+}
