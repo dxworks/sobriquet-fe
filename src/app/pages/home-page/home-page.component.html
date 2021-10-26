@@ -13,8 +13,8 @@
       <span class="info">Or</span>
       <div class="button-wrap">
         <label class="button" for="upload">Upload File</label>
-        <input id="upload" type="file" (change)="upload($event)">
-        <p class="filename">{{selectedJSON?.name}}</p>
+        <input id="upload" type="file" (change)="upload($event)" multiple>
+        <p class="filename">{{getFileNames()}}</p>
       </div>
     </div>
     <button mat-button class="sortinghat-orange-bg save-button font-style-smaller" (click)="save()">SAVE</button>
