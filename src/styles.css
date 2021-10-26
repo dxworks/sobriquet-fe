@@ -46,7 +46,7 @@ body {
 }
 
 .ml-10p {
-  margin-left: 10%;
+  margin-left: 10%!important;
 }
 
 .ml-25p {
@@ -55,6 +55,10 @@ body {
 
 .ml-40p {
   margin-left: 40% !important;
+}
+
+.ml-80p{
+  margin-left: 80%!important;
 }
 
 .h100p {

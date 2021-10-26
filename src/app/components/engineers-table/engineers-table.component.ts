@@ -25,11 +25,6 @@ export class EngineersTableComponent implements OnInit, OnChanges {
   @Input()
   filter: Project;
 
-  @Output()
-  suggestionDenied = new EventEmitter();
-  @Output()
-  suggestionAccepted = new EventEmitter();
-
   dataSource: MatTableDataSource<Engineer>;
 
   displayedColumns = ['firstname', 'lastname', 'email', 'position', 'phone', 'city', 'country'];
@@ -80,7 +75,7 @@ export class EngineersTableComponent implements OnInit, OnChanges {
       this.engineers.push(this.engineer);
       this.getTableData()
     }
-    if (!changes.filter?.firstChange){
+    if (!changes.filter?.firstChange && !this.project){
       this.applyFilter();
     }
   }
@@ -102,18 +97,6 @@ export class EngineersTableComponent implements OnInit, OnChanges {
 
   getTableData() {
     this.dataSource = new MatTableDataSource(this.engineers);
-  }
-
-  acceptSuggestion(engineer: Engineer) {
-    this.engineerService.add(engineer).subscribe(() => this.suggestionAccepted.emit(this.suggestions));
-    this.suggestionAccepted.emit(this.suggestions);
-    this.disableButtons = true;
-  }
-
-  denySuggestion(engineer: Engineer) {
-    this.engineers.splice(this.engineers.indexOf(engineer), 1);
-    this.getTableData();
-    this.suggestionDenied.emit(this.suggestions);
   }
 
   getTeamName(teamId: string) {

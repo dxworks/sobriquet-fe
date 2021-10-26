@@ -1,11 +1,29 @@
-.container{
+.container {
   margin-left: 40px;
   margin-right: 40px;
   margin-top: 30px;
   border: 1px solid #FD8947;
   border-radius: 2px;
 }
-.header{
+
+.header {
   display: grid;
   margin: 2px 10px;
+}
+
+.table {
+  height: 300px;
+  overflow: auto;
+}
+
+.mat-column-actions{
+  flex: 0 0 5%;
+}
+
+.mat-column-firstname, .mat-column-username, .mat-column-lastname{
+  flex: 0 0 20%;
+}
+
+.mat-column-email{
+  flex: 0 0 30%;
 }

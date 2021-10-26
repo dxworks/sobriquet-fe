@@ -17,8 +17,6 @@ export class ProjectIdentityPage implements OnInit {
   engineers: Engineer[] = [];
   engineer: Engineer;
   suggestions: Identity[] = [];
-  acceptedSuggestions: Identity[] = [];
-  deniedSuggestions: Identity[] = [];
 
   constructor(private activatedRoute: ActivatedRoute, private projectService: ProjectService) {
     this.projectService.getByName(this.activatedRoute.snapshot.queryParams.project).subscribe(response => this.project = response);

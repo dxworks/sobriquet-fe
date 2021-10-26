@@ -1,4 +1,14 @@
-import {Component, Input, OnInit, Output, EventEmitter, OnChanges, SimpleChanges} from '@angular/core';
+import {
+  Component,
+  Input,
+  OnInit,
+  Output,
+  EventEmitter,
+  OnChanges,
+  SimpleChanges,
+  ViewChild,
+  AfterViewInit
+} from '@angular/core';
 import {Identity} from "../../data/identity";
 import {MatTableDataSource} from "@angular/material/table";
 import {MergeSuggestionService} from "../../services/ToolsService/merge-suggestion.service";
@@ -7,20 +17,19 @@ import {Project} from "../../data/project";
 import {EngineerService} from "../../services/engineer.service";
 import {ActivatedRoute} from "@angular/router";
 import {ProjectService} from "../../services/project.service";
+import {MatPaginator} from "@angular/material/paginator";
 
 @Component({
   selector: 'app-suggestion-table',
   templateUrl: './suggestion-table.component.html',
   styleUrls: ['./suggestion-table.component.css']
 })
-export class SuggestionTableComponent implements OnInit, OnChanges {
+export class SuggestionTableComponent implements OnInit, OnChanges, AfterViewInit {
+
+  @ViewChild(MatPaginator) paginator: MatPaginator;
 
   @Input()
   identities: Identity[] = [];
-  @Input()
-  acceptedSuggestions: Identity[] = [];
-  @Input()
-  deniedSuggestions: Identity[] = [];
   @Input()
   project: Project;
 
@@ -37,6 +46,8 @@ export class SuggestionTableComponent implements OnInit, OnChanges {
 
   projects: Project[] = [];
 
+  pagination: number[];
+
   constructor(private mergeSuggestionService: MergeSuggestionService,
               private engineersService: EngineerService,
               private activatedRoute: ActivatedRoute,
@@ -44,25 +55,29 @@ export class SuggestionTableComponent implements OnInit, OnChanges {
   }
 
   ngOnInit(): void {
+    this.sortIdentities();
     this.dataSource = new MatTableDataSource(this.identities);
     this.projectService.getAllProjects().subscribe(response => this.projects = response);
     this.getSuggestions();
   }
 
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
+  }
+
   ngOnChanges(changes: SimpleChanges) {
-    if (!changes.acceptedSuggestions?.firstChange && !changes.deniedSuggestions) {
-      this.updateProjectIdentities();
-    }
     if (changes.project) {
       this.identities = this.project.identities;
     }
-    if (!changes.deniedSuggestions?.firstChange && !changes.acceptedSuggestions) {
-      this.addBackIdentities()
-    }
+  }
+
+  sortIdentities() {
+    this.identities.sort((id1, id2) => id1.firstName.localeCompare(id2.firstName));
   }
 
   getSuggestions() {
     this.suggestions = this.mergeSuggestionService.getMergeSuggestions(this.identities);
+    this.pagination = [this.suggestions.length];
   }
 
   handleInput($event) {
@@ -81,10 +96,20 @@ export class SuggestionTableComponent implements OnInit, OnChanges {
 
   merge() {
     const data: Engineer = this.buildEngineer();
-    this.engineerEmitter.emit(data);
-    this.suggestionsEmitter.emit(this.suggestions);
+    this.engineersService.add(data).subscribe(() => {
+      this.engineerEmitter.emit(data);
+      this.updateProjectIdentities();
+      this.updateTable();
+      this.getSuggestions();
+      this.managePagination();
+    });
+  }
+
+  rejectMerge() {
+    this.updateProjectIdentities();
     this.updateTable();
     this.getSuggestions();
+    this.managePagination();
   }
 
   buildEngineer() {
@@ -106,19 +131,22 @@ export class SuggestionTableComponent implements OnInit, OnChanges {
     this.suggestions.forEach(suggestion => {
       this.identities.splice(this.identities.indexOf(suggestion), 1);
     });
-    this.dataSource = new MatTableDataSource<Identity>(this.identities);
   }
 
   updateProjectIdentities() {
-    this.acceptedSuggestions.forEach(suggestion => {
+    this.suggestions.forEach(suggestion => {
       this.project.identities = this.project.identities.filter(identity => identity.username !== suggestion.username);
     });
     this.projectService.editProject(this.project.name, this.project.identities).subscribe();
   }
 
-  addBackIdentities(){
-    this.deniedSuggestions.forEach(deniedIdentity => this.identities.push(deniedIdentity));
+  managePagination() {
     this.dataSource = new MatTableDataSource<Identity>(this.identities);
+    this.paginator._displayedPageSizeOptions = [this.suggestions.length];
+    setTimeout(
+      () => {
+        this.dataSource.paginator = this.paginator;
+      });
   }
 
 }

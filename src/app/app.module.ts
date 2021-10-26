@@ -38,6 +38,8 @@ import {SuggestionTableComponent} from './components/suggestion-table/suggestion
 import {MatCheckboxModule} from "@angular/material/checkbox";
 import {EngineersTableComponent} from './components/engineers-table/engineers-table.component';
 import {DragAndDropDirective} from './providers/drag-and-drop.directive';
+import {MatPaginatorModule} from "@angular/material/paginator";
+import {MatToolbarModule} from "@angular/material/toolbar";
 
 @NgModule({
   declarations: [
@@ -81,6 +83,8 @@ import {DragAndDropDirective} from './providers/drag-and-drop.directive';
     MatProgressBarModule,
     MatSnackBarModule,
     MatCheckboxModule,
+    MatPaginatorModule,
+    MatToolbarModule
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true}],
