@@ -29,7 +29,7 @@
     <ng-container matColumnDef="actions">
       <mat-header-cell *matHeaderCellDef alignment="center" class="font-style-smaller"> Actions</mat-header-cell>
       <mat-cell *matCellDef="let identity">
-        <mat-checkbox [checked]="checkIdentity(identity)"></mat-checkbox>
+        <mat-checkbox [checked]="checkIdentity(identity)" (change)="manageCheckboxChange($event, identity)" ></mat-checkbox>
       </mat-cell>
     </ng-container>
 
@@ -43,6 +43,7 @@
     </div>
     <mat-paginator [pageSizeOptions]="pagination"
                    pageSize="{{pagination}}"
+                   (page)="changePage($event)"
                    showFirstLastButtons>
     </mat-paginator>
   </mat-toolbar-row>

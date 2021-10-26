@@ -48,6 +48,8 @@ export class SuggestionTableComponent implements OnInit, OnChanges, AfterViewIni
 
   pagination: number[];
 
+  identitiesByCluster = []
+
   constructor(private mergeSuggestionService: MergeSuggestionService,
               private engineersService: EngineerService,
               private activatedRoute: ActivatedRoute,
@@ -58,7 +60,8 @@ export class SuggestionTableComponent implements OnInit, OnChanges, AfterViewIni
     this.sortIdentities();
     this.dataSource = new MatTableDataSource(this.identities);
     this.projectService.getAllProjects().subscribe(response => this.projects = response);
-    this.getSuggestions();
+    this.identitiesByCluster = this.mergeSuggestionService.buildCluster(this.identities);
+    this.getSuggestions(this.identities);
   }
 
   ngAfterViewInit() {
@@ -68,6 +71,7 @@ export class SuggestionTableComponent implements OnInit, OnChanges, AfterViewIni
   ngOnChanges(changes: SimpleChanges) {
     if (changes.project) {
       this.identities = this.project.identities;
+      console.clear();
     }
   }
 
@@ -75,8 +79,8 @@ export class SuggestionTableComponent implements OnInit, OnChanges, AfterViewIni
     this.identities.sort((id1, id2) => id1.firstName.localeCompare(id2.firstName));
   }
 
-  getSuggestions() {
-    this.suggestions = this.mergeSuggestionService.getMergeSuggestions(this.identities);
+  getSuggestions(identities: Identity[]) {
+    this.suggestions = this.mergeSuggestionService.getMergeSuggestions(identities);
     this.pagination = [this.suggestions.length];
   }
 
@@ -91,7 +95,6 @@ export class SuggestionTableComponent implements OnInit, OnChanges, AfterViewIni
 
   checkIdentity(identity: Identity) {
     return !!this.suggestions.find(suggestion => suggestion === identity);
-
   }
 
   merge() {
@@ -100,16 +103,18 @@ export class SuggestionTableComponent implements OnInit, OnChanges, AfterViewIni
       this.engineerEmitter.emit(data);
       this.updateProjectIdentities();
       this.updateTable();
-      this.getSuggestions();
-      this.managePagination();
+      this.getSuggestions(this.identities);
+      this.managePagination(this.identities);
+      this.sortIdentities();
+      this.identitiesByCluster = this.mergeSuggestionService.buildCluster(this.identities);
     });
   }
 
   rejectMerge() {
     this.updateProjectIdentities();
     this.updateTable();
-    this.getSuggestions();
-    this.managePagination();
+    this.getSuggestions(this.identities);
+    this.managePagination(this.identities);
   }
 
   buildEngineer() {
@@ -140,13 +145,26 @@ export class SuggestionTableComponent implements OnInit, OnChanges, AfterViewIni
     this.projectService.editProject(this.project.name, this.project.identities).subscribe();
   }
 
-  managePagination() {
-    this.dataSource = new MatTableDataSource<Identity>(this.identities);
+  managePagination(identities: Identity[]) {
+    this.dataSource = new MatTableDataSource<Identity>(identities);
     this.paginator._displayedPageSizeOptions = [this.suggestions.length];
     setTimeout(
       () => {
         this.dataSource.paginator = this.paginator;
       });
+  }
+
+  changePage($event){
+    this.getSuggestions(this.identitiesByCluster[$event.pageIndex]);
+    this.dataSource = new MatTableDataSource(this.identitiesByCluster[$event.pageIndex]);
+  }
+
+  manageCheckboxChange($event, identity){
+    if ($event.checked) {
+      this.suggestions.push(identity);
+    } else {
+      this.suggestions.splice(this.suggestions.indexOf(identity), 1);
+    }
   }
 
 }

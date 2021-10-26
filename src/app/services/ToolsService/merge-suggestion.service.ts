@@ -95,4 +95,23 @@ export class MergeSuggestionService {
     return [];
   }
 
+  buildCluster(identities){
+    let cluster = [];
+    let identitiesByCluster = [];
+    for (let i = 0 ; i < identities.length ; i++) {
+      if (this.identitiesAreSimilar(identities[i], identities[i + 1])) {
+        if (!cluster.includes(identities[i])) {
+          cluster.push(identities[i]);
+        }
+        if (!cluster.includes(identities[i+1])) {
+          cluster.push(identities[i+1]);
+        }
+      } else {
+        identitiesByCluster.push(cluster);
+        cluster = [];
+      }
+    }
+    return identitiesByCluster;
+  }
+
 }
