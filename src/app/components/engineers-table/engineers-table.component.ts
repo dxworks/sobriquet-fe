@@ -1,4 +1,4 @@
-import {Component, Input, OnChanges, OnInit, SimpleChanges, Output, EventEmitter} from '@angular/core';
+import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 import {Engineer} from "../../data/engineer";
 import {EngineerService} from "../../services/engineer.service";
 import {Project} from "../../data/project";
@@ -6,6 +6,11 @@ import {MatTableDataSource} from "@angular/material/table";
 import {Identity} from "../../data/identity";
 import {Team} from "../../data/team";
 import {TeamsService} from "../../services/teams.service";
+import {ProjectService} from "../../services/project.service";
+import {TagService} from "../../services/tag.service";
+import {Tag} from "../../data/tag";
+import {Role} from "../../data/role";
+import {RoleService} from "../../services/role.service";
 
 @Component({
   selector: 'app-engineers-table',
@@ -27,7 +32,7 @@ export class EngineersTableComponent implements OnInit, OnChanges {
 
   dataSource: MatTableDataSource<Engineer>;
 
-  displayedColumns = ['firstname', 'lastname', 'email', 'position', 'phone', 'city', 'country'];
+  displayedColumns = ['firstname', 'lastname', 'email', 'city', 'country', 'position', 'role', 'roleActions', 'tags', 'tagsAction'];
 
   valueSaved: Engineer[] = [];
 
@@ -37,15 +42,30 @@ export class EngineersTableComponent implements OnInit, OnChanges {
 
   filteredTeams: Team[] = [];
 
-  disableButtons = false;
+  filteredTags: Tag[] = [];
+
+  filteredRoles: Role[] = [];
 
   newTeamName: string = '';
 
+  newTagName: string = '';
+
+  newRoleName: string = '';
+
   shiftKeyUp = false;
+
+  projects: Project[] = [];
+
+  tags: Tag[] = [];
+
+  roles: Role[] = [];
 
 
   constructor(private engineerService: EngineerService,
-              private teamService: TeamsService) {
+              private teamService: TeamsService,
+              private projectService: ProjectService,
+              private tagService: TagService,
+              private roleService: RoleService) {
   }
 
   ngOnInit(): void {
@@ -53,7 +73,7 @@ export class EngineersTableComponent implements OnInit, OnChanges {
       this.engineerService.getAll().subscribe(engineers => {
         this.allEngineers = engineers;
         engineers.forEach(engineer => {
-          if (engineer.projects.some(prname => prname === this.project?.name)) {
+          if (engineer.project ===  this.project?.id) {
             this.engineers.push(engineer);
             this.getTableData();
           }
@@ -67,7 +87,11 @@ export class EngineersTableComponent implements OnInit, OnChanges {
       this.displayedColumns.push('teams');
       this.displayedColumns.push('teamsAction');
       this.getTeams();
+      this.getProjects();
     }
+
+    this.getTags();
+    this.getRoles();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -78,14 +102,6 @@ export class EngineersTableComponent implements OnInit, OnChanges {
     if (!changes.filter?.firstChange && !this.project){
       this.applyFilter();
     }
-  }
-
-  applyFilter(){
-    this.dataSource = new MatTableDataSource(this.engineers.filter(engineer => engineer.projects.find(project => project === this.filter.name)));
-  }
-
-  getTeams() {
-    this.teamService.getAllTeams().subscribe(response => this.filteredTeams = this.teams = response);
   }
 
   updateTableView() {
@@ -99,6 +115,30 @@ export class EngineersTableComponent implements OnInit, OnChanges {
     this.dataSource = new MatTableDataSource(this.engineers);
   }
 
+  applyFilter(){
+    this.dataSource = new MatTableDataSource(this.engineers.filter(engineer => engineer.project === this.filter.id));
+  }
+
+  getTeams() {
+    this.teamService.getAllTeams().subscribe(response => this.filteredTeams = this.teams = response);
+  }
+
+  getTags() {
+    this.tagService.getAllTags().subscribe(response => this.filteredTags = this.tags = response);
+  }
+
+  getRoles() {
+    this.roleService.getAllRoles().subscribe(response => this.filteredRoles = this.roles = response);
+  }
+
+  getProjects(){
+    this.projectService.getAllProjects().subscribe(response => this.projects = response);
+  }
+
+  getEngineerProject(projectId) {
+    return this.projects.find(project => project.id === projectId)?.name;
+  }
+
   getTeamName(teamId: string) {
     return this.teams.find(team => team.id === teamId)?.name;
   }
@@ -107,11 +147,31 @@ export class EngineersTableComponent implements OnInit, OnChanges {
     $event?.id ? this.linkTeamToEngineer($event.id, engineer.id) : this.createTeam(engineer);
   }
 
+  selectTag($event, engineer: Engineer) {
+    $event?.name ? this.linkTagToEngineer($event, engineer) : this.createTag(engineer);
+  }
+
+  selectRole($event, engineer: Engineer) {
+    $event?.name ? this.linkRoleToEngineer($event, engineer) : this.createRole(engineer);
+  }
+
   linkTeamToEngineer(teamId, engineerId) {
     this.engineerService.linkTeam(engineerId, teamId).subscribe(() => this.updateTableView());
   }
 
-  onKey($event) {
+  linkTagToEngineer(tag, engineer, onCreate?) {
+    if (onCreate) {
+      engineer.tags.push(tag);
+    }
+    this.engineerService.edit(engineer).subscribe(() => this.updateTableView());
+  }
+
+  linkRoleToEngineer($event, engineer) {
+    engineer.role = $event.name;
+    this.engineerService.edit(engineer).subscribe(() => this.updateTableView());
+  }
+
+  onKeyTeams($event) {
     if ($event.key === 'Backspace') {
       this.newTeamName = this.newTeamName.substring(0, this.newTeamName.length - 1);
     } else if ($event.key === 'Shift') {
@@ -126,12 +186,58 @@ export class EngineersTableComponent implements OnInit, OnChanges {
         this.newTeamName += $event.key;
       }
     }
-    this.filteredTeams = this.search();
+    this.filteredTeams = this.searchTeam();
   }
 
-  search() {
+  onKeyTag($event){
+    if ($event.key === 'Backspace') {
+      this.newTagName = this.newTagName.substring(0, this.newTagName.length - 1);
+    } else if ($event.key === 'Shift') {
+      this.shiftKeyUp = !this.shiftKeyUp;
+    } else if ($event.key === 'CapsLock') {
+      this.shiftKeyUp = false;
+    } else {
+      if (this.shiftKeyUp) {
+        this.newTagName += $event.key.toUpperCase();
+        this.shiftKeyUp = false;
+      } else {
+        this.newTagName += $event.key;
+      }
+    }
+    this.filteredTags = this.searchTag();
+  }
+
+  onKeyRole($event) {
+    if ($event.key === 'Backspace') {
+      this.newRoleName = this.newRoleName.substring(0, this.newRoleName.length - 1);
+    } else if ($event.key === 'Shift') {
+      this.shiftKeyUp = !this.shiftKeyUp;
+    } else if ($event.key === 'CapsLock') {
+      this.shiftKeyUp = false;
+    } else {
+      if (this.shiftKeyUp) {
+        this.newRoleName += $event.key.toUpperCase();
+        this.shiftKeyUp = false;
+      } else {
+        this.newRoleName += $event.key;
+      }
+    }
+    this.filteredRoles = this.searchRole();
+  }
+
+  searchTeam() {
     let filter = this.newTeamName.toLowerCase();
     return this.teams.filter(option => option.name.toLowerCase().includes(filter));
+  }
+
+  searchTag() {
+    let filter = this.newTagName.toLowerCase();
+    return this.tags.filter(option => option.name.toLowerCase().includes(filter));
+  }
+
+  searchRole() {
+    let filter = this.newRoleName.toLowerCase();
+    return this.roles.filter(option => option.name.toLowerCase().includes(filter));
   }
 
   saveChanges(engineer) {
@@ -148,7 +254,25 @@ export class EngineersTableComponent implements OnInit, OnChanges {
     });
   }
 
-  manageSelection($event, engineer) {
+  createTag(engineer) {
+    this.tagService.addTag({name: this.newTagName}).subscribe(response => {
+      this.getTags();
+      this.linkTagToEngineer(response, engineer, true);
+      this.updateTableView();
+      this.newTagName = '';
+    })
+  }
+
+  createRole(engineer) {
+    this.roleService.addRole({name: this.newRoleName}).subscribe(response => {
+      this.getRoles();
+      this.linkRoleToEngineer(response, engineer);
+      this.updateTableView();
+      this.newRoleName = '';
+    })
+  }
+
+  manageTeamSelection($event, engineer) {
     if (engineer.teams.length === 0) {
       this.selectTeam($event, engineer);
     }

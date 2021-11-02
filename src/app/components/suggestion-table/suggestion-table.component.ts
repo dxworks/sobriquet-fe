@@ -126,11 +126,12 @@ export class SuggestionTableComponent implements OnInit, OnChanges, AfterViewIni
       email: this.suggestions[0].email,
       position: '',
       teams: [],
-      phone: '',
       city: '',
       country: '',
       affiliations: [],
-      projects: [this.project.name]
+      project: this.project.id,
+      role: '',
+      tags: []
     }
   }
 
@@ -144,7 +145,7 @@ export class SuggestionTableComponent implements OnInit, OnChanges, AfterViewIni
     this.suggestions.forEach(suggestion => {
       this.project.identities = this.project.identities.filter(identity => identity.username !== suggestion.username);
     });
-    this.projectService.editProject(this.project.name, this.project.identities).subscribe();
+    this.projectService.editProject(this.project.id, this.project.identities).subscribe();
   }
 
   managePagination(identities: Identity[]) {

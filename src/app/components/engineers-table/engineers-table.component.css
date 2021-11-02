@@ -4,8 +4,8 @@
   border-radius: 2px;
 }
 
-.mat-column-teamsAction{
-  flex: 0 0 5% !important;
+.mat-column-teamsAction, .mat-column-tagsAction{
+  flex: 0 0 1% !important;
 }
 
 .mat-column-firstname, .mat-column-lastname, .mat-column-actions, .mat-column-city, .mat-column-country {

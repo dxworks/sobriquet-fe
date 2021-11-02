@@ -6,11 +6,12 @@ export interface Engineer{
   lastName: string;
   position: string;
   teams: string[];
-  phone: string;
   city: string;
   country: string;
   affiliations: Affiliation[];
   email: string;
-  projects: string[];
+  project: string;
+  tags: string[];
+  role: string;
 
 }
