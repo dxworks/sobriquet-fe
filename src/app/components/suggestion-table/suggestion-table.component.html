@@ -1,5 +1,9 @@
 <div class="container mat-elevation-z8">
   <div class="header">
+    <div class="mt-5">
+      <button class="sortinghat-orange-bg mr-10" mat-button (click)="rejectMerge()"><mat-icon>highlight_off</mat-icon></button>
+      <button class="sortinghat-cyan-bg" mat-button (click)="merge()"><mat-icon>check_circle_outline</mat-icon></button>
+    </div>
     <mat-form-field>
       <input matInput (keyup)="handleInput($event)" placeholder="Filter">
     </mat-form-field>
@@ -37,10 +41,7 @@
     <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
   </mat-table>
   <mat-toolbar-row>
-    <div class="ml-80p mt-5">
-      <button class="sortinghat-orange-bg ml-auto" mat-button (click)="rejectMerge()"><mat-icon>highlight_off</mat-icon></button>
-      <button class="sortinghat-cyan-bg ml-10p" mat-button (click)="merge()"><mat-icon>check_circle_outline</mat-icon></button>
-    </div>
+    <div class="paginator-information">Cluster {{current}} of {{identitiesByCluster.length}}</div>
     <mat-paginator [pageSizeOptions]="pagination"
                    pageSize="{{pagination}}"
                    (page)="changePage($event)"

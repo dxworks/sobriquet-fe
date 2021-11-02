@@ -16,14 +16,31 @@
   overflow: auto;
 }
 
-.mat-column-actions{
+.mat-column-actions {
   flex: 0 0 5%;
 }
 
-.mat-column-firstname, .mat-column-username, .mat-column-lastname{
+.mat-column-firstname, .mat-column-username, .mat-column-lastname {
   flex: 0 0 20%;
 }
 
-.mat-column-email{
+.mat-column-email {
   flex: 0 0 30%;
+}
+
+::ng-deep.mat-paginator-range-label {
+  display: none;
+}
+
+.paginator-information {
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  font-size: 12px;
+  color: rgba(0, 0, 0, .54);
+  flex: 1;
+  margin-top: 18px;
+  margin-left: 72%;
+}
+
+.mat-toolbar-row, .mat-toolbar-single-row{
+  display: flex;
 }

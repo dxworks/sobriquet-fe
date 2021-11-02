@@ -48,7 +48,7 @@ export class HomePageComponent implements OnInit {
 
   transformIdentities(fileResults){
     const data = [];
-    fileResults.forEach(fileResult => fileResult.forEach(result => data.push(result)));
+    fileResults?.forEach(fileResult => fileResult.forEach(result => data.push(result)));
     return data;
   }
 

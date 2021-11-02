@@ -16,7 +16,8 @@ export class EngineersPageComponent implements OnInit {
   tableView: boolean;
   cardsView: boolean;
   projects: Project[] = [];
-  project : Project;
+  project: Project;
+  engineerDeleted = false;
 
   constructor(private engineerService: EngineerService,
               private projectsService: ProjectService) {
@@ -30,22 +31,27 @@ export class EngineersPageComponent implements OnInit {
   getData() {
     this.engineerService.getAll().subscribe(response => {
       this.engineers = response;
-      this.tableView = true;
-      this.cardsView = false;
+      if (this.engineerDeleted) {
+        this.cardsView = true;
+        this.tableView = false
+      } else {
+        this.tableView = true;
+        this.cardsView = false;
+      }
     });
   }
 
-  changeView(){
-     if (this.cardsView) {
-       this.tableView = true;
-       this.cardsView = false;
-     } else {
-       this.tableView = false;
-       this.cardsView = true;
-     }
+  changeView() {
+    if (this.cardsView) {
+      this.tableView = true;
+      this.cardsView = false;
+    } else {
+      this.tableView = false;
+      this.cardsView = true;
+    }
   }
 
-  filterEngineersByProject($event){
+  filterEngineersByProject($event) {
     this.project = $event
   }
 }

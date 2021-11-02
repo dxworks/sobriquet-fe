@@ -8,7 +8,7 @@
   <div class="w-100p" *ngIf="cardsView">
     <app-engineer
       [engineers]="engineers"
-      (engineerDeletedEventEmitter)="getData()"
+      (engineerDeletedEventEmitter)="getData(); engineerDeleted = true"
       (teamLinkedEventEmitter)="getData()">
     </app-engineer>
   </div>

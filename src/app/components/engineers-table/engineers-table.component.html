@@ -53,7 +53,7 @@
         <mat-chip-list
           cdkDropList
           cdkDropListOrientation="horizontal">
-          <mat-chip *ngFor="let project of engineer.projects">
+          <mat-chip *ngFor="let project of engineer?.projects">
             {{project}}
           </mat-chip>
         </mat-chip-list>

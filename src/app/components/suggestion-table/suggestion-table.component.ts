@@ -48,7 +48,9 @@ export class SuggestionTableComponent implements OnInit, OnChanges, AfterViewIni
 
   pagination: number[];
 
-  identitiesByCluster = []
+  identitiesByCluster = [];
+
+  current = 1;
 
   constructor(private mergeSuggestionService: MergeSuggestionService,
               private engineersService: EngineerService,
@@ -101,18 +103,18 @@ export class SuggestionTableComponent implements OnInit, OnChanges, AfterViewIni
     const data: Engineer = this.buildEngineer();
     this.engineersService.add(data).subscribe(() => {
       this.engineerEmitter.emit(data);
-      this.updateProjectIdentities();
-      this.updateTable();
-      this.getSuggestions(this.identities);
-      this.managePagination(this.identities);
-      this.sortIdentities();
-      this.identitiesByCluster = this.mergeSuggestionService.buildCluster(this.identities);
+       this.manageIdentities();
+       this.updateProjectIdentities();
+       this.sortIdentities();
+       this.identitiesByCluster = this.mergeSuggestionService.buildCluster(this.identities);
+       this.getSuggestions(this.identitiesByCluster[this.paginator.pageIndex]);
+       this.dataSource = new MatTableDataSource(this.identitiesByCluster[this.paginator.pageIndex]);
     });
   }
 
   rejectMerge() {
     this.updateProjectIdentities();
-    this.updateTable();
+    this.manageIdentities();
     this.getSuggestions(this.identities);
     this.managePagination(this.identities);
   }
@@ -132,7 +134,7 @@ export class SuggestionTableComponent implements OnInit, OnChanges, AfterViewIni
     }
   }
 
-  updateTable() {
+  manageIdentities() {
     this.suggestions.forEach(suggestion => {
       this.identities.splice(this.identities.indexOf(suggestion), 1);
     });
@@ -155,6 +157,7 @@ export class SuggestionTableComponent implements OnInit, OnChanges, AfterViewIni
   }
 
   changePage($event){
+    this.current = $event.pageIndex + 1;
     this.getSuggestions(this.identitiesByCluster[$event.pageIndex]);
     this.dataSource = new MatTableDataSource(this.identitiesByCluster[$event.pageIndex]);
   }
