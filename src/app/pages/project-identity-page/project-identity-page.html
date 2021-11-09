@@ -6,16 +6,12 @@
         {{project?.name}}
       </div>
       <app-suggestion-table [identities]="identities"
-                            [acceptedSuggestions]="acceptedSuggestions"
-                            [deniedSuggestions]="deniedSuggestions"
                             [project]="project"
                             (engineerEmitter)="engineer = $event"
                             (suggestionsEmitter)="suggestions = $event"></app-suggestion-table>
       <app-engineers-table [engineer]="engineer"
                            [project]="project"
-                           [suggestions]="suggestions"
-                           (suggestionAccepted)="acceptedSuggestions = $event"
-                           (suggestionDenied)="deniedSuggestions = $event"></app-engineers-table>
+                           [suggestions]="suggestions"></app-engineers-table>
     </div>
   </div>
 </div>

@@ -27,12 +27,12 @@ export class ProjectComponent implements OnInit {
 
   showProjectIdentities() {
     if (!this.buttonClicked) {
-      this.router.navigate(['/identities'], {queryParams: {project: this.project.name}});
+      this.router.navigate(['/identities'], {queryParams: {project: this.project.id}});
     }
   }
 
   delete() {
-    this.projectService.delete(this.project.name).subscribe(() => this.projectDeleted.emit());
+    this.projectService.delete(this.project.id).subscribe(() => this.projectDeleted.emit());
   }
 
 }

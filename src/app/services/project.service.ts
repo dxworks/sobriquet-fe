@@ -16,7 +16,7 @@ export class ProjectService {
     return this.httpClient.get<Project[]>(`${environment.apiUrl}/projects`);
   }
 
-  addProject(projectName: string, projectFiles: File) {
+  addProject(projectName: string, projectFiles: File | Identity[]) {
     return this.httpClient.post(`${environment.apiUrl}/addProject/${projectName}`, projectFiles);
   }
 
@@ -28,7 +28,7 @@ export class ProjectService {
     return this.httpClient.put(`${environment.apiUrl}/editProject/${name}`, suggestions);
   }
 
-  getByName(name: string) {
+  getById(name: string) {
     return this.httpClient.get<Project>(`${environment.apiUrl}/project/${name}`);
   }
 }

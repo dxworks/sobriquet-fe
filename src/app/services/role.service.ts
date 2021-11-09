@@ -1,20 +1,20 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
+import {Role} from "../data/role";
 import {environment} from "../../environments/environment";
-import {File} from "../data/file";
 
 @Injectable({
   providedIn: 'root'
 })
-export class FileService {
+export class RoleService {
 
   constructor(private httpClient: HttpClient) { }
 
-  getAllFiles(){
-    return this.httpClient.get<File[]>(`${environment.apiUrl}/files`);
+  getAllRoles(){
+    return this.httpClient.get<Role[]>(`${environment.apiUrl}/roles`);
   }
 
-  addFile(file: File){
-    return this.httpClient.post(`${environment.apiUrl}/addFile`, file);
+  addRole(role: Role){
+    return this.httpClient.post(`${environment.apiUrl}/addRole`, role);
   }
 }

@@ -1,13 +1,17 @@
 <div class="container mat-elevation-z8">
   <div class="header">
+    <div class="mt-5">
+      <button class="sortinghat-orange-bg mr-10" mat-button (click)="rejectMerge()"><mat-icon>highlight_off</mat-icon></button>
+      <button class="sortinghat-cyan-bg" mat-button (click)="merge()"><mat-icon>check_circle_outline</mat-icon></button>
+    </div>
     <mat-form-field>
       <input matInput (keyup)="handleInput($event)" placeholder="Filter">
     </mat-form-field>
   </div>
 
-  <mat-table #table [dataSource]="dataSource">
+  <mat-table #table [dataSource]="dataSource" class="table">
     <ng-container matColumnDef="firstname">
-      <mat-header-cell *matHeaderCellDef class="font-style-smaller"> First name</mat-header-cell>
+      <mat-header-cell *matHeaderCellDef class="font-style-smaller" sticky="true"> First name</mat-header-cell>
       <mat-cell *matCellDef="let identity" class="font-style-smaller"> {{identity.firstName}} </mat-cell>
     </ng-container>
 
@@ -18,26 +22,31 @@
 
     <ng-container matColumnDef="username">
       <mat-header-cell *matHeaderCellDef class="font-style-smaller"> Username</mat-header-cell>
-      <mat-cell *matCellDef="let identity"  class="font-style-smaller">{{identity.username}}</mat-cell>
+      <mat-cell *matCellDef="let identity" class="font-style-smaller">{{identity.username}}</mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="email">
       <mat-header-cell *matHeaderCellDef class="font-style-smaller"> Email address</mat-header-cell>
-      <mat-cell *matCellDef="let identity"  class="font-style-smaller">{{identity.email}}</mat-cell>
+      <mat-cell *matCellDef="let identity" class="font-style-smaller">{{identity.email}}</mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="actions">
-      <mat-header-cell *matHeaderCellDef alignment="center" class="font-style-smaller"> Actions</mat-header-cell>
+      <mat-header-cell *matHeaderCellDef alignment="center" class="font-style-smaller"></mat-header-cell>
       <mat-cell *matCellDef="let identity">
-        <mat-checkbox [checked]="checkIdentity(identity)"></mat-checkbox>
+        <mat-checkbox [checked]="checkIdentity(identity)" (change)="manageCheckboxChange($event, identity)" ></mat-checkbox>
       </mat-cell>
     </ng-container>
 
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
     <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
   </mat-table>
-  <div class="grid ml-auto">
-    <button class="sortinghat-orange-bg ml-auto" mat-button (click)="merge()">Merge</button>
-  </div>
+  <mat-toolbar-row>
+    <div class="paginator-information">Cluster {{current}} of {{identitiesByCluster.length}}</div>
+    <mat-paginator [pageSizeOptions]="pagination"
+                   pageSize="{{pagination}}"
+                   (page)="changePage($event)"
+                   showFirstLastButtons>
+    </mat-paginator>
+  </mat-toolbar-row>
 </div>
 

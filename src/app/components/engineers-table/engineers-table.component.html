@@ -15,22 +15,6 @@
       <mat-cell *matCellDef="let engineer" class="font-style-smaller">{{engineer?.email}}</mat-cell>
     </ng-container>
 
-    <ng-container matColumnDef="position">
-      <mat-header-cell *matHeaderCellDef class="font-style-smaller"> Position</mat-header-cell>
-      <mat-cell *matCellDef="let engineer"><input matInput [(ngModel)]="engineer.position"
-                                                  *ngIf="!valueSaved.includes(engineer) && project">
-        <span *ngIf="valueSaved.includes(engineer)" class="font-style-smaller">{{engineer?.position}}</span>
-      </mat-cell>
-    </ng-container>
-
-    <ng-container matColumnDef="phone">
-      <mat-header-cell *matHeaderCellDef class="font-style-smaller"> Phone number</mat-header-cell>
-      <mat-cell *matCellDef="let engineer"><input matInput [(ngModel)]="engineer.phone"
-                                                  *ngIf="!valueSaved.includes(engineer) && project">
-        <span *ngIf="valueSaved.includes(engineer)" class="font-style-smaller">{{engineer?.phone}}</span>
-      </mat-cell>
-    </ng-container>
-
     <ng-container matColumnDef="city">
       <mat-header-cell *matHeaderCellDef class="font-style-smaller"> City</mat-header-cell>
       <mat-cell *matCellDef="let engineer"><input matInput [(ngModel)]="engineer.city"
@@ -47,14 +31,81 @@
       </mat-cell>
     </ng-container>
 
+
+    <ng-container matColumnDef="position">
+      <mat-header-cell *matHeaderCellDef class="font-style-smaller"> Position</mat-header-cell>
+      <mat-cell *matCellDef="let engineer"><input matInput [(ngModel)]="engineer.position"
+                                                  *ngIf="!valueSaved.includes(engineer) && project">
+        <span *ngIf="valueSaved.includes(engineer)" class="font-style-smaller">{{engineer?.position}}</span>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="role">
+      <mat-header-cell *matHeaderCellDef class="font-style-smaller"> Role</mat-header-cell>
+      <mat-cell *matCellDef="let engineer">
+        <mat-chip-list
+          cdkDropList
+          cdkDropListOrientation="horizontal">
+          <mat-chip>
+            {{engineer.role}}
+          </mat-chip>
+        </mat-chip-list>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="roleActions">
+      <mat-header-cell *matHeaderCellDef class="font-style-smaller"></mat-header-cell>
+      <mat-cell *matCellDef="let engineer">
+        <mat-select [(ngModel)]="engineer.role" (ngModelChange)="selectRole($event, engineer)">
+          <mat-form-field appearance="fill" class="dropdown-input">
+            <input matInput placeholder="Search or create role" (keyup)="onKeyRole($event)">
+          </mat-form-field>
+          <mat-option *ngIf="filteredRoles.length === 0" (click)="selectRole($event, engineer)">
+            <mat-icon>add</mat-icon>
+            Create new role ({{newRoleName}})
+          </mat-option>
+          <mat-option *ngFor="let role of filteredRoles" [value]="role">{{role.name}}</mat-option>
+        </mat-select>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="tags">
+      <mat-header-cell *matHeaderCellDef class="font-style-smaller"> Tags</mat-header-cell>
+      <mat-cell *matCellDef="let engineer">
+        <mat-chip-list
+          cdkDropList
+          cdkDropListOrientation="horizontal">
+          <mat-chip *ngFor="let tag of engineer?.tags">
+            {{tag?.name}}
+          </mat-chip>
+        </mat-chip-list>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="tagsAction">
+      <mat-header-cell *matHeaderCellDef class="font-style-smaller"></mat-header-cell>
+      <mat-cell *matCellDef="let engineer">
+        <mat-select [(ngModel)]="engineer.tags[engineer.tags.length]" (ngModelChange)="selectTag($event, engineer)">
+          <mat-form-field appearance="fill" class="dropdown-input">
+            <input matInput placeholder="Search or create tag" (keyup)="onKeyTag($event)">
+          </mat-form-field>
+          <mat-option *ngIf="filteredTags.length === 0" (click)="selectTag($event, engineer)">
+            <mat-icon>add</mat-icon>
+            Create new tag ({{newTagName}})
+          </mat-option>
+          <mat-option *ngFor="let tag of filteredTags" [value]="tag">{{tag.name}}</mat-option>
+        </mat-select>
+      </mat-cell>
+    </ng-container>
+
     <ng-container matColumnDef="projects">
       <mat-header-cell *matHeaderCellDef class="font-style-smaller"> Projects</mat-header-cell>
       <mat-cell *matCellDef="let engineer">
         <mat-chip-list
           cdkDropList
           cdkDropListOrientation="horizontal">
-          <mat-chip *ngFor="let project of engineer.projects">
-            {{project}}
+          <mat-chip>
+            {{getEngineerProject(engineer.project)}}
           </mat-chip>
         </mat-chip-list>
       </mat-cell>
@@ -74,13 +125,15 @@
     </ng-container>
 
     <ng-container matColumnDef="teamsAction">
-      <mat-header-cell *matHeaderCellDef class="font-style-smaller"> Link another team</mat-header-cell>
+      <mat-header-cell *matHeaderCellDef class="font-style-smaller"></mat-header-cell>
       <mat-cell *matCellDef="let engineer">
         <mat-select [(ngModel)]="engineer.teams[0]" (ngModelChange)="selectTeam($event, engineer)">
           <mat-form-field appearance="fill" class="dropdown-input">
-            <input matInput placeholder="Search or create team" (keyup)="onKey($event)">
+            <input matInput placeholder="Search or create team" (keyup)="onKeyTeams($event)">
           </mat-form-field>
-          <mat-option *ngIf="filteredTeams.length === 0" (click)="manageSelection($event, engineer)">Create new team
+          <mat-option *ngIf="filteredTeams.length === 0" (click)="manageTeamSelection($event, engineer)">
+            <mat-icon>add</mat-icon>
+            Create new team ({{newTeamName}})
           </mat-option>
           <mat-option *ngFor="let team of filteredTeams" [value]="team">{{team.name}}</mat-option>
         </mat-select>
@@ -88,16 +141,8 @@
     </ng-container>
 
     <ng-container matColumnDef="actions">
-      <mat-header-cell *matHeaderCellDef alignment="center" class="font-style-smaller"> Actions</mat-header-cell>
+      <mat-header-cell *matHeaderCellDef alignment="center" class="font-style-smaller"></mat-header-cell>
       <mat-cell *matCellDef="let engineer">
-        <button mat-button class="action-button" (click)="acceptSuggestion(engineer)"
-                [disabled]="allEngineers.includes(engineer) || disableButtons">
-          <mat-icon>check_circle_outline</mat-icon>
-        </button>
-        <button mat-button class="action-button" (click)="denySuggestion(engineer)"
-                [disabled]="allEngineers.includes(engineer) || disableButtons">
-          <mat-icon>highlight_off</mat-icon>
-        </button>
         <button mat-button class="action-button" (click)="saveChanges(engineer)">
           <mat-icon>save</mat-icon>
         </button>

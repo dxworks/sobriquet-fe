@@ -4,25 +4,36 @@
   border-radius: 2px;
 }
 
-.mat-column-firstname, .mat-column-lastname {
+.mat-column-teamsAction, .mat-column-tagsAction{
+  flex: 0 0 1% !important;
+}
+
+.mat-column-firstname, .mat-column-lastname, .mat-column-actions, .mat-column-city, .mat-column-country {
   flex: 0 0 10% !important;
 }
 
 .mat-column-email {
-  flex: 0 0 15% !important;
+  flex: 0 0 20% !important;
 }
 
 .mat-chip {
   background: #1FAFA9;
   color: white;
 }
+
 .dropdown-input {
   margin-top: 10px;
   margin-left: 23px;
   margin-bottom: 10px;
 }
-.action-button{
-  padding: 0px!important;
-  width: 30px!important;
+
+.action-button {
+  padding: 0 !important;
+  width: 30px !important;
   min-width: auto;
+  color: #1FAFA9;
+}
+
+.mat-input-element {
+  font: normal normal normal 20px/60px Muli !important;
 }

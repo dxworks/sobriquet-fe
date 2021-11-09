@@ -9,7 +9,7 @@ import {Project} from "../../data/project";
 })
 export class HomePageComponent implements OnInit {
 
-  selectedJSON: File;
+  selectedJSON: File | File[];
   projectName = '';
   projects: Project[] = [];
   fileDropped = false;
@@ -26,10 +26,44 @@ export class HomePageComponent implements OnInit {
   }
 
   upload($event): void {
-    this.fileDropped ? this.selectedJSON = $event[0] : this.selectedJSON = $event.target.files[0];
+    if (this.fileDropped) {
+      $event.length === 1 ? this.selectedJSON = $event[0] : this.selectedJSON = $event;
+    } else {
+      $event.target.files.length === 1 ? this.selectedJSON = $event.target.files[0] : this.selectedJSON = $event.target.files;
+    }
   }
 
   save() {
-    this.projectService.addProject(this.projectName, this.selectedJSON).subscribe(() => this.getProjects());
+    if (this.selectedJSON instanceof File) {
+      this.projectService.addProject(this.projectName, this.selectedJSON).subscribe(() => this.getProjects());
+    } else {
+      let fileResults = [];
+      for (let i = 0; i < this.selectedJSON.length ; i++ ){
+       this.readFile(this.selectedJSON[i]);
+       fileResults.push(JSON.parse(localStorage.getItem(`${this.selectedJSON[i].name}`)));
+      }
+      this.projectService.addProject(this.projectName, this.transformIdentities(fileResults)).subscribe(() => this.getProjects());
+    }
+  }
+
+  transformIdentities(fileResults){
+    const data = [];
+    fileResults?.forEach(fileResult => fileResult.forEach(result => data.push(result)));
+    return data;
+  }
+
+  getFileNames() {
+    if (this.selectedJSON instanceof File) {
+      return this.selectedJSON.name;
+    }
+    return '';
+  }
+
+  readFile(file: File){
+    const reader = new FileReader();
+    reader.onloadend = function () {
+      localStorage.setItem(`${file.name}`, reader.result.toString());
+    }
+    reader.readAsText(file);
   }
 }
