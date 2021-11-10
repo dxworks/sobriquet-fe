@@ -19,7 +19,7 @@
       <mat-header-cell *matHeaderCellDef class="font-style-smaller"> City</mat-header-cell>
       <mat-cell *matCellDef="let engineer"><input matInput [(ngModel)]="engineer.city"
                                                   *ngIf="!valueSaved.includes(engineer) && project">
-        <span *ngIf="valueSaved.includes(engineer)" class="font-style-smaller">{{engineer?.city}}</span>
+        <span *ngIf="valueSaved.includes(engineer) || !this.project" class="font-style-smaller">{{engineer?.city}}</span>
       </mat-cell>
     </ng-container>
 
@@ -27,7 +27,7 @@
       <mat-header-cell *matHeaderCellDef class="font-style-smaller"> Country</mat-header-cell>
       <mat-cell *matCellDef="let engineer"><input matInput [(ngModel)]="engineer.country"
                                                   *ngIf="!valueSaved.includes(engineer) && project">
-        <span *ngIf="valueSaved.includes(engineer)" class="font-style-smaller">{{engineer?.country}}</span>
+        <span *ngIf="valueSaved.includes(engineer) || !this.project" class="font-style-smaller">{{engineer?.country}}</span>
       </mat-cell>
     </ng-container>
 
@@ -36,7 +36,7 @@
       <mat-header-cell *matHeaderCellDef class="font-style-smaller"> Position</mat-header-cell>
       <mat-cell *matCellDef="let engineer"><input matInput [(ngModel)]="engineer.position"
                                                   *ngIf="!valueSaved.includes(engineer) && project">
-        <span *ngIf="valueSaved.includes(engineer)" class="font-style-smaller">{{engineer?.position}}</span>
+        <span *ngIf="valueSaved.includes(engineer) || !this.project" class="font-style-smaller">{{engineer?.position}}</span>
       </mat-cell>
     </ng-container>
 
@@ -99,7 +99,7 @@
     </ng-container>
 
     <ng-container matColumnDef="projects">
-      <mat-header-cell *matHeaderCellDef class="font-style-smaller"> Projects</mat-header-cell>
+      <mat-header-cell *matHeaderCellDef class="font-style-smaller"> Project</mat-header-cell>
       <mat-cell *matCellDef="let engineer">
         <mat-chip-list
           cdkDropList

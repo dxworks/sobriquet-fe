@@ -1,8 +1,12 @@
 <div class="container mat-elevation-z8">
   <div class="header">
     <div class="mt-5">
-      <button class="sortinghat-orange-bg mr-10" mat-button (click)="rejectMerge()"><mat-icon>highlight_off</mat-icon></button>
-      <button class="sortinghat-cyan-bg" mat-button (click)="merge()"><mat-icon>check_circle_outline</mat-icon></button>
+      <button class="sortinghat-orange-bg mr-10" mat-button (click)="rejectMerge()">
+        <mat-icon>highlight_off</mat-icon>
+      </button>
+      <button class="sortinghat-cyan-bg" mat-button (click)="merge()">
+        <mat-icon>check_circle_outline</mat-icon>
+      </button>
     </div>
     <mat-form-field>
       <input matInput (keyup)="handleInput($event)" placeholder="Filter">
@@ -30,10 +34,17 @@
       <mat-cell *matCellDef="let identity" class="font-style-smaller">{{identity.email}}</mat-cell>
     </ng-container>
 
+    <ng-container matColumnDef="source">
+      <mat-header-cell *matHeaderCellDef class="font-style-smaller"> Source</mat-header-cell>
+      <mat-cell *matCellDef="let identity" class="font-style-smaller">
+        <img src="{{getSourceDisplayIcon(identity.source)}}" class="source-logo"></mat-cell>
+    </ng-container>
+
     <ng-container matColumnDef="actions">
       <mat-header-cell *matHeaderCellDef alignment="center" class="font-style-smaller"></mat-header-cell>
       <mat-cell *matCellDef="let identity">
-        <mat-checkbox [checked]="checkIdentity(identity)" (change)="manageCheckboxChange($event, identity)" ></mat-checkbox>
+        <mat-checkbox [checked]="checkIdentity(identity)"
+                      (change)="manageCheckboxChange($event, identity)"></mat-checkbox>
       </mat-cell>
     </ng-container>
 
