@@ -40,7 +40,7 @@ export class SuggestionTableComponent implements OnInit, OnChanges, AfterViewIni
 
   dataSource: MatTableDataSource<Identity>;
 
-  displayedColumns = ['firstname', 'lastname', 'username', 'email', 'actions'];
+  displayedColumns = ['firstname', 'lastname', 'username', 'email', 'source', 'actions'];
 
   suggestions: Identity[] = [];
 
@@ -168,6 +168,21 @@ export class SuggestionTableComponent implements OnInit, OnChanges, AfterViewIni
       this.suggestions.push(identity);
     } else {
       this.suggestions.splice(this.suggestions.indexOf(identity), 1);
+    }
+  }
+
+  getSourceDisplayIcon(source: string) {
+    switch (source) {
+      case 'jira' : return 'assets/source/jira.png'
+      case 'github': return 'assets/source/github.png'
+      case 'bitbucket': return 'assets/source/bitbucket.png'
+      case 'circle': return 'assets/source/circle.png'
+      case 'gitlab': return 'assets/source/gitlab.png'
+      case 'jenkins': return 'assets/source/jenkins.png'
+      case 'pivotal': return 'assets/source/pivotal.png'
+      case 'travis': return 'assets/source/travis.png'
+      case 'file': return 'assets/source/file.png'
+      default: return 'assets/source/git.png'
     }
   }
 

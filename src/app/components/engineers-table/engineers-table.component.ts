@@ -168,7 +168,9 @@ export class EngineersTableComponent implements OnInit, OnChanges {
 
   linkRoleToEngineer($event, engineer) {
     engineer.role = $event.name;
-    this.engineerService.edit(engineer).subscribe(() => this.updateTableView());
+    this.engineerService.edit(engineer).subscribe(() => {
+      this.updateTableView();
+    });
   }
 
   onKeyTeams($event) {

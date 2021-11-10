@@ -4,16 +4,25 @@
   border-radius: 2px;
 }
 
-.mat-column-teamsAction, .mat-column-tagsAction{
+.mat-column-teamsAction, .mat-column-tagsAction, .mat-column-roleActions{
   flex: 0 0 1% !important;
+  margin-right: 5px;
 }
 
 .mat-column-firstname, .mat-column-lastname, .mat-column-actions, .mat-column-city, .mat-column-country {
   flex: 0 0 10% !important;
 }
 
+.mat-column-city, .mat-column-teams {
+  flex: 0 0 5%;
+}
+
+.mat-column-tags, .mat-column-role{
+  flex: 0 0 7%;
+}
+
 .mat-column-email {
-  flex: 0 0 20% !important;
+  flex: 0 0 18% !important;
 }
 
 .mat-chip {
