@@ -3,6 +3,7 @@ import {Engineer} from "../../data/engineer";
 import {EngineerService} from "../../services/engineer.service";
 import {ProjectService} from "../../services/project.service";
 import {Project} from "../../data/project";
+import {ActivatedRoute} from "@angular/router";
 
 @Component({
   selector: 'app-engineers-page',
@@ -18,14 +19,24 @@ export class EngineersPageComponent implements OnInit {
   projects: Project[] = [];
   project: Project;
   engineerDeleted = false;
+  projectName: string;
 
   constructor(private engineerService: EngineerService,
-              private projectsService: ProjectService) {
+              private projectsService: ProjectService,
+              private activatedRoute: ActivatedRoute) {
+    if (this.activatedRoute.snapshot.url.find(urlSegment => urlSegment.path === 'project')) {
+      this.projectName = this.activatedRoute.snapshot.url[this.activatedRoute.snapshot.url.length - 1].path;
+    }
   }
 
   ngOnInit(): void {
     this.getData();
-    this.projectsService.getAllProjects().subscribe(response => this.projects = response);
+    this.projectsService.getAllProjects().subscribe(response => {
+      this.projects = response;
+      if (this.projectName) {
+        this.project = this.projects.find(project => project.name === this.projectName);
+      }
+    });
   }
 
   getData() {

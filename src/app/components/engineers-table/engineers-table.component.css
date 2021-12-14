@@ -9,8 +9,13 @@
   margin-right: 5px;
 }
 
-.mat-column-firstname, .mat-column-lastname, .mat-column-actions, .mat-column-city, .mat-column-country {
+.mat-column-firstname, .mat-column-lastname, .mat-column-city, .mat-column-country {
   flex: 0 0 10% !important;
+}
+
+.mat-column-actions {
+  flex: 0 0 10%!important;
+  padding-left: 50px;
 }
 
 .mat-column-city, .mat-column-teams {
@@ -28,6 +33,7 @@
 .mat-chip {
   background: #1FAFA9;
   color: white;
+  font-size: 12px;
 }
 
 .dropdown-input {
@@ -44,5 +50,5 @@
 }
 
 .mat-input-element {
-  font: normal normal normal 20px/60px Muli !important;
+  font: normal normal normal 14px/30px Muli !important;
 }

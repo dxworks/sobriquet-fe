@@ -9,6 +9,10 @@ export class MergeSuggestionService {
   constructor() {
   }
 
+  checkBot(email: string) {
+    return email.includes('newsletter') || email.includes('noreply') || email.includes('marketing') || email.includes('events') || email.includes('support');
+  }
+
   identitiesAreSimilar(firstIdentity: Identity, secondIdentity: Identity) {
     return this.firstNameIsSimilar(firstIdentity?.firstName, secondIdentity?.firstName) || this.lastNameIsSimilar(firstIdentity?.lastName, secondIdentity?.lastName) ||
       this.emailIsSimilar(firstIdentity?.email, secondIdentity?.email) || this.usernameIsSimilar(firstIdentity?.username, secondIdentity?.username);

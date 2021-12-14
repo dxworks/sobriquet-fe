@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {ProjectService} from "../../services/project.service";
 import {Project} from "../../data/project";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-home-page',
@@ -14,7 +15,8 @@ export class HomePageComponent implements OnInit {
   projects: Project[] = [];
   fileDropped = false;
 
-  constructor(private projectService: ProjectService) {
+  constructor(private projectService: ProjectService,
+              private router: Router) {
   }
 
   ngOnInit(): void {
@@ -35,18 +37,21 @@ export class HomePageComponent implements OnInit {
 
   save() {
     if (this.selectedJSON instanceof File) {
-      this.projectService.addProject(this.projectName, this.selectedJSON).subscribe(() => this.getProjects());
+      this.projectService.addProject(this.projectName, this.selectedJSON).subscribe(response => {
+        this.getProjects();
+        this.router.navigate([`/identities/project/${response.name}`]);
+      });
     } else {
       let fileResults = [];
-      for (let i = 0; i < this.selectedJSON.length ; i++ ){
-       this.readFile(this.selectedJSON[i]);
-       fileResults.push(JSON.parse(localStorage.getItem(`${this.selectedJSON[i].name}`)));
+      for (let i = 0; i < this.selectedJSON.length; i++) {
+        this.readFile(this.selectedJSON[i]);
+        fileResults.push(JSON.parse(localStorage.getItem(`${this.selectedJSON[i].name}`)));
       }
       this.projectService.addProject(this.projectName, this.transformIdentities(fileResults)).subscribe(() => this.getProjects());
     }
   }
 
-  transformIdentities(fileResults){
+  transformIdentities(fileResults) {
     const data = [];
     fileResults?.forEach(fileResult => fileResult.forEach(result => data.push(result)));
     return data;
@@ -59,7 +64,7 @@ export class HomePageComponent implements OnInit {
     return '';
   }
 
-  readFile(file: File){
+  readFile(file: File) {
     const reader = new FileReader();
     reader.onloadend = function () {
       localStorage.setItem(`${file.name}`, reader.result.toString());

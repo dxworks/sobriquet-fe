@@ -27,7 +27,7 @@ export class ProjectComponent implements OnInit {
 
   showProjectIdentities() {
     if (!this.buttonClicked) {
-      this.router.navigate(['/identities'], {queryParams: {project: this.project.id}});
+      this.router.navigate([`/identities/project/${this.project.name}`]);
     }
   }
 

@@ -19,7 +19,7 @@ export class ProjectIdentityPage implements OnInit {
   suggestions: Identity[] = [];
 
   constructor(private activatedRoute: ActivatedRoute, private projectService: ProjectService) {
-    this.projectService.getById(this.activatedRoute.snapshot.queryParams.project).subscribe(response => this.project = response);
+    this.projectService.getAllProjects().subscribe(response => this.project = response.find(project => project.name === this.activatedRoute.snapshot.url[this.activatedRoute.snapshot.url.length - 1].path))
   }
 
   ngOnInit(): void {
