@@ -1,0 +1,14 @@
+<dx-diagram #diagram id="diagram" [showGrid]="false" pageOrientation="horizontal" [simpleView]="true"
+            [readOnly]="true" customShapeToolboxTemplate="customShapeToolboxTemplate">
+  <dxo-default-item-properties connectorLineType="line"
+                               connectorLineEnd="line"
+                               style="stroke: #8EC4DE; stroke-width: 1; margin-left: 5px !important;">
+  </dxo-default-item-properties>
+  <dxo-nodes [dataSource]="dataSource" textExpr="name" parentKeyExpr="parentID" containerChildrenExpr="null"
+             typeExpr="type">
+    <dxo-auto-layout type="tree" orientation="vertical"></dxo-auto-layout>
+  </dxo-nodes>
+  <dxo-toolbox visibility="hidden"></dxo-toolbox>
+  <dxo-view-toolbar [visible]="false"> </dxo-view-toolbar>
+  <dxo-properties-panel visibility="hidden"></dxo-properties-panel>
+</dx-diagram>

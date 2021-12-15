@@ -1,6 +1,5 @@
 .container {
   margin: 30px 40px;
-  border: 1px solid #FD8947;
   border-radius: 2px;
 }
 
@@ -9,8 +8,18 @@
   margin-right: 5px;
 }
 
+.mat-column-teams {
+  flex: 0 0 8%!important;
+  margin-right: 5px;
+}
+
+.mat-columns-project {
+  flex: 0 0 0.5% !important;
+  margin-left: 10px;
+}
+
 .mat-column-firstname, .mat-column-lastname, .mat-column-city, .mat-column-country {
-  flex: 0 0 10% !important;
+  flex: 0 0 9% !important;
 }
 
 .mat-column-actions {
@@ -27,7 +36,7 @@
 }
 
 .mat-column-email {
-  flex: 0 0 18% !important;
+  flex: 0 0 15% !important;
 }
 
 .mat-chip {

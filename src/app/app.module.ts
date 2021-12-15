@@ -40,6 +40,8 @@ import {EngineersTableComponent} from './components/engineers-table/engineers-ta
 import {DragAndDropDirective} from './providers/drag-and-drop.directive';
 import {MatPaginatorModule} from "@angular/material/paginator";
 import {MatToolbarModule} from "@angular/material/toolbar";
+import {TeamsDiagramComponent} from './components/teams-diagram/teams-diagram.component';
+import {DevExtremeModule, DxDiagramModule} from "devextreme-angular";
 
 @NgModule({
   declarations: [
@@ -61,7 +63,8 @@ import {MatToolbarModule} from "@angular/material/toolbar";
     ProjectComponent,
     SuggestionTableComponent,
     EngineersTableComponent,
-    DragAndDropDirective
+    DragAndDropDirective,
+    TeamsDiagramComponent
   ],
   imports: [
     BrowserModule,
@@ -84,7 +87,9 @@ import {MatToolbarModule} from "@angular/material/toolbar";
     MatSnackBarModule,
     MatCheckboxModule,
     MatPaginatorModule,
-    MatToolbarModule
+    MatToolbarModule,
+    DevExtremeModule,
+    DxDiagramModule
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true}],

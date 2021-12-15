@@ -45,6 +45,10 @@ body {
   margin-left: auto !important;
 }
 
+.ml-10 {
+  margin-left: 10px!important;
+}
+
 .ml-10p {
   margin-left: 10%!important;
 }
@@ -78,7 +82,7 @@ body {
 }
 
 .sortinghat-orange-bg {
-  background: #FD8947;
+  background: #FD8947!important;
   color: white;
 }
 
@@ -110,4 +114,8 @@ body {
 
 .fs-12 {
   font-size: 12px!important;
+}
+
+.d-flex {
+  display: flex;
 }

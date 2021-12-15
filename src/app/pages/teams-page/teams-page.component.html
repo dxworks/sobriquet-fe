@@ -1,12 +1,19 @@
 <app-header></app-header>
 <div class="flex h100p content">
   <div class="w-100p">
-    <button mat-button class="sortinghat-cyan-bg add-button font-style-smaller" (click)="openDialog()">
+    <button mat-button class="sortinghat-cyan-bg add-button font-style-smaller mb-5" (click)="openDialog()">
       <mat-icon>add</mat-icon>
       Create a new team
     </button>
-    <app-teams-table [teams]="teams"
-                     (teamDeleted)="getData()">
-    </app-teams-table>
+    <div class="d-flex ml-10">
+      <div *ngFor="let team of teams" class="mb-5">
+        <button mat-button class="sortinghat-cyan-bg team-button font-style-smaller"
+                (click)="selectTeam(team)"
+                [class.sortinghat-orange-bg]="selectedTeam === team ">{{team.name}}</button>
+      </div>
+    </div>
+    <app-teams-diagram [team]="selectedTeam"
+                       [allTeams]="teams"
+                       [showAllTeams]="showAllTeams"></app-teams-diagram>
   </div>
 </div>
