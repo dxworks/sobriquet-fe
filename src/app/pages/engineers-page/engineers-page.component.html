@@ -13,14 +13,25 @@
     </app-engineer>
   </div>
   <div class="w-100p" *ngIf="tableView">
-    <mat-form-field appearance="fill" class="project-selection" >
-      <mat-label>Filter by project</mat-label>
-      <mat-select [(ngModel)]="project" (ngModelChange)="filterEngineersByProject($event)">
-        <mat-option *ngFor="let project of projects" [value]="project">{{project.name}}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-    <app-engineers-table [engineers]="engineers" [filter]="project">
+    <div class="d-flex">
+      <mat-form-field appearance="fill" class="project-selection">
+        <mat-label>Filter by project</mat-label>
+        <mat-select [(ngModel)]="project" (ngModelChange)="filterEngineersByProject($event)">
+          <mat-option *ngFor="let project of projects" [value]="project">{{project.name}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="fill" class="project-selection">
+        <mat-label>Filter by engineer tag</mat-label>
+        <mat-select [(ngModel)]="tag" (ngModelChange)="filterEngineersByTag($event)">
+          <mat-option *ngFor="let tag of tags" [value]="tag">{{tag.name}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <app-engineers-table [engineers]="engineers"
+                         [projectFilter]="project"
+                         [tagFilter]="tag">
     </app-engineers-table>
   </div>
 </div>

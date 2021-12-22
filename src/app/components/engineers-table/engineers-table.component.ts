@@ -1,17 +1,17 @@
 import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
-import {Engineer} from "../../data/engineer";
-import {EngineerService} from "../../services/engineer.service";
-import {Project} from "../../data/project";
-import {MatTableDataSource} from "@angular/material/table";
-import {Identity} from "../../data/identity";
-import {Team} from "../../data/team";
-import {TeamsService} from "../../services/teams.service";
-import {ProjectService} from "../../services/project.service";
-import {TagService} from "../../services/tag.service";
-import {Tag} from "../../data/tag";
-import {Role} from "../../data/role";
-import {RoleService} from "../../services/role.service";
-import {ActivatedRoute, Router} from "@angular/router";
+import {Engineer} from '../../data/engineer';
+import {EngineerService} from '../../services/engineer.service';
+import {Project} from '../../data/project';
+import {MatTableDataSource} from '@angular/material/table';
+import {Identity} from '../../data/identity';
+import {Team} from '../../data/team';
+import {TeamsService} from '../../services/teams.service';
+import {ProjectService} from '../../services/project.service';
+import {TagService} from '../../services/tag.service';
+import {Tag} from '../../data/tag';
+import {RoleService} from '../../services/role.service';
+import {ActivatedRoute, Router} from '@angular/router';
+import {Role} from '../../data/role';
 
 @Component({
   selector: 'app-engineers-table',
@@ -29,7 +29,9 @@ export class EngineersTableComponent implements OnInit, OnChanges {
   @Input()
   suggestions: Identity[] = [];
   @Input()
-  filter: Project;
+  projectFilter: Project;
+  @Input()
+  tagFilter: Tag;
 
   dataSource: MatTableDataSource<Engineer>;
 
@@ -96,8 +98,14 @@ export class EngineersTableComponent implements OnInit, OnChanges {
       this.engineers.push(this.engineer);
       this.getTableData()
     }
-    if (!changes.filter?.firstChange && !this.project) {
-      this.applyFilter();
+    if (changes.projectFilter || !changes.tagFilter?.firstChange) {
+      if (!this.tagFilter) {
+        this.applyProjectFilter();
+      } else if (!this.projectFilter) {
+        this.applyTagFilter();
+      } else {
+        this.applyFilters();
+      }
     }
   }
 
@@ -131,8 +139,19 @@ export class EngineersTableComponent implements OnInit, OnChanges {
     this.dataSource = new MatTableDataSource(this.engineers);
   }
 
-  applyFilter() {
-    this.dataSource = new MatTableDataSource(this.engineers.filter(engineer => engineer.project === this.filter.id));
+  applyProjectFilter() {
+    console.log(this.projectFilter);
+    this.dataSource = new MatTableDataSource(this.engineers.filter(engineer => engineer?.project === this.projectFilter?.id));
+  }
+
+  applyTagFilter() {
+    console.log(this.tagFilter);
+    this.dataSource = new MatTableDataSource(this.engineers.filter(engineer => engineer?.tags.includes(this.tagFilter)));
+  }
+
+  applyFilters() {
+    console.log(this.projectFilter, this.tagFilter);
+    this.dataSource = new MatTableDataSource(this.engineers.filter(engineer => engineer?.project === this.projectFilter?.id && engineer?.tags.includes(this.tagFilter)));
   }
 
   getTeams() {

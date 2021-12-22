@@ -1,7 +1,7 @@
-import {Affiliation} from "./affiliation";
-import {Tag} from "./tag";
+import {Affiliation} from './affiliation';
+import {Tag} from './tag';
 
-export interface Engineer{
+export interface Engineer {
   id?: string;
   firstName: string;
   lastName: string;

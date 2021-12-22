@@ -9,16 +9,16 @@ import {
   ViewChild,
   AfterViewInit
 } from '@angular/core';
-import {Identity} from "../../data/identity";
-import {MatTableDataSource} from "@angular/material/table";
-import {MergeSuggestionService} from "../../services/ToolsService/merge-suggestion.service";
-import {Engineer} from "../../data/engineer";
-import {Project} from "../../data/project";
-import {EngineerService} from "../../services/engineer.service";
-import {ActivatedRoute} from "@angular/router";
-import {ProjectService} from "../../services/project.service";
-import {MatPaginator} from "@angular/material/paginator";
-import {TagService} from "../../services/tag.service";
+import {Identity} from '../../data/identity';
+import {MatTableDataSource} from '@angular/material/table';
+import {MergeSuggestionService} from '../../services/ToolsService/merge-suggestion.service';
+import {Engineer} from '../../data/engineer';
+import {Project} from '../../data/project';
+import {EngineerService} from '../../services/engineer.service';
+import {ActivatedRoute} from '@angular/router';
+import {ProjectService} from '../../services/project.service';
+import {MatPaginator} from '@angular/material/paginator';
+import {TagService} from '../../services/tag.service';
 
 @Component({
   selector: 'app-suggestion-table',

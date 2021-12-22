@@ -1,8 +1,8 @@
 import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
-import {Team} from "../../data/team";
-import {EngineerService} from "../../services/engineer.service";
-import {DiagramService} from "../../services/ToolsService/diagram.service";
-import ArrayStore from "devextreme/data/array_store";
+import {Team} from '../../data/team';
+import {EngineerService} from '../../services/engineer.service';
+import {DiagramService} from '../../services/ToolsService/diagram.service';
+import ArrayStore from 'devextreme/data/array_store';
 
 @Component({
   selector: 'app-teams-diagram',

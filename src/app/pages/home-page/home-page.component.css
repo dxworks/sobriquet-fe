@@ -10,12 +10,11 @@
 }
 
 input[type="file"] {
-  position: absolute;
   z-index: -1;
-  top: 50%;
-  left: 47%;
   font-size: 17px;
   color: #b8b8b8;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .button {
@@ -28,22 +27,22 @@ input[type="file"] {
   font-weight: bold;
   color: #fff;
   margin-top: 5%;
-  margin-left: 46%;
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .input {
   margin-left: auto;
   margin-right: auto;
   margin-top: 30px;
-  padding-left: 60px;
 }
 
 .save-button {
   margin-right: auto;
   margin-top: 20px;
-  padding-left: 80px;
-  padding-right: 80px;
-  margin-left: 45%;
+  margin-left: auto;
+  width: 10%;
 }
 
 .new-project-container {
@@ -66,12 +65,13 @@ input[type="file"] {
   margin-right: auto;
   font-family: Muli;
   font-size: x-large;
-  padding-left: 75px;
-  padding-top: 20px;
 }
 
 .filename {
-  position: absolute;
-  top: 63%;
-  left: 60%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.button-wrap {
+  display: grid;
 }

@@ -1,32 +1,33 @@
-import { Injectable } from '@angular/core';
-import {HttpClient} from "@angular/common/http";
-import {environment} from "../../environments/environment";
-import {Engineer} from "../data/engineer";
+import {Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {environment} from '../../environments/environment';
+import {Engineer} from '../data/engineer';
 
 @Injectable({
   providedIn: 'root'
 })
 export class EngineerService {
 
-  constructor(private httpClient: HttpClient) { }
+  constructor(private httpClient: HttpClient) {
+  }
 
-  getAll(){
+  getAll() {
     return this.httpClient.get<Engineer[]>(`${environment.apiUrl}/engineers`);
   }
 
-  add(engineer: Engineer){
+  add(engineer: Engineer) {
     return this.httpClient.post(`${environment.apiUrl}/addEngineer`, engineer);
   }
 
-  linkTeam(engineerId: string, teamId: string){
+  linkTeam(engineerId: string, teamId: string) {
     return this.httpClient.put(`${environment.apiUrl}/addTeam/${engineerId}/${teamId}`, null);
   }
 
-  delete(engineerId: String){
-   return this.httpClient.delete(`${environment.apiUrl}/deleteEngineer/${engineerId}`);
+  delete(engineerId: String) {
+    return this.httpClient.delete(`${environment.apiUrl}/deleteEngineer/${engineerId}`);
   }
 
-  edit(engineer: Engineer){
+  edit(engineer: Engineer) {
     return this.httpClient.put(`${environment.apiUrl}/editEngineer/${engineer.id}`, engineer);
   }
 }

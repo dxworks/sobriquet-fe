@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import {Team} from "../../data/team";
-import {TeamsService} from "../../services/teams.service";
-import {MatDialog} from "@angular/material/dialog";
-import {NewTeamPopupComponent} from "../../components/popups/new-team-popup/new-team-popup.component";
+import {Team} from '../../data/team';
+import {TeamsService} from '../../services/teams.service';
+import {MatDialog} from '@angular/material/dialog';
+import {NewTeamPopupComponent} from '../../components/popups/new-team-popup/new-team-popup.component';
 
 @Component({
   selector: 'app-teams-page',

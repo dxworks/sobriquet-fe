@@ -1,9 +1,9 @@
 import {Component, OnInit} from '@angular/core';
-import {Identity} from "../../data/identity";
-import {ActivatedRoute} from "@angular/router";
-import {Project} from "../../data/project";
-import {Engineer} from "../../data/engineer";
-import {ProjectService} from "../../services/project.service";
+import {Identity} from '../../data/identity';
+import {ActivatedRoute} from '@angular/router';
+import {Project} from '../../data/project';
+import {Engineer} from '../../data/engineer';
+import {ProjectService} from '../../services/project.service';
 
 @Component({
   selector: 'app-project-identity',
