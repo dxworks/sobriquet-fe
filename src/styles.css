@@ -97,7 +97,7 @@ body {
 }
 
 .font-style-smaller {
-  font: normal normal normal 20px/60px Muli;
+  font: normal normal normal 14px/30px Muli!important;
 }
 
 .font-style {
@@ -106,4 +106,8 @@ body {
 
 .font-style-bigger {
   font: normal normal bold 30px/35px GT Walsheim Pro;
+}
+
+.fs-12 {
+  font-size: 12px!important;
 }

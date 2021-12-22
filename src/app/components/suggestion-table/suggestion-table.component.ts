@@ -18,6 +18,7 @@ import {EngineerService} from "../../services/engineer.service";
 import {ActivatedRoute} from "@angular/router";
 import {ProjectService} from "../../services/project.service";
 import {MatPaginator} from "@angular/material/paginator";
+import {TagService} from "../../services/tag.service";
 
 @Component({
   selector: 'app-suggestion-table',
@@ -55,26 +56,34 @@ export class SuggestionTableComponent implements OnInit, OnChanges, AfterViewIni
   constructor(private mergeSuggestionService: MergeSuggestionService,
               private engineersService: EngineerService,
               private activatedRoute: ActivatedRoute,
+              private tagService: TagService,
               private projectService: ProjectService) {
   }
 
   ngOnInit(): void {
-    this.sortIdentities();
-    this.dataSource = new MatTableDataSource(this.identities);
-    this.projectService.getAllProjects().subscribe(response => this.projects = response);
-    this.identitiesByCluster = this.mergeSuggestionService.buildCluster(this.identities);
-    this.getSuggestions(this.identities);
+    this.prepareData();
   }
 
   ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
+    if (this.dataSource) {
+      this.dataSource.paginator = this.paginator;
+    }
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.project) {
       this.identities = this.project.identities;
+      this.prepareData();
       console.clear();
     }
+  }
+
+  prepareData() {
+    this.sortIdentities();
+    this.dataSource = new MatTableDataSource(this.identities);
+    this.projectService.getAllProjects().subscribe(response => this.projects = response);
+    this.identitiesByCluster = this.mergeSuggestionService.buildCluster(this.identities);
+    this.getSuggestions(this.identities);
   }
 
   sortIdentities() {
@@ -100,15 +109,15 @@ export class SuggestionTableComponent implements OnInit, OnChanges, AfterViewIni
   }
 
   merge() {
-    const data: Engineer = this.buildEngineer();
+    const data: Engineer = this.buildData(this.checkBotIdentity());
     this.engineersService.add(data).subscribe(() => {
       this.engineerEmitter.emit(data);
-       this.manageIdentities();
-       this.updateProjectIdentities();
-       this.sortIdentities();
-       this.identitiesByCluster = this.mergeSuggestionService.buildCluster(this.identities);
-       this.getSuggestions(this.identitiesByCluster[this.paginator.pageIndex]);
-       this.dataSource = new MatTableDataSource(this.identitiesByCluster[this.paginator.pageIndex]);
+      this.manageIdentities();
+      this.updateProjectIdentities();
+      this.sortIdentities();
+      this.identitiesByCluster = this.mergeSuggestionService.buildCluster(this.identities);
+      this.getSuggestions(this.identitiesByCluster[this.paginator.pageIndex]);
+      this.dataSource = new MatTableDataSource(this.identitiesByCluster[this.paginator.pageIndex]);
     });
   }
 
@@ -117,6 +126,33 @@ export class SuggestionTableComponent implements OnInit, OnChanges, AfterViewIni
     this.manageIdentities();
     this.getSuggestions(this.identities);
     this.managePagination(this.identities);
+  }
+
+  checkBotIdentity() {
+    return !!this.suggestions.find(identity => this.mergeSuggestionService.checkBot(identity.email) === true);
+  }
+
+  buildData(bot: boolean) {
+    if (bot) {
+      return this.buildBot();
+    }
+    return this.buildEngineer();
+  }
+
+  buildBot() {
+    return {
+      firstName: this.suggestions[0].firstName,
+      lastName: this.suggestions[0].lastName,
+      email: this.suggestions[0].email,
+      position: '',
+      teams: [],
+      city: '',
+      country: '',
+      affiliations: [],
+      project: this.project.id,
+      role: '',
+      tags: [{name: 'BOT'}]
+    }
   }
 
   buildEngineer() {
@@ -157,13 +193,13 @@ export class SuggestionTableComponent implements OnInit, OnChanges, AfterViewIni
       });
   }
 
-  changePage($event){
+  changePage($event) {
     this.current = $event.pageIndex + 1;
     this.getSuggestions(this.identitiesByCluster[$event.pageIndex]);
     this.dataSource = new MatTableDataSource(this.identitiesByCluster[$event.pageIndex]);
   }
 
-  manageCheckboxChange($event, identity){
+  manageCheckboxChange($event, identity) {
     if ($event.checked) {
       this.suggestions.push(identity);
     } else {
@@ -173,16 +209,26 @@ export class SuggestionTableComponent implements OnInit, OnChanges, AfterViewIni
 
   getSourceDisplayIcon(source: string) {
     switch (source) {
-      case 'jira' : return 'assets/source/jira.png'
-      case 'github': return 'assets/source/github.png'
-      case 'bitbucket': return 'assets/source/bitbucket.png'
-      case 'circle': return 'assets/source/circle.png'
-      case 'gitlab': return 'assets/source/gitlab.png'
-      case 'jenkins': return 'assets/source/jenkins.png'
-      case 'pivotal': return 'assets/source/pivotal.png'
-      case 'travis': return 'assets/source/travis.png'
-      case 'file': return 'assets/source/file.png'
-      default: return 'assets/source/git.png'
+      case 'jira' :
+        return 'assets/source/jira.png'
+      case 'github':
+        return 'assets/source/github.png'
+      case 'bitbucket':
+        return 'assets/source/bitbucket.png'
+      case 'circle':
+        return 'assets/source/circle.png'
+      case 'gitlab':
+        return 'assets/source/gitlab.png'
+      case 'jenkins':
+        return 'assets/source/jenkins.png'
+      case 'pivotal':
+        return 'assets/source/pivotal.png'
+      case 'travis':
+        return 'assets/source/travis.png'
+      case 'file':
+        return 'assets/source/file.png'
+      default:
+        return 'assets/source/git.png'
     }
   }
 

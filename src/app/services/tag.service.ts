@@ -15,7 +15,7 @@ export class TagService {
   }
 
   addTag(tag: Tag){
-    return this.httpClient.post(`${environment.apiUrl}/addTag`, tag);
+    return this.httpClient.post<Tag>(`${environment.apiUrl}/addTag`, tag);
   }
 
 }

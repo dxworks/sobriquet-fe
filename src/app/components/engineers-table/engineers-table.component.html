@@ -46,7 +46,7 @@
         <mat-chip-list
           cdkDropList
           cdkDropListOrientation="horizontal">
-          <mat-chip>
+          <mat-chip *ngIf="engineer?.role">
             {{engineer.role}}
           </mat-chip>
         </mat-chip-list>
@@ -56,7 +56,7 @@
     <ng-container matColumnDef="roleActions">
       <mat-header-cell *matHeaderCellDef class="font-style-smaller"></mat-header-cell>
       <mat-cell *matCellDef="let engineer">
-        <mat-select [(ngModel)]="engineer.role" (ngModelChange)="selectRole($event, engineer)">
+        <mat-select *ngIf="engineer" [(ngModel)]="engineer.role" (ngModelChange)="selectRole($event, engineer)">
           <mat-form-field appearance="fill" class="dropdown-input">
             <input matInput placeholder="Search or create role" (keyup)="onKeyRole($event)">
           </mat-form-field>
@@ -85,7 +85,7 @@
     <ng-container matColumnDef="tagsAction">
       <mat-header-cell *matHeaderCellDef class="font-style-smaller"></mat-header-cell>
       <mat-cell *matCellDef="let engineer">
-        <mat-select [(ngModel)]="engineer.tags[engineer.tags.length]" (ngModelChange)="selectTag($event, engineer)">
+        <mat-select *ngIf=engineer [(ngModel)]="engineer.tags[engineer.tags.length]" (ngModelChange)="selectTag($event, engineer)">
           <mat-form-field appearance="fill" class="dropdown-input">
             <input matInput placeholder="Search or create tag" (keyup)="onKeyTag($event)">
           </mat-form-field>
@@ -105,7 +105,7 @@
           cdkDropList
           cdkDropListOrientation="horizontal">
           <mat-chip>
-            {{getEngineerProject(engineer.project)}}
+            {{getEngineerProject(engineer?.project)}}
           </mat-chip>
         </mat-chip-list>
       </mat-cell>
@@ -117,7 +117,7 @@
         <mat-chip-list
           cdkDropList
           cdkDropListOrientation="horizontal">
-          <mat-chip *ngFor="let team of engineer.teams">
+          <mat-chip *ngFor="let team of engineer?.teams">
             {{getTeamName(team)}}
           </mat-chip>
         </mat-chip-list>
@@ -127,7 +127,7 @@
     <ng-container matColumnDef="teamsAction">
       <mat-header-cell *matHeaderCellDef class="font-style-smaller"></mat-header-cell>
       <mat-cell *matCellDef="let engineer">
-        <mat-select [(ngModel)]="engineer.teams[0]" (ngModelChange)="selectTeam($event, engineer)">
+        <mat-select *ngIf="engineer" [(ngModel)]="engineer.teams[0]" (ngModelChange)="selectTeam($event, engineer)">
           <mat-form-field appearance="fill" class="dropdown-input">
             <input matInput placeholder="Search or create team" (keyup)="onKeyTeams($event)">
           </mat-form-field>

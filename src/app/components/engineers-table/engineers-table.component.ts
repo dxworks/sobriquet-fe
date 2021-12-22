@@ -11,6 +11,7 @@ import {TagService} from "../../services/tag.service";
 import {Tag} from "../../data/tag";
 import {Role} from "../../data/role";
 import {RoleService} from "../../services/role.service";
+import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
   selector: 'app-engineers-table',
@@ -65,31 +66,27 @@ export class EngineersTableComponent implements OnInit, OnChanges {
               private teamService: TeamsService,
               private projectService: ProjectService,
               private tagService: TagService,
+              private router: Router,
+              private activatedRoute: ActivatedRoute,
               private roleService: RoleService) {
   }
 
   ngOnInit(): void {
-    if (this.project) {
-      this.engineerService.getAll().subscribe(engineers => {
-        this.allEngineers = engineers;
-        engineers.forEach(engineer => {
-          if (engineer.project ===  this.project?.id) {
-            this.engineers.push(engineer);
-            this.getTableData();
-          }
-        })
+    if (this.router.url.includes('project')) {
+      this.projectService.getAllProjects().subscribe(response => {
+        this.project = response.find(project => project.name === this.activatedRoute.snapshot.url[this.activatedRoute.snapshot.url.length - 1].path)
       });
+    }
+    if (this.project) {
+      this.getEngineers();
       this.displayedColumns.push('actions');
     } else {
       this.getTableData();
       this.valueSaved = this.engineers;
-      this.displayedColumns.push('projects');
-      this.displayedColumns.push('teams');
-      this.displayedColumns.push('teamsAction');
+      this.addColumns();
       this.getTeams();
       this.getProjects();
     }
-
     this.getTags();
     this.getRoles();
   }
@@ -99,9 +96,28 @@ export class EngineersTableComponent implements OnInit, OnChanges {
       this.engineers.push(this.engineer);
       this.getTableData()
     }
-    if (!changes.filter?.firstChange && !this.project){
+    if (!changes.filter?.firstChange && !this.project) {
       this.applyFilter();
     }
+  }
+
+  addColumns() {
+    this.displayedColumns.push('projects');
+    this.displayedColumns.push('teams');
+    this.displayedColumns.push('teamsAction');
+  }
+
+  getEngineers() {
+    this.engineerService.getAll().subscribe(engineers => {
+      this.allEngineers = engineers;
+      engineers.forEach(engineer => {
+        if (engineer.project === this.project.id) {
+          this.engineers.push(engineer);
+          this.getTableData();
+        }
+      })
+    });
+
   }
 
   updateTableView() {
@@ -115,7 +131,7 @@ export class EngineersTableComponent implements OnInit, OnChanges {
     this.dataSource = new MatTableDataSource(this.engineers);
   }
 
-  applyFilter(){
+  applyFilter() {
     this.dataSource = new MatTableDataSource(this.engineers.filter(engineer => engineer.project === this.filter.id));
   }
 
@@ -131,7 +147,7 @@ export class EngineersTableComponent implements OnInit, OnChanges {
     this.roleService.getAllRoles().subscribe(response => this.filteredRoles = this.roles = response);
   }
 
-  getProjects(){
+  getProjects() {
     this.projectService.getAllProjects().subscribe(response => this.projects = response);
   }
 
@@ -191,7 +207,7 @@ export class EngineersTableComponent implements OnInit, OnChanges {
     this.filteredTeams = this.searchTeam();
   }
 
-  onKeyTag($event){
+  onKeyTag($event) {
     if ($event.key === 'Backspace') {
       this.newTagName = this.newTagName.substring(0, this.newTagName.length - 1);
     } else if ($event.key === 'Shift') {

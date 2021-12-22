@@ -17,7 +17,7 @@ export class ProjectService {
   }
 
   addProject(projectName: string, projectFiles: File | Identity[]) {
-    return this.httpClient.post(`${environment.apiUrl}/addProject/${projectName}`, projectFiles);
+    return this.httpClient.post<Project>(`${environment.apiUrl}/addProject/${projectName}`, projectFiles);
   }
 
   delete(name: string){

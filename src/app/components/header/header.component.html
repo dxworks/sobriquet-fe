@@ -2,37 +2,32 @@
   <img src="../../../assets/logo.png" (click)="goToHomePage()" class="logo">
   <div class="buttons-container">
     <button class="menu-button"
-      [class.selected]="urlPath === '/home'"
-      (click)="goTo('/home')">
+            [class.selected]="urlPath === '/home'"
+            (click)="goTo('/home')">
       Home
     </button>
     <button class="menu-button"
-      [class.selected]="urlPath === '/teams'"
-      (click)="goTo('/teams')">
+            [class.selected]="urlPath === '/teams'"
+            (click)="goTo('/teams')">
       Teams
     </button>
     <button class="menu-button"
-      [class.selected]="urlPath === '/engineers'"
-      (click)="goTo('/engineers')">
+            [class.selected]="urlPath === '/engineers'"
+            (click)="configureEngineersPageRouting()">
       Engineers
     </button>
-<!--    <button class="menu-button"-->
-<!--            [class.selected]="urlPath === '/repositories'"-->
-<!--            (click)="goTo('/repositories')">-->
-<!--      Repositories-->
-<!--    </button>-->
   </div>
 
   <div class="icon">
-      <button mat-button [matMenuTriggerFor]="userActions">
-        <mat-icon class="sortinghat-orange">account_circle</mat-icon>
+    <button mat-button [matMenuTriggerFor]="userActions">
+      <mat-icon class="sortinghat-orange">account_circle</mat-icon>
+    </button>
+    <mat-menu #userActions="matMenu">
+      <button mat-menu-item (click)="logOut()">
+        <mat-icon>exit_to_app</mat-icon>
+        Log out
       </button>
-      <mat-menu #userActions="matMenu">
-        <button mat-menu-item (click)="logOut()">
-          <mat-icon>exit_to_app</mat-icon>
-          Log out
-        </button>
-      </mat-menu>
+    </mat-menu>
   </div>
 </div>
 
