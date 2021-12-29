@@ -47,7 +47,10 @@ export class HomePageComponent implements OnInit {
         this.readFile(this.selectedJSON[i]);
         fileResults.push(JSON.parse(localStorage.getItem(`${this.selectedJSON[i].name}`)));
       }
-      this.projectService.addProject(this.projectName, this.transformIdentities(fileResults)).subscribe(() => this.getProjects());
+      this.projectService.addProject(this.projectName, this.transformIdentities(fileResults)).subscribe(response => {
+        this.getProjects();
+        this.router.navigate([`/identities/project/${response.name}`]);
+      });
     }
   }
 
@@ -60,8 +63,13 @@ export class HomePageComponent implements OnInit {
   getFileNames() {
     if (this.selectedJSON instanceof File) {
       return this.selectedJSON.name;
+    } else {
+      let title = '';
+      for (let i = 0; i < this.selectedJSON?.length; i++) {
+        title += this.selectedJSON[i].name + ', ';
+      }
+      return title.slice(0, -2);
     }
-    return '';
   }
 
   readFile(file: File) {

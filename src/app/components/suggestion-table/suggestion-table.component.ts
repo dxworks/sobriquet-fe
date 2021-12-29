@@ -7,7 +7,7 @@ import {
   OnChanges,
   SimpleChanges,
   ViewChild,
-  AfterViewInit
+  AfterViewInit, ChangeDetectorRef
 } from '@angular/core';
 import {Identity} from '../../data/identity';
 import {MatTableDataSource} from '@angular/material/table';
@@ -17,7 +17,7 @@ import {Project} from '../../data/project';
 import {EngineerService} from '../../services/engineer.service';
 import {ActivatedRoute} from '@angular/router';
 import {ProjectService} from '../../services/project.service';
-import {MatPaginator} from '@angular/material/paginator';
+import {MatPaginator, MatPaginatorIntl} from '@angular/material/paginator';
 import {TagService} from '../../services/tag.service';
 
 @Component({
@@ -57,37 +57,54 @@ export class SuggestionTableComponent implements OnInit, OnChanges, AfterViewIni
               private engineersService: EngineerService,
               private activatedRoute: ActivatedRoute,
               private tagService: TagService,
+              private changeDetectorRef: ChangeDetectorRef,
               private projectService: ProjectService) {
   }
 
   ngOnInit(): void {
+    this.projectService.getAllProjects().subscribe(response => this.projects = response);
+    this.identities = this.project?.identities;
     this.prepareData();
+    this.initTable();
   }
 
   ngAfterViewInit() {
     if (this.dataSource) {
-      this.dataSource.paginator = this.paginator;
+      this.paginator = new MatPaginator(new MatPaginatorIntl(), this.changeDetectorRef);
+      this.paginator._displayedPageSizeOptions = [this.suggestions.length];
+      setTimeout(
+        () => {
+          this.dataSource.paginator = this.paginator;
+        });
     }
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.project) {
+    if (!changes.project?.firstChange) {
       this.identities = this.project.identities;
       this.prepareData();
-      console.clear();
+      this.initTable();
     }
+  }
+
+  initTable() {
+    this.paginator = new MatPaginator(new MatPaginatorIntl(), this.changeDetectorRef);
+    this.paginator._displayedPageSizeOptions = [this.suggestions.length];
+    setTimeout(
+      () => {
+        this.dataSource.paginator = this.paginator;
+      });
   }
 
   prepareData() {
     this.sortIdentities();
     this.dataSource = new MatTableDataSource(this.identities);
-    this.projectService.getAllProjects().subscribe(response => this.projects = response);
     this.identitiesByCluster = this.mergeSuggestionService.buildCluster(this.identities);
     this.getSuggestions(this.identities);
   }
 
   sortIdentities() {
-    this.identities.sort((id1, id2) => id1.firstName.localeCompare(id2.firstName));
+    this.identities?.sort((id1, id2) => id1.firstName.localeCompare(id2.firstName));
   }
 
   getSuggestions(identities: Identity[]) {
@@ -129,7 +146,7 @@ export class SuggestionTableComponent implements OnInit, OnChanges, AfterViewIni
   }
 
   checkBotIdentity() {
-    return !!this.suggestions.find(identity => this.mergeSuggestionService.checkBot(identity.email) === true);
+    return !!this.suggestions.every(identity => this.mergeSuggestionService.checkBot(identity.email) === true);
   }
 
   buildData(bot: boolean) {
@@ -197,6 +214,7 @@ export class SuggestionTableComponent implements OnInit, OnChanges, AfterViewIni
     this.current = $event.pageIndex + 1;
     this.getSuggestions(this.identitiesByCluster[$event.pageIndex]);
     this.dataSource = new MatTableDataSource(this.identitiesByCluster[$event.pageIndex]);
+    this.initTable();
   }
 
   manageCheckboxChange($event, identity) {
@@ -225,8 +243,6 @@ export class SuggestionTableComponent implements OnInit, OnChanges, AfterViewIni
         return 'assets/source/pivotal.png'
       case 'travis':
         return 'assets/source/travis.png'
-      case 'file':
-        return 'assets/source/file.png'
       default:
         return 'assets/source/git.png'
     }

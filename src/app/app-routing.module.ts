@@ -10,6 +10,7 @@ import {HomePageComponent} from './pages/home-page/home-page.component';
 const routes: Routes = [
   {path: '', component: LoginComponent},
   {path: 'identities/project/:name', component: ProjectIdentityPage, canActivate: [AuthGuard]},
+  {path: 'identities/newProject/:name', component: ProjectIdentityPage, canActivate: [AuthGuard]},
   {path: 'engineers/project/:name', component: EngineersPageComponent, canActivate: [AuthGuard]},
   {path: 'home', component: HomePageComponent, canActivate: [AuthGuard]},
   {path: 'teams', component: TeamsPageComponent, canActivate: [AuthGuard]},

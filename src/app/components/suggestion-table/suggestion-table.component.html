@@ -1,4 +1,4 @@
-<div class="container mat-elevation-z8">
+<div class="container mat-elevation-z8" *ngIf="identities?.length > 0">
   <div class="header">
     <div class="mt-5">
       <button class="sortinghat-orange-bg mr-10" mat-button (click)="rejectMerge()">
@@ -61,3 +61,5 @@
   </mat-toolbar-row>
 </div>
 
+
+<span *ngIf="identities?.length === 0" class="message">There are no suggestions for this project</span>

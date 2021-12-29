@@ -61,6 +61,8 @@ import {DevExtremeModule, DxDiagramModule} from 'devextreme-angular';
     TeamsDiagramComponent
   ],
   imports: [
+    FormsModule,
+    ReactiveFormsModule,
     BrowserModule,
     AppRoutingModule,
     NoopAnimationsModule,
@@ -74,7 +76,6 @@ import {DevExtremeModule, DxDiagramModule} from 'devextreme-angular';
     MatTableModule,
     MatChipsModule,
     MatDialogModule,
-    FormsModule,
     MatSelectModule,
     ReactiveFormsModule,
     MatProgressBarModule,
