@@ -15,7 +15,7 @@
 
 .mat-columns-project {
   flex: 0 0 0.5% !important;
-  margin-left: 10px;
+  padding-left: 20px;
 }
 
 .mat-column-firstname, .mat-column-lastname, .mat-column-city, .mat-column-country {
@@ -23,7 +23,7 @@
 }
 
 .mat-column-actions {
-  flex: 0 0 10%!important;
+  flex: 0 0 2%!important;
   padding-left: 50px;
 }
 

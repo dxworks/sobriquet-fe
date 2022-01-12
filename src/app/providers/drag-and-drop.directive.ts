@@ -1,4 +1,4 @@
-import { Directive, EventEmitter, Output, HostListener, HostBinding } from '@angular/core';
+import {Directive, EventEmitter, Output, HostListener, HostBinding} from '@angular/core';
 
 @Directive({
   selector: '[appDragDropFileUpload]'
@@ -16,13 +16,15 @@ export class DragAndDropDirective {
     this.background = '#e2eefd';
   }
 
-  @HostListener('dragleave', ['$event']) public dragLeave(event) {
+  @HostListener('dragleave', ['$event'])
+  public dragLeave(event) {
     event.preventDefault();
     event.stopPropagation();
     this.background = '#ffffff'
   }
 
-  @HostListener('drop', ['$event']) public drop(event) {
+  @HostListener('drop', ['$event'])
+  public drop(event) {
     event.preventDefault();
     event.stopPropagation();
     this.background = '#ffffff';

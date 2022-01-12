@@ -10,6 +10,7 @@
                             (engineerEmitter)="engineer = $event"
                             (suggestionsEmitter)="suggestions = $event"></app-suggestion-table>
       <app-engineers-table [engineer]="engineer"
+                           [showAll]="true"
                            [project]="project"
                            [suggestions]="suggestions"></app-engineers-table>
     </div>

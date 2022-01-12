@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {Engineer} from "../../data/engineer";
+import {Engineer} from '../../data/engineer';
 
 @Component({
   selector: 'app-engineer',
@@ -14,8 +14,11 @@ export class EngineerComponent implements OnInit {
   engineerDeletedEventEmitter = new EventEmitter();
   @Output()
   teamLinkedEventEmitter = new EventEmitter();
-  constructor() { }
 
-  ngOnInit(): void {}
+  constructor() {
+  }
+
+  ngOnInit(): void {
+  }
 
 }

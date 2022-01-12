@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {Identity} from "../../data/identity";
+import {Identity} from '../../data/identity';
 
 @Injectable({
   providedIn: 'root'
@@ -39,9 +39,9 @@ export class MergeSuggestionService {
   }
 
   getCleanSortedEmail(email: string) {
-    let emailNameDomain = email?.split("@");
+    let emailNameDomain = email?.split('@');
     if (emailNameDomain) {
-      let emailNameParts = emailNameDomain[0]?.split(".");
+      let emailNameParts = emailNameDomain[0]?.split('.');
       let emailNameParts1OnlyChars = emailNameParts[0]?.replace(/[0-9]/g, '');
       let emailNameParts2OnlyChars = emailNameParts[1]?.replace(/[0-9]/g, '');
       let emailParts;
@@ -53,13 +53,13 @@ export class MergeSuggestionService {
   getCleanSortedUsername(username: string) {
     let usernameParts;
     let cleanUsername;
-    if (username?.includes(".")) {
-      usernameParts = username?.split(".");
+    if (username?.includes('.')) {
+      usernameParts = username?.split('.');
       let usernameParts1OnlyChars = usernameParts[0]?.replace(/[0-9]/g, '');
       let usernameParts2OnlyChars = usernameParts[1]?.replace(/[0-9]/g, '');
       usernameParts2OnlyChars ? cleanUsername = usernameParts1OnlyChars.concat(usernameParts2OnlyChars) : cleanUsername = usernameParts1OnlyChars;
-    } else if (username?.includes("-") || username?.includes("_")) {
-      username.includes("-") ? usernameParts = username?.split("-") : usernameParts = username?.split("_");
+    } else if (username?.includes('-') || username?.includes('_')) {
+      username.includes('-') ? usernameParts = username?.split('-') : usernameParts = username?.split('_');
       let usernameParts1OnlyChars = usernameParts[0]?.replace(/[0-9]/g, '');
       let usernameParts2OnlyChars = usernameParts[1]?.replace(/[0-9]/g, '');
       usernameParts2OnlyChars ? cleanUsername = usernameParts1OnlyChars.concat(usernameParts2OnlyChars) : cleanUsername = usernameParts1OnlyChars;
@@ -102,7 +102,7 @@ export class MergeSuggestionService {
   buildCluster(identities) {
     let cluster = [];
     let identitiesByCluster = [];
-    for (let i = 0; i < identities.length; i++) {
+    for (let i = 0; i < identities?.length; i++) {
       if (this.identitiesAreSimilar(identities[i], identities[i + 1])) {
         if (!cluster.includes(identities[i])) {
           cluster.push(identities[i]);

@@ -1,5 +1,5 @@
 <div class="container mat-elevation-z8">
-  <mat-table #table [dataSource]="dataSource">
+  <mat-table #table [dataSource]="dataSource" *ngIf="dataSource?.data.length > 0">
     <ng-container matColumnDef="firstname">
       <mat-header-cell *matHeaderCellDef class="font-style-smaller"> First name</mat-header-cell>
       <mat-cell *matCellDef="let engineer" class="font-style-smaller"> {{engineer?.firstName}} </mat-cell>
@@ -17,26 +17,34 @@
 
     <ng-container matColumnDef="city">
       <mat-header-cell *matHeaderCellDef class="font-style-smaller"> City</mat-header-cell>
-      <mat-cell *matCellDef="let engineer"><input matInput [(ngModel)]="engineer.city"
-                                                  *ngIf="!valueSaved.includes(engineer) && project">
-        <span *ngIf="valueSaved.includes(engineer) || !this.project" class="font-style-smaller">{{engineer?.city}}</span>
+      <mat-cell *matCellDef="let engineer"><input matInput [(ngModel)]="engineerCity[dataSource.data.indexOf(engineer)]"
+                                                  (ngModelChange)="engineerCity[dataSource.data.indexOf(engineer)] = $event; changeEngineerProperty($event, engineer, 'city')"
+                                                  *ngIf="!valueSaved.includes(engineer)">
+        <span *ngIf="valueSaved.includes(engineer)"
+              class="font-style-smaller" style="color:red">{{engineer?.city}}</span>
       </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="country">
       <mat-header-cell *matHeaderCellDef class="font-style-smaller"> Country</mat-header-cell>
-      <mat-cell *matCellDef="let engineer"><input matInput [(ngModel)]="engineer.country"
-                                                  *ngIf="!valueSaved.includes(engineer) && project">
-        <span *ngIf="valueSaved.includes(engineer) || !this.project" class="font-style-smaller">{{engineer?.country}}</span>
+      <mat-cell *matCellDef="let engineer"><input matInput
+                                                  [(ngModel)]="engineerCountry[dataSource.data.indexOf(engineer)]"
+                                                  (ngModelChange)="engineerCountry[dataSource.data.indexOf(engineer)] = $event; changeEngineerProperty($event, engineer, 'country')"
+                                                  *ngIf="!valueSaved.includes(engineer)">
+        <span *ngIf="valueSaved.includes(engineer)"
+              class="font-style-smaller">{{engineer?.country}}</span>
       </mat-cell>
     </ng-container>
 
 
     <ng-container matColumnDef="position">
       <mat-header-cell *matHeaderCellDef class="font-style-smaller"> Position</mat-header-cell>
-      <mat-cell *matCellDef="let engineer"><input matInput [(ngModel)]="engineer.position"
-                                                  *ngIf="!valueSaved.includes(engineer) && project">
-        <span *ngIf="valueSaved.includes(engineer) || !this.project" class="font-style-smaller">{{engineer?.position}}</span>
+      <mat-cell *matCellDef="let engineer"><input matInput
+                                                  [(ngModel)]="engineerPosition[dataSource.data.indexOf(engineer)]"
+                                                  (ngModelChange)="engineerPosition[dataSource.data.indexOf(engineer)] = $event; changeEngineerProperty($event, engineer, 'position')"
+                                                  *ngIf="!valueSaved.includes(engineer)">
+        <span *ngIf="valueSaved.includes(engineer)"
+              class="font-style-smaller">{{engineer?.position}}</span>
       </mat-cell>
     </ng-container>
 
@@ -58,7 +66,8 @@
       <mat-cell *matCellDef="let engineer">
         <mat-select *ngIf="engineer" [(ngModel)]="engineer.role" (ngModelChange)="selectRole($event, engineer)">
           <mat-form-field appearance="fill" class="dropdown-input">
-            <input matInput placeholder="Search or create role" (keyup)="onKeyRole($event)">
+            <input matInput placeholder="Search or create role" [(ngModel)]="newRoleName"
+                   (ngModelChange)="filteredRoles = this.searchRole()">
           </mat-form-field>
           <mat-option *ngIf="filteredRoles.length === 0" (click)="selectRole($event, engineer)">
             <mat-icon>add</mat-icon>
@@ -85,9 +94,11 @@
     <ng-container matColumnDef="tagsAction">
       <mat-header-cell *matHeaderCellDef class="font-style-smaller"></mat-header-cell>
       <mat-cell *matCellDef="let engineer">
-        <mat-select *ngIf=engineer [(ngModel)]="engineer.tags[engineer.tags.length]" (ngModelChange)="selectTag($event, engineer)">
+        <mat-select *ngIf=engineer [(ngModel)]="engineer.tags[engineer.tags.length]"
+                    (ngModelChange)="selectTag($event, engineer)">
           <mat-form-field appearance="fill" class="dropdown-input">
-            <input matInput placeholder="Search or create tag" (keyup)="onKeyTag($event)">
+            <input matInput placeholder="Search or create tag" [(ngModel)]="newTagName"
+                   (ngModelChange)="filteredTags = this.searchTag()">
           </mat-form-field>
           <mat-option *ngIf="filteredTags.length === 0" (click)="selectTag($event, engineer)">
             <mat-icon>add</mat-icon>
@@ -129,7 +140,8 @@
       <mat-cell *matCellDef="let engineer">
         <mat-select *ngIf="engineer" [(ngModel)]="engineer.teams[0]" (ngModelChange)="selectTeam($event, engineer)">
           <mat-form-field appearance="fill" class="dropdown-input">
-            <input matInput placeholder="Search or create team" (keyup)="onKeyTeams($event)">
+            <input matInput placeholder="Search or create team" [(ngModel)]="newTeamName"
+                   (ngModelChange)="filteredTeams = this.searchTeam()">
           </mat-form-field>
           <mat-option *ngIf="filteredTeams.length === 0" (click)="manageTeamSelection($event, engineer)">
             <mat-icon>add</mat-icon>

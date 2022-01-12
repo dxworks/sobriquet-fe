@@ -1,10 +1,10 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {Team} from "../../../data/team";
-import {FormControl} from "@angular/forms";
-import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
-import {Engineer} from "../../../data/engineer";
-import {EngineerService} from "../../../services/engineer.service";
-import {TeamsService} from "../../../services/teams.service";
+import {Team} from '../../../data/team';
+import {FormControl} from '@angular/forms';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {Engineer} from '../../../data/engineer';
+import {EngineerService} from '../../../services/engineer.service';
+import {TeamsService} from '../../../services/teams.service';
 
 @Component({
   selector: 'app-team-linker-popup',
@@ -28,7 +28,8 @@ export class TeamLinkerPopupComponent implements OnInit {
   constructor(private dialogRef: MatDialogRef<TeamLinkerPopupComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any,
               private engineerService: EngineerService,
-              private teamsService: TeamsService) { }
+              private teamsService: TeamsService) {
+  }
 
   ngOnInit(): void {
     this.teamsService.getAllTeams().subscribe(response => this.teams = response);
@@ -42,7 +43,7 @@ export class TeamLinkerPopupComponent implements OnInit {
     this.dialogRef.close();
   }
 
-  linkTeamToEngineer(engineerId: string, teamId: string){
+  linkTeamToEngineer(engineerId: string, teamId: string) {
     this.engineerService.linkTeam(engineerId, teamId).subscribe(() => this.onCancelClick());
   }
 

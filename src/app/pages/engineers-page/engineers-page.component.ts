@@ -1,9 +1,11 @@
 import {Component, OnInit} from '@angular/core';
-import {Engineer} from "../../data/engineer";
-import {EngineerService} from "../../services/engineer.service";
-import {ProjectService} from "../../services/project.service";
-import {Project} from "../../data/project";
-import {ActivatedRoute} from "@angular/router";
+import {Engineer} from '../../data/engineer';
+import {EngineerService} from '../../services/engineer.service';
+import {ProjectService} from '../../services/project.service';
+import {Project} from '../../data/project';
+import {ActivatedRoute} from '@angular/router';
+import {Tag} from '../../data/tag';
+import {TagService} from '../../services/tag.service';
 
 @Component({
   selector: 'app-engineers-page',
@@ -13,16 +15,18 @@ import {ActivatedRoute} from "@angular/router";
 export class EngineersPageComponent implements OnInit {
 
   engineers: Engineer[] = [];
-
   tableView: boolean;
   cardsView: boolean;
   projects: Project[] = [];
   project: Project;
   engineerDeleted = false;
   projectName: string;
+  tag: Tag;
+  tags: Tag[] = [];
 
   constructor(private engineerService: EngineerService,
               private projectsService: ProjectService,
+              private tagService: TagService,
               private activatedRoute: ActivatedRoute) {
     if (this.activatedRoute.snapshot.url.find(urlSegment => urlSegment.path === 'project')) {
       this.projectName = this.activatedRoute.snapshot.url[this.activatedRoute.snapshot.url.length - 1].path;
@@ -37,6 +41,7 @@ export class EngineersPageComponent implements OnInit {
         this.project = this.projects.find(project => project.name === this.projectName);
       }
     });
+    this.tagService.getAllTags().subscribe(response => this.tags = response);
   }
 
   getData() {
@@ -64,5 +69,9 @@ export class EngineersPageComponent implements OnInit {
 
   filterEngineersByProject($event) {
     this.project = $event
+  }
+
+  filterEngineersByTag($event) {
+    this.tag = $event;
   }
 }

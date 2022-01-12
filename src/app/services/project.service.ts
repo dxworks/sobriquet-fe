@@ -1,8 +1,8 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
-import {environment} from "../../environments/environment";
-import {Project} from "../data/project";
-import {Identity} from "../data/identity";
+import {HttpClient} from '@angular/common/http';
+import {environment} from '../../environments/environment';
+import {Project} from '../data/project';
+import {Identity} from '../data/identity';
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +20,7 @@ export class ProjectService {
     return this.httpClient.post<Project>(`${environment.apiUrl}/addProject/${projectName}`, projectFiles);
   }
 
-  delete(name: string){
+  delete(name: string) {
     return this.httpClient.delete(`${environment.apiUrl}/deleteProject/${name}`);
   }
 
