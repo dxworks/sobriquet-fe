@@ -1,15 +1,17 @@
 .container {
-  margin: 30px 40px;
+  margin-left: 40px;
+  margin-right: 40px;
+  margin-top: 30px;
   border-radius: 2px;
 }
 
-.mat-column-teamsAction, .mat-column-tagsAction, .mat-column-roleActions{
+.mat-column-teamsAction, .mat-column-tagsAction, .mat-column-roleActions {
   flex: 0 0 1% !important;
   margin-right: 5px;
 }
 
 .mat-column-teams {
-  flex: 0 0 8%!important;
+  flex: 0 0 8% !important;
   margin-right: 5px;
 }
 
@@ -23,15 +25,14 @@
 }
 
 .mat-column-actions {
-  flex: 0 0 2%!important;
-  padding-left: 50px;
+  flex: 0.1;
 }
 
 .mat-column-city, .mat-column-teams {
   flex: 0 0 5%;
 }
 
-.mat-column-tags, .mat-column-role{
+.mat-column-tags, .mat-column-role {
   flex: 0 0 7%;
 }
 
@@ -60,4 +61,24 @@
 
 .mat-input-element {
   font: normal normal normal 14px/30px Muli !important;
+}
+
+th.mat-header-cell, td.mat-cell, td.mat-footer-cell {
+  border-bottom: unset !important;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  margin: 2px 10px;
+}
+
+::ng-deep.mat-form-field-type-mat-select:not(.mat-form-field-disabled) .mat-form-field-flex {
+  background: white;
+}
+
+.add-button {
+  height: fit-content;
+  margin-top: auto;
+  margin-bottom: auto;
 }

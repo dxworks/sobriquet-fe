@@ -1,55 +1,67 @@
 <div class="container mat-elevation-z8">
-  <mat-table #table [dataSource]="dataSource" *ngIf="dataSource?.data.length > 0">
+  <div class="header">
+    <mat-form-field appearance="fill">
+      <mat-label>Filter by engineer tag</mat-label>
+      <mat-select [(ngModel)]="tag" (ngModelChange)="applyTagFilter($event)">
+        <mat-option *ngFor="let tag of tags" [value]="tag">{{tag.name}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+
+    <button mat-button class="sortinghat-cyan-bg mt-5 add-button" (click)="openDialog()">
+      <mat-icon>add</mat-icon>
+    </button>
+  </div>
+  <mat-table #table [dataSource]="dataSource" *ngIf="dataSource?.data.length > 0" matSort
+             (matSortChange)="sortData()">
+    <ng-container matColumnDef="select">
+      <th mat-header-cell *matHeaderCellDef>
+        <mat-checkbox (change)="$event ? masterToggle() : null"
+                      [checked]="selection.hasValue() && isAllSelected()"
+                      [indeterminate]="selection.hasValue() && !isAllSelected()">
+        </mat-checkbox>
+      </th>
+      <td mat-cell *matCellDef="let row">
+        <mat-checkbox (click)="$event.stopPropagation()"
+                      (change)="$event ? selection.toggle(row) : null"
+                      [checked]="selection.isSelected(row)">
+        </mat-checkbox>
+      </td>
+    </ng-container>
     <ng-container matColumnDef="firstname">
-      <mat-header-cell *matHeaderCellDef class="font-style-smaller"> First name</mat-header-cell>
+      <mat-header-cell *matHeaderCellDef class="font-style-smaller" mat-sort-header> First name</mat-header-cell>
       <mat-cell *matCellDef="let engineer" class="font-style-smaller"> {{engineer?.firstName}} </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="lastname">
-      <mat-header-cell *matHeaderCellDef class="font-style-smaller"> Last name</mat-header-cell>
+      <mat-header-cell *matHeaderCellDef class="font-style-smaller" mat-sort-header> Last name</mat-header-cell>
       <mat-cell *matCellDef="let engineer" class="font-style-smaller"> {{engineer?.lastName}} </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="email">
-      <mat-header-cell *matHeaderCellDef class="font-style-smaller"> Email address</mat-header-cell>
+      <mat-header-cell *matHeaderCellDef class="font-style-smaller" mat-sort-header> Email address</mat-header-cell>
       <mat-cell *matCellDef="let engineer" class="font-style-smaller">{{engineer?.email}}</mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="city">
-      <mat-header-cell *matHeaderCellDef class="font-style-smaller"> City</mat-header-cell>
-      <mat-cell *matCellDef="let engineer"><input matInput [(ngModel)]="engineerCity[dataSource.data.indexOf(engineer)]"
-                                                  (ngModelChange)="engineerCity[dataSource.data.indexOf(engineer)] = $event; changeEngineerProperty($event, engineer, 'city')"
-                                                  *ngIf="!valueSaved.includes(engineer)">
-        <span *ngIf="valueSaved.includes(engineer)"
-              class="font-style-smaller" style="color:red">{{engineer?.city}}</span>
-      </mat-cell>
+      <mat-header-cell *matHeaderCellDef class="font-style-smaller" mat-sort-header> City</mat-header-cell>
+      <mat-cell *matCellDef="let engineer">{{engineer?.city}}</mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="country">
-      <mat-header-cell *matHeaderCellDef class="font-style-smaller"> Country</mat-header-cell>
-      <mat-cell *matCellDef="let engineer"><input matInput
-                                                  [(ngModel)]="engineerCountry[dataSource.data.indexOf(engineer)]"
-                                                  (ngModelChange)="engineerCountry[dataSource.data.indexOf(engineer)] = $event; changeEngineerProperty($event, engineer, 'country')"
-                                                  *ngIf="!valueSaved.includes(engineer)">
-        <span *ngIf="valueSaved.includes(engineer)"
-              class="font-style-smaller">{{engineer?.country}}</span>
-      </mat-cell>
+      <mat-header-cell *matHeaderCellDef class="font-style-smaller" mat-sort-header> Country</mat-header-cell>
+      <mat-cell *matCellDef="let engineer">{{engineer?.country}}</mat-cell>
     </ng-container>
 
 
     <ng-container matColumnDef="position">
-      <mat-header-cell *matHeaderCellDef class="font-style-smaller"> Position</mat-header-cell>
-      <mat-cell *matCellDef="let engineer"><input matInput
-                                                  [(ngModel)]="engineerPosition[dataSource.data.indexOf(engineer)]"
-                                                  (ngModelChange)="engineerPosition[dataSource.data.indexOf(engineer)] = $event; changeEngineerProperty($event, engineer, 'position')"
-                                                  *ngIf="!valueSaved.includes(engineer)">
-        <span *ngIf="valueSaved.includes(engineer)"
-              class="font-style-smaller">{{engineer?.position}}</span>
-      </mat-cell>
+      <mat-header-cell *matHeaderCellDef class="font-style-smaller" mat-sort-header> Position</mat-header-cell>
+      <mat-cell *matCellDef="let engineer">{{engineer?.position}}</mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="role">
-      <mat-header-cell *matHeaderCellDef class="font-style-smaller"> Role</mat-header-cell>
+      <mat-header-cell *matHeaderCellDef class="font-style-smaller jc-center"> Role</mat-header-cell>
       <mat-cell *matCellDef="let engineer">
         <mat-chip-list
           cdkDropList
@@ -79,7 +91,7 @@
     </ng-container>
 
     <ng-container matColumnDef="tags">
-      <mat-header-cell *matHeaderCellDef class="font-style-smaller"> Tags</mat-header-cell>
+      <mat-header-cell *matHeaderCellDef class="font-style-smaller jc-center"> Tags</mat-header-cell>
       <mat-cell *matCellDef="let engineer">
         <mat-chip-list
           cdkDropList
@@ -110,7 +122,7 @@
     </ng-container>
 
     <ng-container matColumnDef="projects">
-      <mat-header-cell *matHeaderCellDef class="font-style-smaller"> Project</mat-header-cell>
+      <mat-header-cell *matHeaderCellDef class="font-style-smaller jc-center"> Project</mat-header-cell>
       <mat-cell *matCellDef="let engineer">
         <mat-chip-list
           cdkDropList
@@ -123,7 +135,7 @@
     </ng-container>
 
     <ng-container matColumnDef="teams">
-      <mat-header-cell *matHeaderCellDef class="font-style-smaller"> Teams</mat-header-cell>
+      <mat-header-cell *matHeaderCellDef class="font-style-smaller jc-center"> Teams</mat-header-cell>
       <mat-cell *matCellDef="let engineer">
         <mat-chip-list
           cdkDropList
@@ -155,8 +167,8 @@
     <ng-container matColumnDef="actions">
       <mat-header-cell *matHeaderCellDef alignment="center" class="font-style-smaller"></mat-header-cell>
       <mat-cell *matCellDef="let engineer">
-        <button mat-button class="action-button" (click)="saveChanges(engineer)">
-          <mat-icon>save</mat-icon>
+        <button mat-button class="action-button" (click)="selectedEngineer = engineer; openInfoDialog()">
+          <mat-icon class="sortinghat-orange">info</mat-icon>
         </button>
       </mat-cell>
     </ng-container>
@@ -164,6 +176,10 @@
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
     <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
   </mat-table>
+  <mat-toolbar-row>
+    <mat-paginator [pageSizeOptions]="[50,100, 500, 1000]"
+                   pageSize="50"
+                   showFirstLastButtons>
+    </mat-paginator>
+  </mat-toolbar-row>
 </div>
-
-

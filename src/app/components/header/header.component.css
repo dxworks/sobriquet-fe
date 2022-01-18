@@ -4,11 +4,7 @@
   width: 100%;
   padding-bottom: 40px;
   display: flex;
-}
-
-.user-icon {
-  width: 20px;
-  margin-top: 20px;
+  justify-content: space-between;
 }
 
 .logo {
@@ -21,8 +17,6 @@
 
 .buttons-container {
   margin-top: 3%;
-  margin-left: auto;
-  margin-right: auto;
 }
 
 .menu-button {
@@ -43,9 +37,4 @@
 .menu-button:hover {
   background: #FD8947;
   border-radius: 5px;
-}
-
-.icon {
-  margin-top: 4.5%;
-  margin-right: 15px;
 }

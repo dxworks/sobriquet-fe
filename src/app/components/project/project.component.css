@@ -10,3 +10,7 @@
   cursor: pointer;
   width: 300px;
 }
+
+._mat-animation-noopable.mat-card {
+  justify-content: center;
+}

@@ -1,0 +1,23 @@
+::ng-deep th.mat-header-cell:last-of-type, td.mat-cell:last-of-type, td.mat-footer-cell:last-of-type {
+  border-bottom: unset;
+}
+
+::ng-deep.mat-dialog-container {
+  width: 600px;
+}
+
+.icon {
+  cursor: pointer;
+}
+
+.mat-column-actions{
+  flex: 0.12;
+}
+
+::ng-deep .mat-form-field-appearance-fill .mat-form-field-flex{
+  background: white;
+}
+
+::ng-deep.mat-form-field{
+  width: 50%;
+}

@@ -7,9 +7,8 @@ import {LoginComponent} from './components/login/login.component';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
-import {ProjectIdentityPage} from './pages/project-identity-page/project-identity-page';
-import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
-import {AuthInterceptor} from './providers/auth.interceptor';
+import {ProjectPageComponent} from './pages/project-page/project-page.component';
+import {HttpClientModule} from '@angular/common/http';
 import {MatTableModule} from '@angular/material/table';
 import {MatCardModule} from '@angular/material/card';
 import {MatButtonModule} from '@angular/material/button';
@@ -18,15 +17,12 @@ import {MatMenuModule} from '@angular/material/menu';
 import {MatIconModule} from '@angular/material/icon';
 import {TeamsPageComponent} from './pages/teams-page/teams-page.component';
 import {TeamsTableComponent} from './components/teams-table/teams-table.component';
-import {EngineersPageComponent} from './pages/engineers-page/engineers-page.component';
 import {EngineerComponent} from './components/engineer/engineer.component';
 import {EngineerCardComponent} from './components/engineer-card/engineer-card.component';
 import {MatChipsModule} from '@angular/material/chips';
 import {MatDialogModule} from '@angular/material/dialog';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatSelectModule} from '@angular/material/select';
-import {TeamLinkerPopupComponent} from './components/popups/team-linker-popup/team-linker-popup.component';
-import {NewTeamPopupComponent} from './components/popups/new-team-popup/new-team-popup.component';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {HomePageComponent} from './pages/home-page/home-page.component';
@@ -39,26 +35,32 @@ import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {TeamsDiagramComponent} from './components/teams-diagram/teams-diagram.component';
 import {DevExtremeModule, DxDiagramModule} from 'devextreme-angular';
+import {MatSortModule} from '@angular/material/sort';
+import {NewEngineerPopupComponent} from './components/new-engineer-popup/new-engineer-popup.component';
+import {EngineerDetailsPopupComponent} from './components/engineer-details-popup/engineer-details-popup.component';
+import {NewTeamPopupComponent} from './components/new-team-popup/new-team-popup.component';
+import {TeamLinkerPopupComponent} from './components/team-linker-popup/team-linker-popup.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    ProjectIdentityPage,
+    ProjectPageComponent,
     HeaderComponent,
     TeamsPageComponent,
     TeamsTableComponent,
-    EngineersPageComponent,
     EngineerComponent,
     EngineerCardComponent,
-    TeamLinkerPopupComponent,
-    NewTeamPopupComponent,
     HomePageComponent,
     ProjectComponent,
     SuggestionTableComponent,
     EngineersTableComponent,
     DragAndDropDirective,
-    TeamsDiagramComponent
+    TeamsDiagramComponent,
+    NewEngineerPopupComponent,
+    EngineerDetailsPopupComponent,
+    NewTeamPopupComponent,
+    TeamLinkerPopupComponent,
   ],
   imports: [
     FormsModule,
@@ -84,10 +86,10 @@ import {DevExtremeModule, DxDiagramModule} from 'devextreme-angular';
     MatPaginatorModule,
     MatToolbarModule,
     DevExtremeModule,
-    DxDiagramModule
+    DxDiagramModule,
+    MatSortModule
   ],
-  providers: [
-    {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true}],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule {

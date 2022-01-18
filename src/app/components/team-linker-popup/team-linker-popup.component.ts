@@ -1,10 +1,10 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {Team} from '../../../data/team';
 import {FormControl} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {Engineer} from '../../../data/engineer';
-import {EngineerService} from '../../../services/engineer.service';
-import {TeamsService} from '../../../services/teams.service';
+import {Team} from '../../data/team';
+import {Engineer} from '../../data/engineer';
+import {EngineerService} from '../../services/engineer.service';
+import {TeamsService} from '../../services/teams.service';
 
 @Component({
   selector: 'app-team-linker-popup',

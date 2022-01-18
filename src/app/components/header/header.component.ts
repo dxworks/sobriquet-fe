@@ -31,7 +31,7 @@ export class HeaderComponent implements OnInit {
   }
 
   goToHomePage() {
-    this.router.navigate(['/home']);
+    this.router.navigate(['']);
   }
 
   logOut() {
