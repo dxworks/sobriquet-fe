@@ -17,6 +17,7 @@ export class ProjectPageComponent implements OnInit {
   engineers: Engineer[] = [];
   engineer: Engineer;
   suggestions: Identity[] = [];
+  demergedIdentities: Identity[] = [];
 
   constructor(private activatedRoute: ActivatedRoute, private projectService: ProjectService) {
     this.projectService.getAllProjects().subscribe(response => {
@@ -30,7 +31,7 @@ export class ProjectPageComponent implements OnInit {
   }
 
   transformIdentities() {
-    this.identities.forEach(identity => this.engineers.push({
+    this.identities?.forEach(identity => this.engineers.push({
       firstName: identity.firstName,
       lastName: identity.lastName,
       email: identity.email,
@@ -46,12 +47,9 @@ export class ProjectPageComponent implements OnInit {
     }))
   }
 
-  changeEngineerTable($event) {
-    this.engineer = $event;
+  manageProjectChanges($event) {
+    this.identities = $event;
     this.engineers = [];
-    this.projectService.getById(this.project.id).subscribe(response => {
-      this.identities = response.identities;
-      this.transformIdentities();
-    });
+    this.transformIdentities()
   }
 }

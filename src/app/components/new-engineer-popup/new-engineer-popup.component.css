@@ -1,0 +1,7 @@
+::ng-deep.mat-form-field-appearance-fill .mat-form-field-flex {
+  background: white;
+}
+
+::ng-deep.mat-form-field-wrapper {
+  margin-right: 20px;
+}

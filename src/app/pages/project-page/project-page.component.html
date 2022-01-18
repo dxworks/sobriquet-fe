@@ -9,10 +9,13 @@
                            [engineer]="engineer"
                            [showAll]="true"
                            [project]="project"
-                           [suggestions]="suggestions"></app-engineers-table>
+                           [suggestions]="suggestions"
+                           (identitiesChanged)="demergedIdentities = $event"></app-engineers-table>
       <app-suggestion-table [identities]="identities"
                             [project]="project"
-                            (engineerEmitter)="changeEngineerTable($event)"
+                            [demergedIdentities]="demergedIdentities"
+                            (projectEmitter)="manageProjectChanges($event)"
+                            (engineerEmitter)="engineer = $event"
                             (suggestionsEmitter)="suggestions = $event"></app-suggestion-table>
     </div>
   </div>

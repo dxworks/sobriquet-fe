@@ -38,7 +38,7 @@ export class EngineerDetailsPopupComponent implements OnInit {
   }
 
   save() {
-    this.engineerService.edit(this.selectedEngineer).subscribe(() => this.onCancelClick());
+    this.engineerService.edit(this.selectedEngineer).subscribe(() => this.dialogRef.close({projectIdentities: this.project.identities}));
   }
 
   isAllSelected() {
@@ -61,10 +61,13 @@ export class EngineerDetailsPopupComponent implements OnInit {
   }
 
   rejectIdentity(identity: Identity) {
-      this.selectedEngineer.identities.splice(this.selectedEngineer.identities.indexOf(identity), 1);
+    this.selectedEngineer.identities.splice(this.selectedEngineer.identities.indexOf(identity), 1);
+    this.projectService.getById(this.project.id).subscribe(response => {
+      this.project = response;
       this.project.identities.length === 0 ? this.project.identities = [identity] : this.project.identities.push(identity);
       this.projectService.editProject(this.project.id, this.project.identities).subscribe();
-      this.dataSource.data = this.selectedEngineer.identities;
+    })
+    this.dataSource.data = this.selectedEngineer.identities;
   }
 
 }

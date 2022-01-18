@@ -33,24 +33,22 @@ export class SuggestionTableComponent implements OnInit, OnChanges, AfterViewIni
   identities: Identity[] = [];
   @Input()
   project: Project;
+  @Input()
+  demergedIdentities: Identity[] = [];
 
+  @Output()
+  projectEmitter = new EventEmitter();
   @Output()
   engineerEmitter = new EventEmitter();
   @Output()
   suggestionsEmitter = new EventEmitter();
 
   dataSource: MatTableDataSource<Identity>;
-
   displayedColumns = ['firstname', 'lastname', 'username', 'email', 'source', 'actions'];
-
   suggestions: Identity[] = [];
-
   projects: Project[] = [];
-
   pagination: number[];
-
   identitiesByCluster = [];
-
   current = 1;
 
   constructor(private mergeSuggestionService: MergeSuggestionService,
@@ -69,6 +67,7 @@ export class SuggestionTableComponent implements OnInit, OnChanges, AfterViewIni
   }
 
   ngAfterViewInit() {
+    this.pagination = [this.suggestions.length];
     if (this.dataSource) {
       this.paginator = new MatPaginator(new MatPaginatorIntl(), this.changeDetectorRef);
       this.paginator._displayedPageSizeOptions = [this.suggestions.length];
@@ -84,10 +83,18 @@ export class SuggestionTableComponent implements OnInit, OnChanges, AfterViewIni
       this.identities = this.project.identities;
       this.prepareData();
       this.initTable();
+      this.dataSource.paginator = this.paginator;
+    }
+    if (changes.demergedIdentities && this.demergedIdentities.length > 0) {
+      this.identities = this.identities.concat(this.demergedIdentities);
+      this.prepareData();
+      this.initTable();
+      this.dataSource.paginator = this.paginator;
     }
   }
 
   initTable() {
+    this.pagination = [this.suggestions.length];
     this.paginator = new MatPaginator(new MatPaginatorIntl(), this.changeDetectorRef);
     this.paginator._displayedPageSizeOptions = [this.suggestions.length];
     setTimeout(
@@ -200,7 +207,7 @@ export class SuggestionTableComponent implements OnInit, OnChanges, AfterViewIni
     this.suggestions.forEach(suggestion => {
       this.project.identities = this.project.identities.filter(identity => identity.username !== suggestion.username);
     });
-    this.projectService.editProject(this.project.id, this.project.identities).subscribe();
+    this.projectService.editProject(this.project.id, this.project.identities).subscribe(() => this.projectEmitter.emit(this.project.identities));
   }
 
   managePagination(identities: Identity[]) {

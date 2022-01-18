@@ -1,18 +1,20 @@
-<mat-form-field appearance="fill" class="project-selection">
-  <mat-label>Filter by engineer tag</mat-label>
-  <mat-select [(ngModel)]="tag" (ngModelChange)="applyTagFilter($event)">
-    <mat-option *ngFor="let tag of tags" [value]="tag">{{tag.name}}
-    </mat-option>
-  </mat-select>
-</mat-form-field>
-
-
-<button mat-button class="white ml-45p mt-40" (click)="openDialog()">
-  <mat-icon>add</mat-icon>
-  Add a new engineer
-</button>
 <div class="container mat-elevation-z8">
-  <mat-table #table [dataSource]="dataSource" *ngIf="dataSource?.data.length > 0" matSort (matSortChange)="sortData()">
+  <div class="header">
+    <mat-form-field appearance="fill">
+      <mat-label>Filter by engineer tag</mat-label>
+      <mat-select [(ngModel)]="tag" (ngModelChange)="applyTagFilter($event)">
+        <mat-option *ngFor="let tag of tags" [value]="tag">{{tag.name}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+
+    <button mat-button class="sortinghat-cyan-bg mt-5 add-button" (click)="openDialog()">
+      <mat-icon>add</mat-icon>
+    </button>
+  </div>
+  <mat-table #table [dataSource]="dataSource" *ngIf="dataSource?.data.length > 0" matSort
+             (matSortChange)="sortData()">
     <ng-container matColumnDef="select">
       <th mat-header-cell *matHeaderCellDef>
         <mat-checkbox (change)="$event ? masterToggle() : null"
@@ -59,7 +61,7 @@
     </ng-container>
 
     <ng-container matColumnDef="role">
-      <mat-header-cell *matHeaderCellDef class="font-style-smaller"> Role</mat-header-cell>
+      <mat-header-cell *matHeaderCellDef class="font-style-smaller jc-center"> Role</mat-header-cell>
       <mat-cell *matCellDef="let engineer">
         <mat-chip-list
           cdkDropList
@@ -89,7 +91,7 @@
     </ng-container>
 
     <ng-container matColumnDef="tags">
-      <mat-header-cell *matHeaderCellDef class="font-style-smaller"> Tags</mat-header-cell>
+      <mat-header-cell *matHeaderCellDef class="font-style-smaller jc-center"> Tags</mat-header-cell>
       <mat-cell *matCellDef="let engineer">
         <mat-chip-list
           cdkDropList
@@ -120,7 +122,7 @@
     </ng-container>
 
     <ng-container matColumnDef="projects">
-      <mat-header-cell *matHeaderCellDef class="font-style-smaller"> Project</mat-header-cell>
+      <mat-header-cell *matHeaderCellDef class="font-style-smaller jc-center"> Project</mat-header-cell>
       <mat-cell *matCellDef="let engineer">
         <mat-chip-list
           cdkDropList
@@ -133,7 +135,7 @@
     </ng-container>
 
     <ng-container matColumnDef="teams">
-      <mat-header-cell *matHeaderCellDef class="font-style-smaller"> Teams</mat-header-cell>
+      <mat-header-cell *matHeaderCellDef class="font-style-smaller jc-center"> Teams</mat-header-cell>
       <mat-cell *matCellDef="let engineer">
         <mat-chip-list
           cdkDropList

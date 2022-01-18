@@ -1,4 +1,14 @@
-import {AfterViewInit, Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild} from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  EventEmitter,
+  SimpleChanges,
+  ViewChild
+} from '@angular/core';
 import {Engineer} from '../../data/engineer';
 import {EngineerService} from '../../services/engineer.service';
 import {Project} from '../../data/project';
@@ -24,7 +34,7 @@ import {EngineerDetailsPopupComponent} from '../engineer-details-popup/engineer-
   templateUrl: './engineers-table.component.html',
   styleUrls: ['./engineers-table.component.css']
 })
-export class EngineersTableComponent implements OnInit, OnChanges, AfterViewInit {
+export class EngineersTableComponent implements OnInit, OnChanges {
 
   @ViewChild(MatSort) sort: MatSort = new MatSort();
 
@@ -39,42 +49,27 @@ export class EngineersTableComponent implements OnInit, OnChanges, AfterViewInit
   @Input()
   showAll = false;
 
+  @Output()
+  identitiesChanged = new EventEmitter()
+
   dataSource: MatTableDataSource<Engineer>;
-
   displayedColumns = ['select', 'firstname', 'lastname', 'email', 'city', 'country', 'position', 'role', 'roleActions', 'tags', 'tagsAction', 'projects', 'teams', 'teamsAction', 'actions'];
-
   allEngineers: Engineer[] = [];
-
   teams: Team[] = [];
-
   filteredTeams: Team[] = [];
-
   filteredTags: Tag[] = [];
-
   filteredRoles: Role[] = [];
-
   newTeamName: string = '';
-
   newTagName: string = '';
-
   newRoleName: string = '';
-
   projects: Project[] = [];
-
   tags: Tag[] = [];
-
   tag: Tag;
-
   selection = new SelectionModel<Engineer>(true, []);
-
   roles: Role[] = [];
-
   engineerCity: string[] = [];
-
   engineerCountry: string[] = [];
-
   engineerPosition: string[] = [];
-
   selectedEngineer: Engineer;
 
   constructor(private engineerService: EngineerService,
@@ -98,14 +93,9 @@ export class EngineersTableComponent implements OnInit, OnChanges, AfterViewInit
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (!changes.engineer?.firstChange && this.project && this.engineer) {
+    if (!changes.engineer?.firstChange && !changes.engineers?.firstChange && this.project && this.engineer) {
       this.getEngineers();
     }
-  }
-
-  ngAfterViewInit() {
-    this.dataSource = new MatTableDataSource<Engineer>(this.engineers);
-    this.dataSource.sort = this.sort;
   }
 
   initializeData() {
@@ -276,7 +266,7 @@ export class EngineersTableComponent implements OnInit, OnChanges, AfterViewInit
   }
 
   openDialog() {
-    const dialogRef = this.dialog.open(NewEngineerPopupComponent);
+    const dialogRef = this.dialog.open(NewEngineerPopupComponent, {data: {project: this.project}});
 
     dialogRef.afterClosed().subscribe(() => this.initializeData());
   }
@@ -289,6 +279,10 @@ export class EngineersTableComponent implements OnInit, OnChanges, AfterViewInit
       }
     });
 
-    dialogRef.afterClosed().subscribe(() => this.initializeData());
+    dialogRef.afterClosed().subscribe(response => {
+      if (response) {
+        this.identitiesChanged.emit(response.projectIdentities);
+      }
+    });
   }
 }
