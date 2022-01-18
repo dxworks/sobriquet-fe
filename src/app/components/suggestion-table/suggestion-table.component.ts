@@ -168,7 +168,8 @@ export class SuggestionTableComponent implements OnInit, OnChanges, AfterViewIni
       affiliations: [],
       project: this.project.id,
       role: '',
-      tags: [{name: 'BOT'}]
+      tags: [{name: 'BOT'}],
+      identities: this.suggestions
     }
   }
 
@@ -184,7 +185,8 @@ export class SuggestionTableComponent implements OnInit, OnChanges, AfterViewIni
       affiliations: [],
       project: this.project.id,
       role: '',
-      tags: []
+      tags: [],
+      identities: this.suggestions
     }
   }
 

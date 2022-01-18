@@ -4,7 +4,7 @@ import {TeamsService} from '../../services/teams.service';
 import {Team} from '../../data/team';
 import {EngineerService} from '../../services/engineer.service';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
-import {TeamLinkerPopupComponent} from '../popups/team-linker-popup/team-linker-popup.component';
+import {TeamLinkerPopupComponent} from '../team-linker-popup/team-linker-popup.component';
 
 @Component({
   selector: 'app-engineer-card',

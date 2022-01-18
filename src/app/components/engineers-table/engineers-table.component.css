@@ -61,3 +61,12 @@
 .mat-input-element {
   font: normal normal normal 14px/30px Muli !important;
 }
+
+th.mat-header-cell, td.mat-cell, td.mat-footer-cell{
+  border-bottom: unset!important;
+}
+
+.project-selection {
+  margin: 0 40px;
+  width: -webkit-fill-available;
+}

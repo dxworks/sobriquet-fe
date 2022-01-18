@@ -5,14 +5,15 @@
       <div class="title">
         {{project?.name}}
       </div>
-      <app-suggestion-table [identities]="identities"
-                            [project]="project"
-                            (engineerEmitter)="engineer = $event"
-                            (suggestionsEmitter)="suggestions = $event"></app-suggestion-table>
-      <app-engineers-table [engineer]="engineer"
+      <app-engineers-table [engineers]="engineers"
+                           [engineer]="engineer"
                            [showAll]="true"
                            [project]="project"
                            [suggestions]="suggestions"></app-engineers-table>
+      <app-suggestion-table [identities]="identities"
+                            [project]="project"
+                            (engineerEmitter)="changeEngineerTable($event)"
+                            (suggestionsEmitter)="suggestions = $event"></app-suggestion-table>
     </div>
   </div>
 </div>

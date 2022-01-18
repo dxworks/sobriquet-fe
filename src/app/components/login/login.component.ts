@@ -29,7 +29,7 @@ export class LoginComponent implements OnInit {
       if (response.status >= 200 && response.status <= 204) {
         this.authService.setToken(username.value, password.value);
       }
-      this.router.navigate(['/home']);
+      this.router.navigate(['']);
     });
   }
 }

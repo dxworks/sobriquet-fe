@@ -5,7 +5,7 @@ import {EngineerService} from '../../services/engineer.service';
 import {Engineer} from '../../data/engineer';
 import {MatTableDataSource} from '@angular/material/table';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
-import {TeamLinkerPopupComponent} from '../popups/team-linker-popup/team-linker-popup.component';
+import {TeamLinkerPopupComponent} from '../team-linker-popup/team-linker-popup.component';
 
 @Component({
   selector: 'app-teams-table',

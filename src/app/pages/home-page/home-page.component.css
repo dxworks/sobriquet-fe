@@ -47,7 +47,6 @@ input[type="file"] {
 
 .new-project-container {
   border: 2px solid #DBDDDD;
-  border-top: 0;
   margin-right: 40px;
   margin-left: 40px;
   padding-bottom: 30px;
@@ -74,4 +73,8 @@ input[type="file"] {
 
 .button-wrap {
   display: grid;
+}
+
+.content {
+  margin-top: 5%;
 }
