@@ -5,7 +5,6 @@ import {FormControl} from '@angular/forms';
 import {Engineer} from '../../data/engineer';
 import {EngineerService} from '../../services/engineer.service';
 import {TeamsService} from '../../services/teams.service';
-import {Affiliation} from '../../data/affiliation';
 import {Identity} from '../../data/identity';
 import {Tag} from '../../data/tag';
 import {Role} from '../../data/role';
@@ -29,22 +28,26 @@ export class NewEngineerPopupComponent implements OnInit {
   teamsFormControl = new FormControl();
   tagFormControl = new FormControl();
   rolesFormControl = new FormControl();
+  engineersFormControl = new FormControl();
+  statusFormControl = new FormControl();
+  statuses = ['In Project', 'Leaving', 'Left'];
+  engineers: Engineer[] = [];
   project: Project;
 
   newEngineer: Engineer = new class implements Engineer {
-    affiliations: Affiliation[];
     city: string;
     country: string;
     email: string;
-    firstName: string;
+    name: string;
     id: string;
     identities: Identity[];
-    lastName: string;
-    position: string;
+    senority: string;
     project: string;
     role: string;
     tags: Tag[];
     teams: string[];
+    status: string;
+    reportsTo: string;
   }();
 
   constructor(public dialogRef: MatDialogRef<NewEngineerPopupComponent>,
@@ -57,6 +60,14 @@ export class NewEngineerPopupComponent implements OnInit {
 
   ngOnInit(): void {
     this.project = this.data.project;
+    this.manageTeams();
+    this.manageTags();
+    this.manageRoles();
+    this.manageEngineers();
+    this.manageStatuses();
+  }
+
+  manageTeams() {
     this.teamsService.getAllTeams().subscribe(response => this.teams = response);
     this.newEngineer.teams = [];
     this.teamsFormControl.valueChanges.subscribe(response => response.forEach(element => {
@@ -64,14 +75,32 @@ export class NewEngineerPopupComponent implements OnInit {
         this.newEngineer?.teams.push(element.id);
       }
     }));
+  }
 
+  manageTags() {
     this.tagService.getAllTags().subscribe(response => this.tags = response);
     this.tagFormControl.valueChanges.subscribe(response => response.forEach(element => {
       !this.newEngineer.tags ? this.newEngineer.tags = [element] : this.newEngineer.tags.push(element);
     }));
+  }
+
+  manageRoles() {
     this.roleService.getAllRoles().subscribe(response => this.roles = response);
     this.rolesFormControl.valueChanges.subscribe(response => response.forEach(element => {
       this.newEngineer.role = element.name
+    }));
+  }
+
+  manageEngineers() {
+    this.engineerService.getAll().subscribe(response => this.engineers = response.filter(eng => eng.project === this.project.id))
+    this.engineersFormControl.valueChanges.subscribe(response => response.forEach(element => {
+      this.newEngineer.reportsTo = element.id
+    }));
+  }
+
+  manageStatuses() {
+    this.statusFormControl.valueChanges.subscribe(response => response.forEach(element => {
+      this.newEngineer.status = element
     }));
   }
 
@@ -80,7 +109,6 @@ export class NewEngineerPopupComponent implements OnInit {
   }
 
   addEngineer() {
-    this.newEngineer.affiliations = [];
     this.newEngineer.project = this.project.id;
     this.newEngineer.identities = [];
     this.engineerService.add(this.newEngineer).subscribe(() => this.onCancelClick());

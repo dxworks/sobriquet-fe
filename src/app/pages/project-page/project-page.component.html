@@ -5,6 +5,7 @@
       <div class="title">
         {{project?.name}}
       </div>
+        <img src="assets/upload.png" class="image" (click)="openFileUploadDialog()">
       <app-engineers-table [engineers]="engineers"
                            [engineer]="engineer"
                            [showAll]="true"

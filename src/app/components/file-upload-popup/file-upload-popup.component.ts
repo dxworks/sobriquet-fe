@@ -1,30 +1,27 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Inject, OnInit} from '@angular/core';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {ProjectService} from '../../services/project.service';
-import {Project} from '../../data/project';
-import {Router} from '@angular/router';
 
 @Component({
-  selector: 'app-home-page',
-  templateUrl: './home-page.component.html',
-  styleUrls: ['./home-page.component.css']
+  selector: 'app-file-upload-popup',
+  templateUrl: './file-upload-popup.component.html',
+  styleUrls: ['./file-upload-popup.component.css']
 })
-export class HomePageComponent implements OnInit {
+export class FileUploadPopupComponent implements OnInit {
 
-  selectedJSON: File | File[];
-  projectName = '';
-  projects: Project[] = [];
   fileDropped = false;
+  selectedJSON: File | File[];
+  projectIdentities = []
+  projectName = '';
 
-  constructor(private projectService: ProjectService,
-              private router: Router) {
+  constructor(public dialogRef: MatDialogRef<FileUploadPopupComponent>,
+              private projectService: ProjectService,
+              @Inject(MAT_DIALOG_DATA) public data) {
   }
 
   ngOnInit(): void {
-    this.getProjects();
-  }
-
-  getProjects() {
-    this.projectService.getAllProjects().subscribe(response => this.projects = response);
+    this.projectName = this.data.project.id;
+    this.projectIdentities = this.data.project.identities;
   }
 
   upload($event): void {
@@ -33,9 +30,9 @@ export class HomePageComponent implements OnInit {
 
   save() {
     if (this.selectedJSON instanceof File) {
-      this.projectService.addProject(this.projectName, this.selectedJSON).subscribe(response => {
-        this.getProjects();
-        this.router.navigate([`/identities/project/${response.name}`]);
+      this.readFile(this.selectedJSON);
+      this.projectService.editProject(this.projectName, this.projectIdentities.concat(JSON.parse(localStorage.getItem(`${this.selectedJSON.name}`)))).subscribe(() => {
+        this.dialogRef.close('saved');
       });
     } else {
       let fileResults = [];
@@ -43,11 +40,14 @@ export class HomePageComponent implements OnInit {
         this.readFile(this.selectedJSON[i]);
         fileResults.push(JSON.parse(localStorage.getItem(`${this.selectedJSON[i].name}`)));
       }
-      this.projectService.addProject(this.projectName, this.transformIdentities(fileResults)).subscribe(response => {
-        this.getProjects();
-        this.router.navigate([`/identities/project/${response.name}`]);
+      this.projectService.addProject(this.projectName, this.projectIdentities.concat(this.transformIdentities(fileResults))).subscribe(() => {
+        this.dialogRef.close('saved');
       });
     }
+  }
+
+  onCancelClick(): void {
+    this.dialogRef.close();
   }
 
   transformIdentities(fileResults) {
@@ -75,4 +75,5 @@ export class HomePageComponent implements OnInit {
     }
     reader.readAsText(file);
   }
+
 }

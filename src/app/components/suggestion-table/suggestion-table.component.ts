@@ -116,6 +116,9 @@ export class SuggestionTableComponent implements OnInit, OnChanges, AfterViewIni
 
   getSuggestions(identities: Identity[]) {
     this.suggestions = this.mergeSuggestionService.getMergeSuggestions(identities);
+    if (this.suggestions.length === 1) {
+      this.merge();
+    }
     this.pagination = [this.suggestions.length];
   }
 
@@ -163,37 +166,37 @@ export class SuggestionTableComponent implements OnInit, OnChanges, AfterViewIni
     return this.buildEngineer();
   }
 
-  buildBot() {
+  buildBot(): Engineer {
     return {
-      firstName: this.suggestions[0].firstName,
-      lastName: this.suggestions[0].lastName,
+      name: this.suggestions[0].firstName + ' ' + this.suggestions[0].lastName,
       email: this.suggestions[0].email,
-      position: '',
+      senority: '',
       teams: [],
       city: '',
       country: '',
-      affiliations: [],
       project: this.project.id,
       role: '',
       tags: [{name: 'BOT'}],
-      identities: this.suggestions
+      identities: this.suggestions,
+      status: '',
+      reportsTo: ''
     }
   }
 
-  buildEngineer() {
+  buildEngineer(): Engineer {
     return {
-      firstName: this.suggestions[0].firstName,
-      lastName: this.suggestions[0].lastName,
+      name: this.suggestions[0].firstName + ' ' + this.suggestions[0].lastName,
       email: this.suggestions[0].email,
-      position: '',
+      senority: '',
       teams: [],
       city: '',
       country: '',
-      affiliations: [],
       project: this.project.id,
       role: '',
       tags: [],
-      identities: this.suggestions
+      identities: this.suggestions,
+      status: '',
+      reportsTo: ''
     }
   }
 

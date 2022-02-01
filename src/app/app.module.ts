@@ -3,7 +3,6 @@ import {BrowserModule} from '@angular/platform-browser';
 
 import {AppComponent} from './app.component';
 import {AppRoutingModule} from './app-routing.module';
-import {LoginComponent} from './components/login/login.component';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
@@ -16,9 +15,6 @@ import {HeaderComponent} from './components/header/header.component';
 import {MatMenuModule} from '@angular/material/menu';
 import {MatIconModule} from '@angular/material/icon';
 import {TeamsPageComponent} from './pages/teams-page/teams-page.component';
-import {TeamsTableComponent} from './components/teams-table/teams-table.component';
-import {EngineerComponent} from './components/engineer/engineer.component';
-import {EngineerCardComponent} from './components/engineer-card/engineer-card.component';
 import {MatChipsModule} from '@angular/material/chips';
 import {MatDialogModule} from '@angular/material/dialog';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
@@ -39,18 +35,14 @@ import {MatSortModule} from '@angular/material/sort';
 import {NewEngineerPopupComponent} from './components/new-engineer-popup/new-engineer-popup.component';
 import {EngineerDetailsPopupComponent} from './components/engineer-details-popup/engineer-details-popup.component';
 import {NewTeamPopupComponent} from './components/new-team-popup/new-team-popup.component';
-import {TeamLinkerPopupComponent} from './components/team-linker-popup/team-linker-popup.component';
+import {FileUploadPopupComponent} from './components/file-upload-popup/file-upload-popup.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    LoginComponent,
     ProjectPageComponent,
     HeaderComponent,
     TeamsPageComponent,
-    TeamsTableComponent,
-    EngineerComponent,
-    EngineerCardComponent,
     HomePageComponent,
     ProjectComponent,
     SuggestionTableComponent,
@@ -60,7 +52,7 @@ import {TeamLinkerPopupComponent} from './components/team-linker-popup/team-link
     NewEngineerPopupComponent,
     EngineerDetailsPopupComponent,
     NewTeamPopupComponent,
-    TeamLinkerPopupComponent,
+    FileUploadPopupComponent,
   ],
   imports: [
     FormsModule,

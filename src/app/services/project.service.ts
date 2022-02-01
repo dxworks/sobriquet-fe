@@ -31,4 +31,14 @@ export class ProjectService {
   getById(name: string) {
     return this.httpClient.get<Project>(`${environment.apiUrl}/project/${name}`);
   }
+
+  upload($event, fileDropped) {
+    let selectedJSON;
+    if (fileDropped) {
+      $event.length === 1 ? selectedJSON = $event[0] : selectedJSON = $event;
+    } else {
+      $event.target.files.length === 1 ? selectedJSON = $event.target.files[0] : selectedJSON = $event.target.files;
+    }
+    return selectedJSON;
+  }
 }

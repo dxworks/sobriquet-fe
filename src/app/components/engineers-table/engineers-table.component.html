@@ -1,20 +1,41 @@
 <div class="container mat-elevation-z8">
   <div class="header">
-    <mat-form-field appearance="fill">
-      <mat-label>Filter by engineer tag</mat-label>
-      <mat-select [(ngModel)]="tag" (ngModelChange)="applyTagFilter($event)">
-        <mat-option *ngFor="let tag of tags" [value]="tag">{{tag.name}}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-
-
+    <div class="d-flex">
+      <mat-form-field appearance="fill">
+        <mat-label>Filter by Tag</mat-label>
+        <mat-select [(ngModel)]="tag" (ngModelChange)="applyFilter($event, 'tags')">
+          <mat-option *ngFor="let tag of tags" [value]="tag">{{tag.name}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Filter by Role</mat-label>
+        <mat-select [(ngModel)]="role" (ngModelChange)="applyFilter($event, 'role')">
+          <mat-option *ngFor="let role of roles" [value]="role">{{role.name}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Filter by Team</mat-label>
+        <mat-select [(ngModel)]="team" (ngModelChange)="applyFilter($event, 'teams')">
+          <mat-option *ngFor="let team of teams" [value]="team">{{team.name}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Filter by Status</mat-label>
+        <mat-select [(ngModel)]="status" (ngModelChange)="applyFilter($event, 'status')">
+          <mat-option *ngFor="let status of statuses" [value]="status">{{status}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
     <button mat-button class="sortinghat-cyan-bg mt-5 add-button" (click)="openDialog()">
       <mat-icon>add</mat-icon>
     </button>
   </div>
-  <mat-table #table [dataSource]="dataSource" *ngIf="dataSource?.data.length > 0" matSort
-             (matSortChange)="sortData()">
+  <mat-table #table [dataSource]="dataSource" *ngIf="dataSource?.data.length > 0"
+             matSort (matSortChange)="sortData($event)">
     <ng-container matColumnDef="select">
       <th mat-header-cell *matHeaderCellDef>
         <mat-checkbox (change)="$event ? masterToggle() : null"
@@ -30,34 +51,31 @@
       </td>
     </ng-container>
     <ng-container matColumnDef="firstname">
-      <mat-header-cell *matHeaderCellDef class="font-style-smaller" mat-sort-header> First name</mat-header-cell>
-      <mat-cell *matCellDef="let engineer" class="font-style-smaller"> {{engineer?.firstName}} </mat-cell>
-    </ng-container>
-
-    <ng-container matColumnDef="lastname">
-      <mat-header-cell *matHeaderCellDef class="font-style-smaller" mat-sort-header> Last name</mat-header-cell>
-      <mat-cell *matCellDef="let engineer" class="font-style-smaller"> {{engineer?.lastName}} </mat-cell>
+      <mat-header-cell *matHeaderCellDef class="font-style-smaller" mat-sort-header="firstname"> Name
+      </mat-header-cell>
+      <mat-cell *matCellDef="let engineer" class="font-style-smaller"> {{engineer?.name}} </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="email">
-      <mat-header-cell *matHeaderCellDef class="font-style-smaller" mat-sort-header> Email address</mat-header-cell>
+      <mat-header-cell *matHeaderCellDef class="font-style-smaller" mat-sort-header="email"> Email address
+      </mat-header-cell>
       <mat-cell *matCellDef="let engineer" class="font-style-smaller">{{engineer?.email}}</mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="city">
-      <mat-header-cell *matHeaderCellDef class="font-style-smaller" mat-sort-header> City</mat-header-cell>
+      <mat-header-cell *matHeaderCellDef class="font-style-smaller" mat-sort-header="city"> City</mat-header-cell>
       <mat-cell *matCellDef="let engineer">{{engineer?.city}}</mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="country">
-      <mat-header-cell *matHeaderCellDef class="font-style-smaller" mat-sort-header> Country</mat-header-cell>
+      <mat-header-cell *matHeaderCellDef class="font-style-smaller" mat-sort-header="country"> Country</mat-header-cell>
       <mat-cell *matCellDef="let engineer">{{engineer?.country}}</mat-cell>
     </ng-container>
 
 
     <ng-container matColumnDef="position">
-      <mat-header-cell *matHeaderCellDef class="font-style-smaller" mat-sort-header> Position</mat-header-cell>
-      <mat-cell *matCellDef="let engineer">{{engineer?.position}}</mat-cell>
+      <mat-header-cell *matHeaderCellDef class="font-style-smaller"> Senority</mat-header-cell>
+      <mat-cell *matCellDef="let engineer">{{engineer?.senority}}</mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="role">
@@ -121,19 +139,6 @@
       </mat-cell>
     </ng-container>
 
-    <ng-container matColumnDef="projects">
-      <mat-header-cell *matHeaderCellDef class="font-style-smaller jc-center"> Project</mat-header-cell>
-      <mat-cell *matCellDef="let engineer">
-        <mat-chip-list
-          cdkDropList
-          cdkDropListOrientation="horizontal">
-          <mat-chip>
-            {{getEngineerProject(engineer?.project)}}
-          </mat-chip>
-        </mat-chip-list>
-      </mat-cell>
-    </ng-container>
-
     <ng-container matColumnDef="teams">
       <mat-header-cell *matHeaderCellDef class="font-style-smaller jc-center"> Teams</mat-header-cell>
       <mat-cell *matCellDef="let engineer">
@@ -160,6 +165,48 @@
             Create new team ({{newTeamName}})
           </mat-option>
           <mat-option *ngFor="let team of filteredTeams" [value]="team">{{team.name}}</mat-option>
+        </mat-select>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="reportsTo">
+      <mat-header-cell *matHeaderCellDef class="font-style-smaller jc-center"> Reports To</mat-header-cell>
+      <mat-cell *matCellDef="let engineer">
+        <mat-chip-list
+          cdkDropList
+          cdkDropListOrientation="horizontal">
+            {{getReportsTo(engineer.reportsTo)}}
+        </mat-chip-list>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="reportsToAction">
+      <mat-header-cell *matHeaderCellDef class="font-style-smaller"></mat-header-cell>
+      <mat-cell *matCellDef="let engineer">
+        <mat-select *ngIf="engineer" [(ngModel)]="engineer.reportsTo" (ngModelChange)="selectReportsTo($event, engineer)">
+          <mat-option *ngFor="let engineer of allEngineers" [value]="engineer">{{engineer.name}}</mat-option>
+        </mat-select>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="status">
+      <mat-header-cell *matHeaderCellDef class="font-style-smaller jc-center"> Status</mat-header-cell>
+      <mat-cell *matCellDef="let engineer">
+        <mat-chip-list
+          cdkDropList
+          cdkDropListOrientation="horizontal">
+          <mat-chip *ngIf="engineer.status">
+            {{engineer.status}}
+          </mat-chip>
+        </mat-chip-list>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="statusAction">
+      <mat-header-cell *matHeaderCellDef class="font-style-smaller"></mat-header-cell>
+      <mat-cell *matCellDef="let engineer">
+        <mat-select *ngIf="engineer" [(ngModel)]="engineer.status" (ngModelChange)="selectStatus($event, engineer)">
+          <mat-option *ngFor="let status of statuses" [value]="status">{{status}}</mat-option>
         </mat-select>
       </mat-cell>
     </ng-container>
