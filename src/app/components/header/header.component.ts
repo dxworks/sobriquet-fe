@@ -1,6 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
-import {AuthService} from '../../services/auth.service';
 import {Project} from '../../data/project';
 
 @Component({
@@ -14,36 +13,20 @@ export class HeaderComponent implements OnInit {
   project: Project;
 
   urlPath: string;
-  previousUrl: string;
 
-  constructor(public router: Router,
-              private authService: AuthService) {
+  constructor(public router: Router) {
   }
 
   ngOnInit(): void {
     this.urlPath = this.router.url;
   }
 
-
   goTo(path: string) {
     this.urlPath = path;
-    this.router.navigate([`${path}`]);
+    this.router.navigate([`${path}/project/${this.router.url.split('/')[this.router.url.split('/').length - 1]}`]);
   }
 
   goToHomePage() {
     this.router.navigate(['']);
   }
-
-  logOut() {
-    this.authService.logout();
-  }
-
-  configureEngineersPageRouting() {
-    if (this.project) {
-      this.router.navigate([`/engineers/project/${this.project.name}`]);
-    } else {
-      this.router.navigate(['/engineers']);
-    }
-  }
-
 }

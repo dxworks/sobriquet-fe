@@ -1,34 +1,29 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Inject, OnInit} from '@angular/core';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {ProjectService} from '../../services/project.service';
-import {Project} from '../../data/project';
-import {Router} from '@angular/router';
-import {Engineer} from '../../data/engineer';
 import {EngineerService} from '../../services/engineer.service';
 
 @Component({
-  selector: 'app-home-page',
-  templateUrl: './home-page.component.html',
-  styleUrls: ['./home-page.component.css']
+  selector: 'app-file-upload-popup',
+  templateUrl: './file-upload-popup.component.html',
+  styleUrls: ['./file-upload-popup.component.css']
 })
-export class HomePageComponent implements OnInit {
+export class FileUploadPopupComponent implements OnInit {
 
-  selectedJSON: File | File[];
-  projectName = '';
-  projects: Project[] = [];
   fileDropped = false;
-  engineers: Engineer[] = [];
+  selectedJSON: File | File[];
+  projectIdentities = []
+  projectId = '';
 
-  constructor(private projectService: ProjectService,
+  constructor(public dialogRef: MatDialogRef<FileUploadPopupComponent>,
+              private projectService: ProjectService,
               private engineerService: EngineerService,
-              private router: Router) {
+              @Inject(MAT_DIALOG_DATA) public data) {
   }
 
   ngOnInit(): void {
-    this.getProjects();
-  }
-
-  getProjects() {
-    this.projectService.getAllProjects().subscribe(response => this.projects = response);
+    this.projectId = this.data.project.id;
+    this.projectIdentities = this.data.project.identities;
   }
 
   upload($event): void {
@@ -38,11 +33,10 @@ export class HomePageComponent implements OnInit {
   save() {
     if (this.selectedJSON instanceof File) {
       this.readFile(this.selectedJSON);
-      this.projectService.addProject(this.projectName, this.selectedJSON).subscribe(response => {
-        this.getProjects();
+      this.projectService.editProject(this.projectId, this.projectIdentities.concat(JSON.parse(localStorage.getItem(`${this.selectedJSON.name}`)))).subscribe(() => {
         const identities: any = this.selectedJSON;
-        this.changeIdentityToEngineer(JSON.parse(localStorage.getItem(`${identities.name}`)), response.uuid)
-        this.router.navigate([`/identities/project/${response.name}`]).then();
+        const engineers = this.changeIdentityToEngineer(JSON.parse(localStorage.getItem(`${identities.name}`)), this.projectId)
+        this.dialogRef.close(engineers);
       });
     } else {
       let fileResults = [];
@@ -50,12 +44,15 @@ export class HomePageComponent implements OnInit {
         this.readFile(this.selectedJSON[i]);
         fileResults.push(JSON.parse(localStorage.getItem(`${this.selectedJSON[i].name}`)));
       }
-      this.projectService.addProject(this.projectName, this.transformIdentities(fileResults)).subscribe(response => {
-        this.getProjects();
-        this.changeIdentityToEngineer(this.transformIdentities(fileResults), response.uuid);
-        this.router.navigate([`/identities/project/${response.name}`]).then();
+      this.projectService.editProject(this.projectId, this.projectIdentities.concat(this.transformIdentities(fileResults))).subscribe(() => {
+        const engineers = this.changeIdentityToEngineer(this.transformIdentities(fileResults), this.projectId);
+        this.dialogRef.close(engineers);
       });
     }
+  }
+
+  onCancelClick(): void {
+    this.dialogRef.close();
   }
 
   transformIdentities(fileResults) {
@@ -85,7 +82,8 @@ export class HomePageComponent implements OnInit {
   }
 
   changeIdentityToEngineer(identities, projectId) {
-    identities?.forEach(identity => this.engineers.push({
+    const engineers = [];
+    identities?.forEach(identity => engineers.push({
       name: identity.firstName + ' ' + identity.lastName,
       email: identity.email,
       project: projectId,
@@ -99,10 +97,12 @@ export class HomePageComponent implements OnInit {
       status: '',
       reportsTo: ''
     }));
-    this.saveEngineers();
+    this.saveEngineers(engineers);
+    return engineers;
   }
 
-  saveEngineers() {
-    this.engineers.forEach(engineer => this.engineerService.add(engineer).subscribe());
+  saveEngineers(engineers) {
+    engineers.forEach(engineer => this.engineerService.add(engineer).subscribe());
   }
+
 }

@@ -1,0 +1,16 @@
+<h1 mat-dialog-title>Upload</h1>
+<div mat-dialog-content class="grid">
+  <div class="file-upload" appDragDropFileUpload (fileDropped)="fileDropped = true; upload($event)">
+    <span class="info">Drag and drop files here</span>
+    <span class="info">Or</span>
+    <div class="button-wrap">
+      <label class="button" for="upload">Upload Files</label>
+      <input id="upload" type="file" (change)="upload($event)" multiple>
+      <p class="filename">{{getFileNames()}}</p>
+    </div>
+  </div>
+</div>
+<div mat-dialog-actions class="jc-center">
+  <button mat-button (click)="onCancelClick()">Cancel</button>
+  <button mat-button cdkFocusInitial (click)="save()">Save</button>
+</div>

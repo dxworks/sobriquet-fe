@@ -5,19 +5,13 @@
   border-radius: 2px;
 }
 
-.mat-column-teamsAction, .mat-column-tagsAction, .mat-column-roleActions {
+.mat-column-teamsAction, .mat-column-tagsAction, .mat-column-roleActions, .mat-column-statusAction, .mat-column-reportsToAction {
   flex: 0 0 1% !important;
-  margin-right: 5px;
 }
 
 .mat-column-teams {
   flex: 0 0 8% !important;
-  margin-right: 5px;
-}
-
-.mat-columns-project {
-  flex: 0 0 0.5% !important;
-  padding-left: 20px;
+  justify-content: center;
 }
 
 .mat-column-firstname, .mat-column-lastname, .mat-column-city, .mat-column-country {
@@ -28,16 +22,21 @@
   flex: 0.1;
 }
 
-.mat-column-city, .mat-column-teams {
+.mat-column-city {
   flex: 0 0 5%;
 }
 
 .mat-column-tags, .mat-column-role {
-  flex: 0 0 7%;
+  flex: 0 0 5%;
+  justify-content: center;
 }
 
 .mat-column-email {
   flex: 0 0 15% !important;
+}
+
+.mat-column-reportsTo, .mat-column-status {
+  justify-content: center;
 }
 
 .mat-chip {
@@ -81,4 +80,5 @@ th.mat-header-cell, td.mat-cell, td.mat-footer-cell {
   height: fit-content;
   margin-top: auto;
   margin-bottom: auto;
+  margin-left: 0!important;
 }

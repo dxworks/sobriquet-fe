@@ -1,4 +1,4 @@
-import {Component, Inject, Input, OnInit} from '@angular/core';
+import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {Engineer} from '../../data/engineer';
 import {Identity} from '../../data/identity';
@@ -20,6 +20,7 @@ export class EngineerDetailsPopupComponent implements OnInit {
   project: Project;
   selection = new SelectionModel<Identity>(true, []);
   displayedColumns = ['select', 'name', 'email', 'actions'];
+  identities = [];
 
   constructor(public dialogRef: MatDialogRef<EngineerDetailsPopupComponent>,
               @Inject(MAT_DIALOG_DATA) public data,
@@ -29,7 +30,12 @@ export class EngineerDetailsPopupComponent implements OnInit {
 
   ngOnInit(): void {
     this.selectedEngineer = this.data.engineer;
-    this.project = this.data.project;
+    this.projectService.getById(this.data.project.id).subscribe(response => {
+      this.project = response;
+      this.identities = this.project.identities;
+    });
+    const email = this.selectedEngineer.email;
+    this.selectedEngineer.identities = this.selectedEngineer.identities.filter(identity => identity.email !== email);
     this.dataSource = new MatTableDataSource<Identity>(this.selectedEngineer.identities);
   }
 
@@ -38,7 +44,10 @@ export class EngineerDetailsPopupComponent implements OnInit {
   }
 
   save() {
-    this.engineerService.edit(this.selectedEngineer).subscribe(() => this.dialogRef.close({projectIdentities: this.project.identities}));
+    this.engineerService.edit(this.selectedEngineer).subscribe(() => {
+      this.projectService.editProject(this.project.id, this.identities).subscribe();
+      this.dialogRef.close({projectIdentities: this.identities})
+    });
   }
 
   isAllSelected() {
@@ -62,11 +71,6 @@ export class EngineerDetailsPopupComponent implements OnInit {
 
   rejectIdentity(identity: Identity) {
     this.selectedEngineer.identities.splice(this.selectedEngineer.identities.indexOf(identity), 1);
-    this.projectService.getById(this.project.id).subscribe(response => {
-      this.project = response;
-      this.project.identities.length === 0 ? this.project.identities = [identity] : this.project.identities.push(identity);
-      this.projectService.editProject(this.project.id, this.project.identities).subscribe();
-    })
     this.dataSource.data = this.selectedEngineer.identities;
   }
 

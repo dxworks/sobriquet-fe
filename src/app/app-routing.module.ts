@@ -8,7 +8,7 @@ const routes: Routes = [
   {path: '', component: HomePageComponent},
   {path: 'identities/project/:name', component: ProjectPageComponent},
   {path: 'identities/newProject/:name', component: ProjectPageComponent},
-  {path: 'teams', component: TeamsPageComponent},
+  {path: 'teams/project/:name', component: TeamsPageComponent},
 ]
 
 @NgModule({

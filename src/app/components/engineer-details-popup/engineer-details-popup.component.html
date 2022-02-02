@@ -1,21 +1,16 @@
-<h1 mat-dialog-title>{{selectedEngineer.firstName}} {{selectedEngineer.lastName}}</h1>
+<h1 mat-dialog-title>{{selectedEngineer.name}}</h1>
 <div mat-dialog-content class="grid">
   <div class="d-flex jc-around">
-    <mat-form-field appearance="fill" class="mr-10">
-      <mat-label>First name</mat-label>
-      <input matInput [(ngModel)]="selectedEngineer.firstName">
-    </mat-form-field>
-
-    <mat-form-field appearance="fill">
-      <mat-label>Last name</mat-label>
-      <input matInput [(ngModel)]="selectedEngineer.lastName">
+    <mat-form-field appearance="fill" class="mr-10" style="width: 100%!important;">
+      <mat-label>Name</mat-label>
+      <input matInput [(ngModel)]="selectedEngineer.name">
     </mat-form-field>
   </div>
 
   <div class="d-flex jc-around">
     <mat-form-field appearance="fill" class="mr-10">
       <mat-label>Position</mat-label>
-      <input matInput [(ngModel)]="selectedEngineer.position">
+      <input matInput [(ngModel)]="selectedEngineer.senority">
     </mat-form-field>
 
     <mat-form-field appearance="fill">
@@ -52,7 +47,7 @@
         </td>
       </ng-container>
       <ng-container matColumnDef="name">
-        <mat-header-cell *matHeaderCellDef class="font-style-smaller"> Full Name</mat-header-cell>
+        <mat-header-cell *matHeaderCellDef class="font-style-smaller">Name</mat-header-cell>
         <mat-cell *matCellDef="let engineer"
                   class="font-style-smaller"> {{engineer?.firstName}} {{engineer?.lastName}}</mat-cell>
       </ng-container>
@@ -67,7 +62,7 @@
       <ng-container matColumnDef="actions">
         <mat-header-cell *matHeaderCellDef class="font-style-smaller"> Reject</mat-header-cell>
         <mat-cell *matCellDef="let engineer" class="font-style-smaller">
-          <mat-icon class="icon sortinghat-orange" (click)="rejectIdentity(engineer)">cancel</mat-icon>
+          <mat-icon class="icon sortinghat-orange" (click)="identities.push(engineer); this.rejectIdentity(engineer)">cancel</mat-icon>
         </mat-cell>
       </ng-container>
 

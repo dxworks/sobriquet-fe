@@ -1,5 +1,4 @@
 import {
-  AfterViewInit,
   Component,
   Input,
   OnChanges,
@@ -23,7 +22,7 @@ import {RoleService} from '../../services/role.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Role} from '../../data/role';
 import {SelectionModel} from '@angular/cdk/collections';
-import {MatSort} from '@angular/material/sort';
+import {MatSort, Sort} from '@angular/material/sort';
 import {LiveAnnouncer} from '@angular/cdk/a11y';
 import {NewEngineerPopupComponent} from '../new-engineer-popup/new-engineer-popup.component';
 import {MatDialog} from '@angular/material/dialog';
@@ -53,8 +52,8 @@ export class EngineersTableComponent implements OnInit, OnChanges {
   identitiesChanged = new EventEmitter()
 
   dataSource: MatTableDataSource<Engineer>;
-  displayedColumns = ['select', 'firstname', 'lastname', 'email', 'city', 'country', 'position', 'role', 'roleActions', 'tags', 'tagsAction', 'projects', 'teams', 'teamsAction', 'actions'];
-  allEngineers: Engineer[] = [];
+  displayedColumns = ['select', 'firstname', 'email', 'city', 'country', 'position', 'role', 'roleActions', 'tags', 'tagsAction',
+    'teams', 'teamsAction', 'reportsTo', 'reportsToAction', 'status', 'statusAction', 'actions'];
   teams: Team[] = [];
   filteredTeams: Team[] = [];
   filteredTags: Tag[] = [];
@@ -71,6 +70,10 @@ export class EngineersTableComponent implements OnInit, OnChanges {
   engineerCountry: string[] = [];
   engineerPosition: string[] = [];
   selectedEngineer: Engineer;
+  team: Team;
+  role: Role;
+  statuses = ['In Project', 'Leaving', 'Left'];
+  status: string;
 
   constructor(private engineerService: EngineerService,
               private teamService: TeamsService,
@@ -85,7 +88,10 @@ export class EngineersTableComponent implements OnInit, OnChanges {
   }
 
   ngOnInit(): void {
-    this.initializeData();
+    this.engineerService.getAll().subscribe(response => {
+      this.engineers = response.filter(engineer => engineer.project === this.project.id);
+      this.initializeData();
+    });
     this.getTeams();
     this.getProjects();
     this.getTags();
@@ -103,44 +109,34 @@ export class EngineersTableComponent implements OnInit, OnChanges {
       this.project = response.find(project => project.name === this.activatedRoute.snapshot.url[this.activatedRoute.snapshot.url.length - 1].path);
       this.engineerCity = [];
       this.getEngineers();
-      this.getTableData(this.engineers);
     });
   }
 
   getEngineers() {
-    this.engineerService.getAll().subscribe(engineers => {
-      this.allEngineers = engineers;
-      const filteredEngineers = [];
-      engineers.forEach(engineer => {
-        if (engineer.project === this.project.id) {
-          filteredEngineers.push(engineer);
-          this.getEngineerDetails(engineer);
-          this.getTableData(filteredEngineers.concat(this.engineers));
-        }
-      })
+    this.engineers.forEach(engineer => {
+        this.getEngineerDetails(engineer);
     });
-
+    this.getTableData(this.engineers);
   }
 
   getEngineerDetails(engineer: Engineer) {
     engineer?.city ? this.engineerCity.push(engineer.city) : this.engineerCity.push('');
     engineer?.country ? this.engineerCountry.push(engineer.country) : this.engineerCountry.push('');
-    engineer?.position ? this.engineerPosition.push(engineer.position) : this.engineerPosition.push('');
-  }
-
-  updateTableView() {
-    this.engineerService.getAll().subscribe(response => {
-      this.engineers = response;
-      this.getTableData(this.engineers);
-    })
+    engineer?.senority ? this.engineerPosition.push(engineer.senority) : this.engineerPosition.push('');
   }
 
   getTableData(engineers: Engineer[]) {
     this.dataSource = new MatTableDataSource(engineers);
   }
 
-  applyTagFilter($event) {
-    this.dataSource = new MatTableDataSource(this.engineers.filter(engineer => engineer?.tags.find(tag => tag.name === $event.name)));
+  applyFilter($event, property) {
+    if (property.endsWith('s') && property !== 'status') {
+      this.dataSource = new MatTableDataSource(this.engineers.concat(this.engineers.filter(engineer => engineer.project === this.project.id)).filter(engineer => engineer[property].find(prop => prop.name === $event.name || prop === $event.id)));
+    } else if (property === 'status') {
+      this.dataSource = new MatTableDataSource(this.engineers.concat(this.engineers.filter(engineer => engineer.project === this.project.id)).filter(engineer => engineer[property] === $event));
+    } else {
+      this.dataSource = new MatTableDataSource(this.engineers.concat(this.engineers.filter(engineer => engineer.project === this.project.id)).filter(engineer => engineer[property] === $event.name));
+    }
   }
 
   getTeams() {
@@ -159,10 +155,6 @@ export class EngineersTableComponent implements OnInit, OnChanges {
     this.projectService.getAllProjects().subscribe(response => this.projects = response);
   }
 
-  getEngineerProject(projectId) {
-    return this.projects.find(project => project.id === projectId)?.name;
-  }
-
   getTeamName(teamId: string) {
     return this.teams.find(team => team.id === teamId)?.name;
   }
@@ -179,21 +171,35 @@ export class EngineersTableComponent implements OnInit, OnChanges {
     $event?.name ? this.linkRoleToEngineer($event, engineer) : this.createRole(engineer);
   }
 
+  selectReportsTo($event, engineer: Engineer) {
+    engineer.reportsTo = $event.id;
+    this.engineerService.edit(engineer).subscribe(() => {
+      this.getEngineers();
+    })
+  }
+
+  selectStatus($event, engineer: Engineer) {
+    engineer.status = $event;
+    this.engineerService.edit(engineer).subscribe(() => {
+      this.getEngineers();
+    });
+  }
+
   linkTeamToEngineer(teamId, engineerId) {
-    this.engineerService.linkTeam(engineerId, teamId).subscribe(() => this.updateTableView());
+    this.engineerService.linkTeam(engineerId, teamId).subscribe(() => this.getEngineers());
   }
 
   linkTagToEngineer(tag, engineer, onCreate?) {
     if (onCreate) {
       engineer.tags.push(tag);
     }
-    this.engineerService.edit(engineer).subscribe(() => this.updateTableView());
+    this.engineerService.edit(engineer).subscribe(() => this.getEngineers());
   }
 
   linkRoleToEngineer($event, engineer) {
     engineer.role = $event.name;
     this.engineerService.edit(engineer).subscribe(() => {
-      this.updateTableView();
+      this.getEngineers();
     });
   }
 
@@ -217,7 +223,7 @@ export class EngineersTableComponent implements OnInit, OnChanges {
       let data: any = response;
       this.getTeams();
       this.linkTeamToEngineer(data.id, engineer.id);
-      this.updateTableView();
+      this.getEngineers();
       this.newTeamName = '';
     });
   }
@@ -226,7 +232,7 @@ export class EngineersTableComponent implements OnInit, OnChanges {
     this.tagService.addTag({name: this.newTagName}).subscribe(response => {
       this.getTags();
       this.linkTagToEngineer(response, engineer, true);
-      this.updateTableView();
+      this.getEngineers();
       this.newTagName = '';
     })
   }
@@ -235,7 +241,7 @@ export class EngineersTableComponent implements OnInit, OnChanges {
     this.roleService.addRole({name: this.newRoleName}).subscribe(response => {
       this.getRoles();
       this.linkRoleToEngineer(response, engineer);
-      this.updateTableView();
+      this.getEngineers();
       this.newRoleName = '';
     })
   }
@@ -261,8 +267,32 @@ export class EngineersTableComponent implements OnInit, OnChanges {
     this.selection.select(...this.dataSource.data);
   }
 
-  sortData() {
-    this.dataSource.sort = this.sort;
+  sortData(sort: Sort) {
+    const data = this.dataSource.data.slice();
+    if (!sort.active || sort.direction === '') {
+      this.dataSource.data = data;
+      return;
+    }
+
+    this.dataSource.data = data.sort((a, b) => {
+      const isAsc = sort.direction === 'asc';
+      switch (sort.active) {
+        case 'firstname':
+          return this.compare(a.name, b.name, isAsc);
+        case 'email':
+          return this.compare(a.email, b.email, isAsc);
+        case 'city':
+          return this.compare(a.city, b.city, isAsc);
+        case 'country':
+          return this.compare(a.country, b.country, isAsc);
+        default:
+          return 0;
+      }
+    });
+  }
+
+  compare(a: number | string, b: number | string, isAsc: boolean) {
+    return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
   }
 
   openDialog() {
@@ -284,5 +314,9 @@ export class EngineersTableComponent implements OnInit, OnChanges {
         this.identitiesChanged.emit(response.projectIdentities);
       }
     });
+  }
+
+  getReportsTo(reportsTo) {
+    return this.engineers.find(eng => eng.id === reportsTo)?.name;
   }
 }

@@ -46,10 +46,10 @@ export class SuggestionTableComponent implements OnInit, OnChanges, AfterViewIni
   dataSource: MatTableDataSource<Identity>;
   displayedColumns = ['firstname', 'lastname', 'username', 'email', 'source', 'actions'];
   suggestions: Identity[] = [];
-  projects: Project[] = [];
   pagination: number[];
   identitiesByCluster = [];
   current = 1;
+  engineers: Engineer[] = [];
 
   constructor(private mergeSuggestionService: MergeSuggestionService,
               private engineersService: EngineerService,
@@ -60,7 +60,7 @@ export class SuggestionTableComponent implements OnInit, OnChanges, AfterViewIni
   }
 
   ngOnInit(): void {
-    this.projectService.getAllProjects().subscribe(response => this.projects = response);
+    this.getEngineers();
     this.identities = this.project?.identities;
     this.prepareData();
     this.initTable();
@@ -82,15 +82,18 @@ export class SuggestionTableComponent implements OnInit, OnChanges, AfterViewIni
     if (!changes.project?.firstChange) {
       this.identities = this.project.identities;
       this.prepareData();
-      this.initTable();
-      this.dataSource.paginator = this.paginator;
+      this.getEngineers();
     }
     if (changes.demergedIdentities && this.demergedIdentities.length > 0) {
-      this.identities = this.identities.concat(this.demergedIdentities);
+      this.identities.length > 0 ? this.identities = this.identities.concat(this.demergedIdentities) : this.identities = this.demergedIdentities;
+      this.project.identities = this.identities;
       this.prepareData();
-      this.initTable();
-      this.dataSource.paginator = this.paginator;
+      this.getEngineers();
     }
+  }
+
+  getEngineers() {
+    this.engineersService.getAll().subscribe(response => this.engineers = response.filter(eng => eng.project === this.project.id));
   }
 
   initTable() {
@@ -105,9 +108,8 @@ export class SuggestionTableComponent implements OnInit, OnChanges, AfterViewIni
 
   prepareData() {
     this.sortIdentities();
-    this.dataSource = new MatTableDataSource(this.identities);
     this.identitiesByCluster = this.mergeSuggestionService.buildCluster(this.identities);
-    this.getSuggestions(this.identities);
+    this.changePage({pageIndex: 0});
   }
 
   sortIdentities() {
@@ -116,6 +118,9 @@ export class SuggestionTableComponent implements OnInit, OnChanges, AfterViewIni
 
   getSuggestions(identities: Identity[]) {
     this.suggestions = this.mergeSuggestionService.getMergeSuggestions(identities);
+    if (this.suggestions.length === 1) {
+      this.merge();
+    }
     this.pagination = [this.suggestions.length];
   }
 
@@ -132,21 +137,52 @@ export class SuggestionTableComponent implements OnInit, OnChanges, AfterViewIni
     return !!this.suggestions.find(suggestion => suggestion === identity);
   }
 
+  removeSimilar() {
+    const engForDelete = [];
+    for (let i = 1; i < this.suggestions.length; i++) {
+      engForDelete.push(this.engineers.find(eng => eng.email === this.suggestions[i].email));
+    }
+    this.engineers = engForDelete;
+  }
+
   merge() {
-    const data: Engineer = this.buildData(this.checkBotIdentity());
-    this.engineersService.add(data).subscribe(() => {
-      this.engineerEmitter.emit(data);
-      this.manageIdentities();
-      this.updateProjectIdentities();
-      this.sortIdentities();
-      this.identitiesByCluster = this.mergeSuggestionService.buildCluster(this.identities);
-      this.getSuggestions(this.identitiesByCluster[this.paginator.pageIndex]);
-      this.dataSource = new MatTableDataSource(this.identitiesByCluster[this.paginator.pageIndex]);
-    });
+    let data: Engineer;
+    if (this.engineers.find(eng => eng.email === this.suggestions[0].email)) {
+      data = this.engineers.find(eng => eng.email === this.suggestions[0].email);
+      data.identities = this.suggestions;
+      if (this.checkBotIdentity()) {
+        if (data.tags.length === 0) {
+          data.tags = [{name: 'BOT'}];
+        } else {
+          data.tags.push({name: 'BOT'});
+        }
+      }
+      this.removeSimilar();
+      this.engineersService.edit(data).subscribe(() => {
+        this.engineerEmitter.emit(data);
+        this.manageIdentities();
+        this.updateProjectIdentities(this.engineers);
+        this.sortIdentities();
+        this.identitiesByCluster = this.mergeSuggestionService.buildCluster(this.identities);
+        this.getSuggestions(this.identitiesByCluster[this.current - 1]);
+        this.changePage({pageIndex: this.current - 1});
+      });
+    } else {
+      data = this.buildData(this.checkBotIdentity());
+      this.engineersService.add(data).subscribe(() => {
+        this.engineerEmitter.emit(data);
+        this.manageIdentities();
+        this.updateProjectIdentities(null);
+        this.sortIdentities();
+        this.identitiesByCluster = this.mergeSuggestionService.buildCluster(this.identities);
+        this.getSuggestions(this.identitiesByCluster[this.current - 1]);
+        this.changePage({pageIndex: this.current - 1});
+      });
+    }
   }
 
   rejectMerge() {
-    this.updateProjectIdentities();
+    this.updateProjectIdentities(null);
     this.manageIdentities();
     this.getSuggestions(this.identities);
     this.managePagination(this.identities);
@@ -163,37 +199,37 @@ export class SuggestionTableComponent implements OnInit, OnChanges, AfterViewIni
     return this.buildEngineer();
   }
 
-  buildBot() {
+  buildBot(): Engineer {
     return {
-      firstName: this.suggestions[0].firstName,
-      lastName: this.suggestions[0].lastName,
+      name: this.suggestions[0].firstName + ' ' + this.suggestions[0].lastName,
       email: this.suggestions[0].email,
-      position: '',
+      senority: '',
       teams: [],
       city: '',
       country: '',
-      affiliations: [],
       project: this.project.id,
       role: '',
       tags: [{name: 'BOT'}],
-      identities: this.suggestions
+      identities: this.suggestions,
+      status: '',
+      reportsTo: ''
     }
   }
 
-  buildEngineer() {
+  buildEngineer(): Engineer {
     return {
-      firstName: this.suggestions[0].firstName,
-      lastName: this.suggestions[0].lastName,
+      name: this.suggestions[0].firstName + ' ' + this.suggestions[0].lastName,
       email: this.suggestions[0].email,
-      position: '',
+      senority: '',
       teams: [],
       city: '',
       country: '',
-      affiliations: [],
       project: this.project.id,
       role: '',
       tags: [],
-      identities: this.suggestions
+      identities: this.suggestions,
+      status: '',
+      reportsTo: ''
     }
   }
 
@@ -203,11 +239,14 @@ export class SuggestionTableComponent implements OnInit, OnChanges, AfterViewIni
     });
   }
 
-  updateProjectIdentities() {
+  updateProjectIdentities(engineers) {
     this.suggestions.forEach(suggestion => {
       this.project.identities = this.project.identities.filter(identity => identity.username !== suggestion.username);
     });
-    this.projectService.editProject(this.project.id, this.project.identities).subscribe(() => this.projectEmitter.emit(this.project.identities));
+    this.projectService.editProject(this.project.id, this.project.identities).subscribe(() => this.projectEmitter.emit({
+      projectIdentities: this.project.identities,
+      engineers: engineers
+    }));
   }
 
   managePagination(identities: Identity[]) {

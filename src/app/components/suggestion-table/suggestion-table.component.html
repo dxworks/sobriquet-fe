@@ -51,13 +51,15 @@
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
     <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
   </mat-table>
-  <mat-toolbar-row>
+  <mat-toolbar-row class="jc-end">
     <div class="paginator-information">Cluster {{current}} of {{identitiesByCluster.length}}</div>
-    <mat-paginator [pageSizeOptions]="pagination"
-                   pageSize="{{pagination}}"
-                   (page)="changePage($event)"
-                   showFirstLastButtons>
-    </mat-paginator>
+    <button mat-button class="page-button" (click)="changePage({pageIndex: current - 2})" [disabled]="current === 1">
+      <mat-icon>navigate_before</mat-icon>
+    </button>
+    <button mat-button class="page-button" (click)="changePage({pageIndex: current})"
+            [disabled]="current === identitiesByCluster.length">
+      <mat-icon>navigate_next</mat-icon>
+    </button>
   </mat-toolbar-row>
 </div>
 

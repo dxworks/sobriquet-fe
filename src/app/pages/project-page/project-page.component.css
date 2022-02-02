@@ -1,12 +1,21 @@
-.content{
+.content {
   display: block;
   width: 100%;
   margin-top: 30px;
 }
-.title{
+
+.title {
   margin-left: auto;
   margin-right: auto;
   margin-top: 20px;
   font: normal normal bold 30px/35px GT Walsheim Pro;
   color: #FD8947;
+}
+
+.image {
+  display: grid;
+  margin-right: 40px;
+  cursor: pointer;
+  width: 25px;
+  margin-left: auto;
 }
