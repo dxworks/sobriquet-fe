@@ -54,7 +54,6 @@ export class EngineersTableComponent implements OnInit, OnChanges {
   dataSource: MatTableDataSource<Engineer>;
   displayedColumns = ['select', 'firstname', 'email', 'city', 'country', 'position', 'role', 'roleActions', 'tags', 'tagsAction',
     'teams', 'teamsAction', 'reportsTo', 'reportsToAction', 'status', 'statusAction', 'actions'];
-  allEngineers: Engineer[] = [];
   teams: Team[] = [];
   filteredTeams: Team[] = [];
   filteredTags: Tag[] = [];
@@ -89,7 +88,10 @@ export class EngineersTableComponent implements OnInit, OnChanges {
   }
 
   ngOnInit(): void {
-    this.initializeData();
+    this.engineerService.getAll().subscribe(response => {
+      this.engineers = response.filter(engineer => engineer.project === this.project.id);
+      this.initializeData();
+    });
     this.getTeams();
     this.getProjects();
     this.getTags();
@@ -107,23 +109,14 @@ export class EngineersTableComponent implements OnInit, OnChanges {
       this.project = response.find(project => project.name === this.activatedRoute.snapshot.url[this.activatedRoute.snapshot.url.length - 1].path);
       this.engineerCity = [];
       this.getEngineers();
-      this.getTableData(this.engineers);
     });
   }
 
   getEngineers() {
-    this.engineerService.getAll().subscribe(engineers => {
-      this.allEngineers = engineers;
-      const filteredEngineers = [];
-      engineers.forEach(engineer => {
-        if (engineer.project === this.project.id) {
-          filteredEngineers.push(engineer);
-          this.getEngineerDetails(engineer);
-          this.getTableData(filteredEngineers.concat(this.engineers));
-        }
-      })
+    this.engineers.forEach(engineer => {
+        this.getEngineerDetails(engineer);
     });
-
+    this.getTableData(this.engineers);
   }
 
   getEngineerDetails(engineer: Engineer) {
@@ -138,11 +131,11 @@ export class EngineersTableComponent implements OnInit, OnChanges {
 
   applyFilter($event, property) {
     if (property.endsWith('s') && property !== 'status') {
-      this.dataSource = new MatTableDataSource(this.engineers.concat(this.allEngineers.filter(engineer => engineer.project === this.project.id)).filter(engineer => engineer[property].find(prop => prop.name === $event.name || prop === $event.id)));
+      this.dataSource = new MatTableDataSource(this.engineers.concat(this.engineers.filter(engineer => engineer.project === this.project.id)).filter(engineer => engineer[property].find(prop => prop.name === $event.name || prop === $event.id)));
     } else if (property === 'status') {
-      this.dataSource = new MatTableDataSource(this.engineers.concat(this.allEngineers.filter(engineer => engineer.project === this.project.id)).filter(engineer => engineer[property] === $event));
+      this.dataSource = new MatTableDataSource(this.engineers.concat(this.engineers.filter(engineer => engineer.project === this.project.id)).filter(engineer => engineer[property] === $event));
     } else {
-      this.dataSource = new MatTableDataSource(this.engineers.concat(this.allEngineers.filter(engineer => engineer.project === this.project.id)).filter(engineer => engineer[property] === $event.name));
+      this.dataSource = new MatTableDataSource(this.engineers.concat(this.engineers.filter(engineer => engineer.project === this.project.id)).filter(engineer => engineer[property] === $event.name));
     }
   }
 
@@ -324,6 +317,6 @@ export class EngineersTableComponent implements OnInit, OnChanges {
   }
 
   getReportsTo(reportsTo) {
-    return this.allEngineers.find(eng => eng.id === reportsTo)?.name;
+    return this.engineers.find(eng => eng.id === reportsTo)?.name;
   }
 }

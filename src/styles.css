@@ -124,6 +124,10 @@ body {
   justify-content: center;
 }
 
+.jc-end {
+  justify-content: end;
+}
+
 .jc-around {
   justify-content: space-around;
 }

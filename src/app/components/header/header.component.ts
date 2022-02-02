@@ -23,7 +23,7 @@ export class HeaderComponent implements OnInit {
 
   goTo(path: string) {
     this.urlPath = path;
-    this.router.navigate([`${path}/project/${this.router.url[this.router.url.length - 1]}`]);
+    this.router.navigate([`${path}/project/${this.router.url.split('/')[this.router.url.split('/').length - 1]}`]);
   }
 
   goToHomePage() {

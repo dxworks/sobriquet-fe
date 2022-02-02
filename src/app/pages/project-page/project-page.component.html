@@ -11,11 +11,11 @@
                            [showAll]="true"
                            [project]="project"
                            [suggestions]="suggestions"
-                           (identitiesChanged)="demergedIdentities = $event"></app-engineers-table>
+                           (identitiesChanged)="manageDemerge($event)"></app-engineers-table>
       <app-suggestion-table [identities]="identities"
                             [project]="project"
                             [demergedIdentities]="demergedIdentities"
-                            (projectEmitter)="manageProjectChanges($event)"
+                            (projectEmitter)="manageProjectChanges($event.projectIdentities, $event.engineers)"
                             (engineerEmitter)="engineer = $event"
                             (suggestionsEmitter)="suggestions = $event"></app-suggestion-table>
     </div>

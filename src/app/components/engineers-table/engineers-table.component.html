@@ -184,7 +184,7 @@
       <mat-header-cell *matHeaderCellDef class="font-style-smaller"></mat-header-cell>
       <mat-cell *matCellDef="let engineer">
         <mat-select *ngIf="engineer" [(ngModel)]="engineer.reportsTo" (ngModelChange)="selectReportsTo($event, engineer)">
-          <mat-option *ngFor="let engineer of allEngineers" [value]="engineer">{{engineer.name}}</mat-option>
+          <mat-option *ngFor="let engineer of engineers" [value]="engineer">{{engineer.name}}</mat-option>
         </mat-select>
       </mat-cell>
     </ng-container>

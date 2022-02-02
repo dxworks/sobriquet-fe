@@ -28,8 +28,8 @@ export class ProjectService {
     return this.httpClient.put(`${environment.apiUrl}/editProject/${name}`, suggestions);
   }
 
-  getById(name: string) {
-    return this.httpClient.get<Project>(`${environment.apiUrl}/project/${name}`);
+  getById(id: string) {
+    return this.httpClient.get<Project>(`${environment.apiUrl}/project/${id}`);
   }
 
   upload($event, fileDropped) {

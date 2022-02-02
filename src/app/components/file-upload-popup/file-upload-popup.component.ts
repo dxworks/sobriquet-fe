@@ -1,6 +1,7 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {ProjectService} from '../../services/project.service';
+import {EngineerService} from '../../services/engineer.service';
 
 @Component({
   selector: 'app-file-upload-popup',
@@ -12,15 +13,16 @@ export class FileUploadPopupComponent implements OnInit {
   fileDropped = false;
   selectedJSON: File | File[];
   projectIdentities = []
-  projectName = '';
+  projectId = '';
 
   constructor(public dialogRef: MatDialogRef<FileUploadPopupComponent>,
               private projectService: ProjectService,
+              private engineerService: EngineerService,
               @Inject(MAT_DIALOG_DATA) public data) {
   }
 
   ngOnInit(): void {
-    this.projectName = this.data.project.id;
+    this.projectId = this.data.project.id;
     this.projectIdentities = this.data.project.identities;
   }
 
@@ -31,8 +33,10 @@ export class FileUploadPopupComponent implements OnInit {
   save() {
     if (this.selectedJSON instanceof File) {
       this.readFile(this.selectedJSON);
-      this.projectService.editProject(this.projectName, this.projectIdentities.concat(JSON.parse(localStorage.getItem(`${this.selectedJSON.name}`)))).subscribe(() => {
-        this.dialogRef.close('saved');
+      this.projectService.editProject(this.projectId, this.projectIdentities.concat(JSON.parse(localStorage.getItem(`${this.selectedJSON.name}`)))).subscribe(() => {
+        const identities: any = this.selectedJSON;
+        const engineers = this.changeIdentityToEngineer(JSON.parse(localStorage.getItem(`${identities.name}`)), this.projectId)
+        this.dialogRef.close(engineers);
       });
     } else {
       let fileResults = [];
@@ -40,8 +44,9 @@ export class FileUploadPopupComponent implements OnInit {
         this.readFile(this.selectedJSON[i]);
         fileResults.push(JSON.parse(localStorage.getItem(`${this.selectedJSON[i].name}`)));
       }
-      this.projectService.addProject(this.projectName, this.projectIdentities.concat(this.transformIdentities(fileResults))).subscribe(() => {
-        this.dialogRef.close('saved');
+      this.projectService.editProject(this.projectId, this.projectIdentities.concat(this.transformIdentities(fileResults))).subscribe(() => {
+        const engineers = this.changeIdentityToEngineer(this.transformIdentities(fileResults), this.projectId);
+        this.dialogRef.close(engineers);
       });
     }
   }
@@ -74,6 +79,30 @@ export class FileUploadPopupComponent implements OnInit {
       localStorage.setItem(`${file.name}`, reader.result.toString());
     }
     reader.readAsText(file);
+  }
+
+  changeIdentityToEngineer(identities, projectId) {
+    const engineers = [];
+    identities?.forEach(identity => engineers.push({
+      name: identity.firstName + ' ' + identity.lastName,
+      email: identity.email,
+      project: projectId,
+      tags: [],
+      teams: [],
+      country: '',
+      city: '',
+      senority: '',
+      role: '',
+      identities: [],
+      status: '',
+      reportsTo: ''
+    }));
+    this.saveEngineers(engineers);
+    return engineers;
+  }
+
+  saveEngineers(engineers) {
+    engineers.forEach(engineer => this.engineerService.add(engineer).subscribe());
   }
 
 }
