@@ -2,10 +2,10 @@
   <div class="header">
     <div class="mt-5">
       <button class="sortinghat-orange-bg mr-10" mat-button (click)="rejectMerge()">
-        <mat-icon>highlight_off</mat-icon>
+        <mat-icon>call_split</mat-icon>
       </button>
       <button class="sortinghat-cyan-bg" mat-button (click)="merge()">
-        <mat-icon>check_circle_outline</mat-icon>
+        <mat-icon>merge_type</mat-icon>
       </button>
     </div>
     <mat-form-field>
@@ -53,10 +53,10 @@
   </mat-table>
   <mat-toolbar-row class="jc-end">
     <div class="paginator-information">Cluster {{current}} of {{identitiesByCluster.length}}</div>
-    <button mat-button class="page-button" (click)="changePage({pageIndex: current - 2})" [disabled]="current === 1">
+    <button mat-button class="page-button" (click)="changePage({pageIndex: current - 2}, true)" [disabled]="current === 1">
       <mat-icon>navigate_before</mat-icon>
     </button>
-    <button mat-button class="page-button" (click)="changePage({pageIndex: current})"
+    <button mat-button class="page-button" (click)="changePage({pageIndex: current}, true)"
             [disabled]="current === identitiesByCluster.length">
       <mat-icon>navigate_next</mat-icon>
     </button>

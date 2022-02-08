@@ -65,11 +65,13 @@ export class ProjectPageComponent implements OnInit {
     });
   }
 
-  manageDemerge($event){
+  manageDemerge($event) {
+    const newIdentities = [];
     $event.forEach(identity => {
       if (!this.demergedIdentities.includes(identity)) {
-        this.demergedIdentities.push(identity);
+        newIdentities.push(identity);
       }
-    })
+    });
+    this.demergedIdentities = newIdentities;
   }
 }

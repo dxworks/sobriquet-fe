@@ -97,7 +97,9 @@ export class HomePageComponent implements OnInit {
       role: '',
       identities: [],
       status: '',
-      reportsTo: ''
+      reportsTo: '',
+      username: '',
+      ignorable: false
     }));
     this.saveEngineers();
   }

@@ -1,38 +1,56 @@
 <div class="container mat-elevation-z8">
-  <div class="header">
-    <div class="d-flex">
-      <mat-form-field appearance="fill">
-        <mat-label>Filter by Tag</mat-label>
-        <mat-select [(ngModel)]="tag" (ngModelChange)="applyFilter($event, 'tags')">
-          <mat-option *ngFor="let tag of tags" [value]="tag">{{tag.name}}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-      <mat-form-field appearance="fill">
-        <mat-label>Filter by Role</mat-label>
-        <mat-select [(ngModel)]="role" (ngModelChange)="applyFilter($event, 'role')">
-          <mat-option *ngFor="let role of roles" [value]="role">{{role.name}}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-      <mat-form-field appearance="fill">
-        <mat-label>Filter by Team</mat-label>
-        <mat-select [(ngModel)]="team" (ngModelChange)="applyFilter($event, 'teams')">
-          <mat-option *ngFor="let team of teams" [value]="team">{{team.name}}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-      <mat-form-field appearance="fill">
-        <mat-label>Filter by Status</mat-label>
-        <mat-select [(ngModel)]="status" (ngModelChange)="applyFilter($event, 'status')">
-          <mat-option *ngFor="let status of statuses" [value]="status">{{status}}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
+  <div class="header grid">
+    <div class="mt-5 flex" style="justify-content: inherit">
+      <mat-checkbox class="example-margin" [(ngModel)]="showIgnored" (ngModelChange)="showEngineers()">Show ignored
+      </mat-checkbox>
+      <div class="buttons-section">
+        <button mat-button class="sortinghat-cyan-bg add-button mr-10">
+          <mat-icon>merge_type</mat-icon>
+        </button>
+        <button mat-button class="sortinghat-orange-bg add-button mr-10" (click)="ignore()">
+          <mat-icon *ngIf="!showIgnored">block</mat-icon>
+          <mat-icon *ngIf="showIgnored">check</mat-icon>
+        </button>
+        <button mat-button class="sortinghat-cyan-bg add-button" (click)="openDialog()">
+          <mat-icon>add</mat-icon>
+        </button>
+      </div>
     </div>
-    <button mat-button class="sortinghat-cyan-bg mt-5 add-button" (click)="openDialog()">
-      <mat-icon>add</mat-icon>
-    </button>
+    <div class="d-flex jc-center">
+      <div>
+        <mat-form-field appearance="fill">
+          <mat-label>Filter by Tag</mat-label>
+          <mat-select [(ngModel)]="tag" (ngModelChange)="applyFilter($event, 'tags')" multiple>
+            <mat-option *ngFor="let tag of tags" [value]="tag.name">{{tag.name}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>Filter by Role</mat-label>
+          <mat-select [(ngModel)]="role" (ngModelChange)="applyFilter($event, 'role')" multiple>
+            <mat-option *ngFor="let role of roles" [value]="role.name">{{role.name}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>Filter by Team</mat-label>
+          <mat-select [(ngModel)]="team" (ngModelChange)="applyFilter($event, 'teams')" multiple>
+            <mat-option *ngFor="let team of teams" [value]="team.id">{{team.name}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>Filter by Status</mat-label>
+          <mat-select [(ngModel)]="status" (ngModelChange)="applyFilter($event, 'status')" multiple>
+            <mat-option *ngFor="let status of statuses" [value]="status">{{status}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div>
+        <input matInput [(ngModel)]="searchValue" (ngModelChange)="search()" placeholder="Search..." class="search">
+      </div>
+    </div>
   </div>
   <mat-table #table [dataSource]="dataSource" *ngIf="dataSource?.data.length > 0"
              matSort (matSortChange)="sortData($event)">
@@ -60,6 +78,12 @@
       <mat-header-cell *matHeaderCellDef class="font-style-smaller" mat-sort-header="email"> Email address
       </mat-header-cell>
       <mat-cell *matCellDef="let engineer" class="font-style-smaller">{{engineer?.email}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="username">
+      <mat-header-cell *matHeaderCellDef class="font-style-smaller" mat-sort-header="username"> Username
+      </mat-header-cell>
+      <mat-cell *matCellDef="let engineer" class="font-style-smaller">{{engineer?.username}}</mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="city">
@@ -175,7 +199,7 @@
         <mat-chip-list
           cdkDropList
           cdkDropListOrientation="horizontal">
-            {{getReportsTo(engineer.reportsTo)}}
+          {{getReportsTo(engineer.reportsTo)}}
         </mat-chip-list>
       </mat-cell>
     </ng-container>
@@ -183,7 +207,8 @@
     <ng-container matColumnDef="reportsToAction">
       <mat-header-cell *matHeaderCellDef class="font-style-smaller"></mat-header-cell>
       <mat-cell *matCellDef="let engineer">
-        <mat-select *ngIf="engineer" [(ngModel)]="engineer.reportsTo" (ngModelChange)="selectReportsTo($event, engineer)">
+        <mat-select *ngIf="engineer" [(ngModel)]="engineer.reportsTo"
+                    (ngModelChange)="selectReportsTo($event, engineer)">
           <mat-option *ngFor="let engineer of engineers" [value]="engineer">{{engineer.name}}</mat-option>
         </mat-select>
       </mat-cell>
@@ -214,9 +239,13 @@
     <ng-container matColumnDef="actions">
       <mat-header-cell *matHeaderCellDef alignment="center" class="font-style-smaller"></mat-header-cell>
       <mat-cell *matCellDef="let engineer">
-        <button mat-button class="action-button" (click)="selectedEngineer = engineer; openInfoDialog()">
-          <mat-icon class="sortinghat-orange">info</mat-icon>
-        </button>
+        <div>
+          <button mat-button class="action-button" id="edit-button"
+                  (click)="selectedEngineer = engineer; openInfoDialog()">
+            <mat-icon class="edit-icon sortinghat-orange">edit</mat-icon>
+          </button>
+          <span class="button-number">{{engineer.identities?.length}}</span>
+        </div>
       </mat-cell>
     </ng-container>
 

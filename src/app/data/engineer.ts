@@ -15,4 +15,6 @@ export interface Engineer {
   identities: Identity[];
   reportsTo: string;
   status: string;
+  username: string;
+  ignorable: boolean;
 }

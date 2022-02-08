@@ -8,7 +8,6 @@
         <img src="assets/upload.png" class="image" (click)="openFileUploadDialog()">
       <app-engineers-table [engineers]="engineers"
                            [engineer]="engineer"
-                           [showAll]="true"
                            [project]="project"
                            [suggestions]="suggestions"
                            (identitiesChanged)="manageDemerge($event)"></app-engineers-table>

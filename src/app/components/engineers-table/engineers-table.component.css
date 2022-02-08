@@ -14,7 +14,7 @@
   justify-content: center;
 }
 
-.mat-column-firstname, .mat-column-lastname, .mat-column-city, .mat-column-country {
+.mat-column-firstname, .mat-column-lastname, .mat-column-city, .mat-column-country, .mat-column-username {
   flex: 0 0 9% !important;
 }
 
@@ -54,6 +54,7 @@
 .action-button {
   padding: 0 !important;
   width: 30px !important;
+  height: 20px !important;
   min-width: auto;
   color: #1FAFA9;
 }
@@ -80,5 +81,34 @@ th.mat-header-cell, td.mat-cell, td.mat-footer-cell {
   height: fit-content;
   margin-top: auto;
   margin-bottom: auto;
-  margin-left: 0!important;
+  margin-left: 0 !important;
+}
+
+.edit-icon {
+  zoom: 0.9;
+  margin-left: 5px;
+}
+
+.button-number {
+  display: grid;
+  margin-left: auto;
+  width: 10px;
+  font-size: 11px;
+  color: rgba(0, 0, 0, .54);
+}
+
+.search {
+  margin-left: 20%;
+  border-bottom: 1px solid rgba(148, 148, 148, 1);
+  height: 73%;
+  width: 20rem;
+}
+
+::ng-deep.mat-checkbox-layout .mat-checkbox-label {
+  color: rgba(148, 148, 148, 1);
+}
+
+.buttons-section {
+  margin-left: 81%;
+  display: flex;
 }

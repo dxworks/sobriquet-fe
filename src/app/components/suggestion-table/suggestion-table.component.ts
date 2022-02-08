@@ -85,7 +85,12 @@ export class SuggestionTableComponent implements OnInit, OnChanges, AfterViewIni
       this.getEngineers();
     }
     if (changes.demergedIdentities && this.demergedIdentities.length > 0) {
-      this.identities.length > 0 ? this.identities = this.identities.concat(this.demergedIdentities) : this.identities = this.demergedIdentities;
+      this.identities = this.project.identities;
+      this.demergedIdentities.forEach(identity => {
+        if (!this.identities.find(id => id.email === identity.email)) {
+          this.identities.push(identity);
+        }
+      })
       this.project.identities = this.identities;
       this.prepareData();
       this.getEngineers();
@@ -109,6 +114,7 @@ export class SuggestionTableComponent implements OnInit, OnChanges, AfterViewIni
   prepareData() {
     this.sortIdentities();
     this.identitiesByCluster = this.mergeSuggestionService.buildCluster(this.identities);
+    this.getSuggestions(this.identities);
     this.changePage({pageIndex: 0});
   }
 
@@ -212,7 +218,9 @@ export class SuggestionTableComponent implements OnInit, OnChanges, AfterViewIni
       tags: [{name: 'BOT'}],
       identities: this.suggestions,
       status: '',
-      reportsTo: ''
+      reportsTo: '',
+      username: '',
+      ignorable: false
     }
   }
 
@@ -229,7 +237,9 @@ export class SuggestionTableComponent implements OnInit, OnChanges, AfterViewIni
       tags: [],
       identities: this.suggestions,
       status: '',
-      reportsTo: ''
+      reportsTo: '',
+      username: '',
+      ignorable: false
     }
   }
 
@@ -258,9 +268,11 @@ export class SuggestionTableComponent implements OnInit, OnChanges, AfterViewIni
       });
   }
 
-  changePage($event) {
+  changePage($event, getSuggestions?: boolean) {
     this.current = $event.pageIndex + 1;
-    this.getSuggestions(this.identitiesByCluster[$event.pageIndex]);
+    if (getSuggestions) {
+      this.getSuggestions(this.identitiesByCluster[$event.pageIndex]);
+    }
     this.dataSource = new MatTableDataSource(this.identitiesByCluster[$event.pageIndex]);
     this.initTable();
   }

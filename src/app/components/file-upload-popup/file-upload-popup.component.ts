@@ -95,7 +95,9 @@ export class FileUploadPopupComponent implements OnInit {
       role: '',
       identities: [],
       status: '',
-      reportsTo: ''
+      reportsTo: '',
+      username: '',
+      ignorable: false
     }));
     this.saveEngineers(engineers);
     return engineers;

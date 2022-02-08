@@ -34,8 +34,6 @@ export class EngineerDetailsPopupComponent implements OnInit {
       this.project = response;
       this.identities = this.project.identities;
     });
-    const email = this.selectedEngineer.email;
-    this.selectedEngineer.identities = this.selectedEngineer.identities.filter(identity => identity.email !== email);
     this.dataSource = new MatTableDataSource<Identity>(this.selectedEngineer.identities);
   }
 
