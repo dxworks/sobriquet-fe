@@ -44,7 +44,7 @@ export class TeamsDiagramComponent implements OnInit, OnChanges {
 
   getProject() {
     this.projectService.getAllProjects().subscribe(response => {
-      this.project = response.find(project => project.name === this.router.url.split('/')[this.router.url.split('/').length - 1]);
+      this.project = response.find(project => project.name === this.router.url.split('/')[2]);
       this.getData();
     })
   }

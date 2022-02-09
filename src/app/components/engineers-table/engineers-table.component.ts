@@ -27,6 +27,7 @@ import {LiveAnnouncer} from '@angular/cdk/a11y';
 import {NewEngineerPopupComponent} from '../new-engineer-popup/new-engineer-popup.component';
 import {MatDialog} from '@angular/material/dialog';
 import {EngineerDetailsPopupComponent} from '../engineer-details-popup/engineer-details-popup.component';
+import {MergeInformationPopupComponent} from '../merge-information-popup/merge-information-popup.component';
 
 @Component({
   selector: 'app-engineers-table',
@@ -102,7 +103,7 @@ export class EngineersTableComponent implements OnInit, OnChanges {
 
   initializeData() {
     this.projectService.getAllProjects().subscribe(response => {
-      this.project = response.find(project => project.name === this.activatedRoute.snapshot.url[this.activatedRoute.snapshot.url.length - 1].path);
+      this.project = response.find(project => project.name === this.activatedRoute.snapshot.url[1].path);
       this.engineerCity = [];
       this.getEngineers();
     });
@@ -297,7 +298,7 @@ export class EngineersTableComponent implements OnInit, OnChanges {
   openDialog() {
     const dialogRef = this.dialog.open(NewEngineerPopupComponent, {data: {project: this.project}});
 
-    dialogRef.afterClosed().subscribe(() => this.initializeData());
+    dialogRef.afterClosed().subscribe(() => this.showEngineers());
   }
 
   openInfoDialog() {
@@ -342,5 +343,15 @@ export class EngineersTableComponent implements OnInit, OnChanges {
       this.engineers = response.filter(engineer => engineer.project === this.project.id && engineer.ignorable === this.showIgnored);
       this.initializeData();
     });
+  }
+
+  mergeEngineers() {
+    const dialogRef = this.dialog.open(MergeInformationPopupComponent, {
+      data: {
+        selected: this.selection.selected,
+        project: this.project
+      }
+    });
+    dialogRef.afterClosed().subscribe(() => this.showEngineers());
   }
 }

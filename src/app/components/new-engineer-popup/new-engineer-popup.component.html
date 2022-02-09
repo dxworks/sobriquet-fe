@@ -1,9 +1,14 @@
 <h1 mat-dialog-title>Add new engineer</h1>
 <div mat-dialog-content class="grid">
   <div class="d-flex">
-    <mat-form-field appearance="fill" style="width: 100%!important;">
+    <mat-form-field appearance="fill">
       <mat-label>Name</mat-label>
       <input matInput [(ngModel)]="newEngineer.name">
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Username</mat-label>
+      <input matInput [(ngModel)]="newEngineer.username">
     </mat-form-field>
 
   </div>

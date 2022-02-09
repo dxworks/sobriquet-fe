@@ -42,7 +42,7 @@ export class HomePageComponent implements OnInit {
         this.getProjects();
         const identities: any = this.selectedJSON;
         this.changeIdentityToEngineer(JSON.parse(localStorage.getItem(`${identities.name}`)), response.uuid)
-        this.router.navigate([`/identities/project/${response.name}`]).then();
+        this.router.navigate([`/project/${response.name}/identities`]).then();
       });
     } else {
       let fileResults = [];
@@ -53,7 +53,7 @@ export class HomePageComponent implements OnInit {
       this.projectService.addProject(this.projectName, this.transformIdentities(fileResults)).subscribe(response => {
         this.getProjects();
         this.changeIdentityToEngineer(this.transformIdentities(fileResults), response.uuid);
-        this.router.navigate([`/identities/project/${response.name}`]).then();
+        this.router.navigate([`/project/${response.name}/identities`]).then();
       });
     }
   }

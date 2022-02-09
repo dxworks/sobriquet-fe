@@ -69,6 +69,7 @@ th.mat-header-cell, td.mat-cell, td.mat-footer-cell {
 
 .header {
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
   margin: 2px 10px;
 }
@@ -98,7 +99,6 @@ th.mat-header-cell, td.mat-cell, td.mat-footer-cell {
 }
 
 .search {
-  margin-left: 20%;
   border-bottom: 1px solid rgba(148, 148, 148, 1);
   height: 73%;
   width: 20rem;
@@ -109,6 +109,5 @@ th.mat-header-cell, td.mat-cell, td.mat-footer-cell {
 }
 
 .buttons-section {
-  margin-left: 81%;
   display: flex;
 }

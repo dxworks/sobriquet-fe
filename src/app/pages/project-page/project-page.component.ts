@@ -34,7 +34,7 @@ export class ProjectPageComponent implements OnInit {
 
   getIdentities() {
     this.projectService.getAllProjects().subscribe(response => {
-      this.project = response.find(project => project.name === this.activatedRoute.snapshot.url[this.activatedRoute.snapshot.url.length - 1].path);
+      this.project = response.find(project => project.name === this.activatedRoute.snapshot.url[1].path);
       this.identities = this.project?.identities;
     })
   }

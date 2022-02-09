@@ -1,15 +1,20 @@
 <h1 mat-dialog-title>{{selectedEngineer.name}}</h1>
 <div mat-dialog-content class="grid">
   <div class="d-flex jc-around">
-    <mat-form-field appearance="fill" class="mr-10" style="width: 100%!important;">
+    <mat-form-field appearance="fill" class="mr-10">
       <mat-label>Name</mat-label>
       <input matInput [(ngModel)]="selectedEngineer.name">
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Username</mat-label>
+      <input matInput [(ngModel)]="selectedEngineer.username">
     </mat-form-field>
   </div>
 
   <div class="d-flex jc-around">
     <mat-form-field appearance="fill" class="mr-10">
-      <mat-label>Position</mat-label>
+      <mat-label>Senority</mat-label>
       <input matInput [(ngModel)]="selectedEngineer.senority">
     </mat-form-field>
 
