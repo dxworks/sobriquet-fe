@@ -41,4 +41,21 @@ export class ProjectService {
     }
     return selectedJSON;
   }
+
+  transformIdentitiesName(identities) {
+    identities?.forEach(identity => {
+      if (identity.lenght > 0) {
+        identity.forEach(id => {
+          id.firstName = id.name.split(' ')[0];
+          id.lastName = id.name.split(' ')[1];
+          delete id.name;
+        })
+      } else {
+        identity.firstName = identity.name.split(' ')[0];
+        identity.lastName = identity.name.split(' ')[1];
+        delete identity.name;
+      }
+    });
+    return identities;
+  }
 }

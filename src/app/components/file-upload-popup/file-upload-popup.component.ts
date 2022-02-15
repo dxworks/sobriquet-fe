@@ -33,16 +33,16 @@ export class FileUploadPopupComponent implements OnInit {
   save() {
     if (this.selectedJSON instanceof File) {
       this.readFile(this.selectedJSON);
-      this.projectService.editProject(this.projectId, this.projectIdentities.concat(JSON.parse(localStorage.getItem(`${this.selectedJSON.name}`)))).subscribe(() => {
+      this.projectService.editProject(this.projectId, this.projectIdentities.concat(this.projectService.transformIdentitiesName(JSON.parse(localStorage.getItem(this.selectedJSON.name))))).subscribe(() => {
         const identities: any = this.selectedJSON;
-        const engineers = this.changeIdentityToEngineer(JSON.parse(localStorage.getItem(`${identities.name}`)), this.projectId)
+        const engineers = this.changeIdentityToEngineer(this.projectService.transformIdentitiesName(JSON.parse(localStorage.getItem(identities.name))), this.projectId)
         this.dialogRef.close(engineers);
       });
     } else {
       let fileResults = [];
       for (let i = 0; i < this.selectedJSON.length; i++) {
         this.readFile(this.selectedJSON[i]);
-        fileResults.push(JSON.parse(localStorage.getItem(`${this.selectedJSON[i].name}`)));
+        fileResults.push(this.projectService.transformIdentitiesName(JSON.parse(localStorage.getItem(`${this.selectedJSON[i].name}`))));
       }
       this.projectService.editProject(this.projectId, this.projectIdentities.concat(this.transformIdentities(fileResults))).subscribe(() => {
         const engineers = this.changeIdentityToEngineer(this.transformIdentities(fileResults), this.projectId);

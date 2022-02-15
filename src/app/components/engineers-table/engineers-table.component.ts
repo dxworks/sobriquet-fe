@@ -99,6 +99,10 @@ export class EngineersTableComponent implements OnInit, OnChanges {
     if (!changes.engineer?.firstChange && !changes.engineers?.firstChange && this.project && this.engineer) {
       this.getEngineers();
     }
+
+    if (changes.engineers) {
+      this.showEngineers();
+    }
   }
 
   initializeData() {

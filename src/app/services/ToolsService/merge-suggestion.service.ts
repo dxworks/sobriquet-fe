@@ -122,4 +122,18 @@ export class MergeSuggestionService {
     return identitiesByCluster;
   }
 
+  cleanName(name: string): string {
+    name = name.replace(/[^a-zA-Z ]/g, '');
+    return name.split(' ')[0].substr(0, 1).toUpperCase() + name.split(' ')[0].substr(1) + ' ' +
+      name.split(' ')[1].substr(0, 1).toUpperCase() + name.split(' ')[1].substr(1);
+  }
+
+  identitiesAreEqual(firstIdentity: Identity, secondIdentity: Identity) {
+    return firstIdentity.firstName === secondIdentity.firstName &&
+      firstIdentity.lastName === secondIdentity.lastName &&
+      firstIdentity.email === secondIdentity.email &&
+      firstIdentity.username === secondIdentity.username &&
+      firstIdentity.source === secondIdentity.source;
+  }
+
 }
