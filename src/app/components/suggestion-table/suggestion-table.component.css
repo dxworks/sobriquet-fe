@@ -70,3 +70,7 @@
   margin-right: 10px;
   cursor: pointer;
 }
+
+::ng-deep.mat-form-field-appearance-fill .mat-form-field-infix {
+  display: flex;
+}

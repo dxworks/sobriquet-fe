@@ -48,7 +48,9 @@ export class EngineersTableComponent implements OnInit, OnChanges {
   suggestions: Identity[] = [];
 
   @Output()
-  identitiesChanged = new EventEmitter()
+  identitiesChanged = new EventEmitter();
+  @Output()
+  engineerChanged = new EventEmitter();
 
   dataSource: MatTableDataSource<Engineer>;
   displayedColumns = ['select', 'firstname', 'email', 'username', 'city', 'country', 'position', 'role', 'roleActions', 'tags', 'tagsAction',
@@ -176,6 +178,7 @@ export class EngineersTableComponent implements OnInit, OnChanges {
 
   selectReportsTo($event, engineer: Engineer) {
     engineer.reportsTo = $event.id;
+    this.engineerChanged.emit();
     this.engineerService.edit(engineer).subscribe(() => {
       this.getEngineers();
     })
@@ -183,12 +186,14 @@ export class EngineersTableComponent implements OnInit, OnChanges {
 
   selectStatus($event, engineer: Engineer) {
     engineer.status = $event;
+    this.engineerChanged.emit();
     this.engineerService.edit(engineer).subscribe(() => {
       this.getEngineers();
     });
   }
 
   linkTeamToEngineer(teamId, engineerId) {
+    this.engineerChanged.emit();
     this.engineerService.linkTeam(engineerId, teamId).subscribe(() => this.getEngineers());
   }
 
@@ -196,11 +201,13 @@ export class EngineersTableComponent implements OnInit, OnChanges {
     if (onCreate) {
       engineer.tags.push(tag);
     }
+    this.engineerChanged.emit();
     this.engineerService.edit(engineer).subscribe(() => this.getEngineers());
   }
 
   linkRoleToEngineer($event, engineer) {
     engineer.role = $event.name;
+    this.engineerChanged.emit();
     this.engineerService.edit(engineer).subscribe(() => {
       this.getEngineers();
     });
@@ -353,7 +360,8 @@ export class EngineersTableComponent implements OnInit, OnChanges {
     const dialogRef = this.dialog.open(MergeInformationPopupComponent, {
       data: {
         selected: this.selection.selected,
-        project: this.project
+        project: this.project,
+        delete: true
       }
     });
     dialogRef.afterClosed().subscribe(() => this.showEngineers());

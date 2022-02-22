@@ -20,6 +20,9 @@ import {ProjectService} from '../../services/project.service';
 import {MatPaginator, MatPaginatorIntl} from '@angular/material/paginator';
 import {TagService} from '../../services/tag.service';
 import {Tag} from '../../data/tag';
+import {MergeInformationPopupComponent} from '../merge-information-popup/merge-information-popup.component';
+import {MatDialog} from '@angular/material/dialog';
+import {Characters} from '../../resources/characters';
 
 @Component({
   selector: 'app-suggestion-table',
@@ -36,6 +39,8 @@ export class SuggestionTableComponent implements OnInit, OnChanges, AfterViewIni
   project: Project;
   @Input()
   demergedIdentities: Identity[] = [];
+  @Input()
+  engineers: Engineer[] = [];
 
   @Output()
   projectEmitter = new EventEmitter();
@@ -50,7 +55,8 @@ export class SuggestionTableComponent implements OnInit, OnChanges, AfterViewIni
   pagination: number[];
   identitiesByCluster = [];
   current = 1;
-  engineers: Engineer[] = [];
+  name: string;
+  characters = Characters;
   mergeResult: Engineer = new class implements Engineer {
     city: string;
     country: string;
@@ -73,6 +79,7 @@ export class SuggestionTableComponent implements OnInit, OnChanges, AfterViewIni
               private engineersService: EngineerService,
               private activatedRoute: ActivatedRoute,
               private tagService: TagService,
+              public dialog: MatDialog,
               private changeDetectorRef: ChangeDetectorRef,
               private projectService: ProjectService) {
   }
@@ -187,6 +194,7 @@ export class SuggestionTableComponent implements OnInit, OnChanges, AfterViewIni
   getSuggestions(identities: Identity[]) {
     this.suggestions = this.mergeSuggestionService.getMergeSuggestions(identities);
     if (this.suggestions.length === 1) {
+      this.getMergedEngineerDetails();
       this.merge();
     }
     this.pagination = [this.suggestions.length];
@@ -205,45 +213,57 @@ export class SuggestionTableComponent implements OnInit, OnChanges, AfterViewIni
     return !!this.suggestions.find(suggestion => suggestion === identity);
   }
 
-  removeSimilar() {
+  getSimilar() {
     const engForDelete = [];
     for (let i = 0; i < this.suggestions.length; i++) {
-      if (this.suggestions[i].email !== this.mergeResult.email) {
-        engForDelete.push(this.engineers.find(eng => eng.email === this.suggestions[i].email));
-      }
+      engForDelete.push(this.engineers.find(eng => eng.email === this.suggestions[i].email));
     }
     this.engineers = engForDelete;
   }
 
   merge() {
-    let data: Engineer;
-    if (this.engineers.find(eng => eng.email === this.mergeResult.email)) {
-      data = this.engineers.find(eng => eng.email === this.mergeResult.email);
-      data.identities = this.suggestions;
-      if (this.checkBotIdentity()) {
-        if (data.tags.length === 0) {
-          data.tags = [{name: 'BOT'}];
-        } else {
-          data.tags.push({name: 'BOT'});
-        }
+    this.getSimilar();
+    let data = this.buildData(this.checkBotIdentity());
+    this.engineersService.add(data).subscribe(() => {
+      this.manageMerge(data)
+    });
+  }
+
+  onMergeButtonClicked() {
+    const selectedEngineers = [];
+    for (let i = 0; i < this.suggestions.length; i++) {
+      if (this.engineers.find(eng => eng.email === this.suggestions[i].email)) {
+        selectedEngineers.push(this.engineers.find(eng => eng.email === this.suggestions[i].email));
       }
-      this.removeSimilar();
-      this.engineersService.edit(data).subscribe(() => {
-        this.manageMerge(data);
-      });
-    } else {
-      this.removeSimilar();
-      data = this.buildData(this.checkBotIdentity());
-      this.engineersService.add(data).subscribe(() => {
-        this.manageMerge(data)
-      });
     }
+    if (selectedEngineers.find(eng => eng.tags.length > 0 || eng.reportsTo || eng.role || eng.teams.length > 0 || eng.status)) {
+      this.openMergeInfoPopup(selectedEngineers);
+    } else {
+      this.merge();
+    }
+  }
+
+  openMergeInfoPopup(selectedEngineers: Engineer[]) {
+    const dialogRef = this.dialog.open(MergeInformationPopupComponent, {
+      data: {
+        mergedEngineer: this.mergeResult,
+        selected: selectedEngineers,
+        project: this.project,
+        delete: false
+      }
+    });
+    dialogRef.afterClosed().subscribe(response => {
+      if (response) {
+        this.mergeResult = response;
+      }
+      this.merge();
+    });
   }
 
   manageMerge(data) {
     this.engineerEmitter.emit(data);
     this.manageIdentities();
-    this.updateProjectIdentities(this.engineers);
+    this.demergedIdentities.length === 0 ? this.updateProjectIdentities(this.engineers) : this.updateProjectIdentities(null);
     this.sortIdentities();
     this.identitiesByCluster = this.mergeSuggestionService.buildCluster(this.identities);
     this.getSuggestions(this.identitiesByCluster[this.current - 1]);
@@ -258,7 +278,7 @@ export class SuggestionTableComponent implements OnInit, OnChanges, AfterViewIni
   }
 
   splitCluster(cluster) {
-    let i,j, temporary, chunk = 1;
+    let i, j, temporary, chunk = 1;
     for (i = 0, j = cluster.length; i < j; i += chunk) {
       temporary = cluster.slice(i, i + chunk);
     }
@@ -280,15 +300,15 @@ export class SuggestionTableComponent implements OnInit, OnChanges, AfterViewIni
       name: this.mergeResult.name,
       email: this.mergeResult.email,
       senority: this.mergeResult.senority,
-      teams: [],
+      teams: this.mergeResult.teams,
       city: this.mergeResult.city,
       country: this.mergeResult.country,
       project: this.project.id,
-      role: '',
+      role: this.mergeResult.role,
       tags: [{name: 'BOT'}],
       identities: this.suggestions,
-      status: '',
-      reportsTo: '',
+      status: this.mergeResult.status,
+      reportsTo: this.mergeResult.reportsTo,
       username: this.mergeResult.username,
       ignorable: false
     }
@@ -299,15 +319,15 @@ export class SuggestionTableComponent implements OnInit, OnChanges, AfterViewIni
       name: this.mergeResult.name,
       email: this.mergeResult.email,
       senority: this.mergeResult.senority,
-      teams: [],
+      teams: this.mergeResult.teams,
       city: this.mergeResult.city,
       country: this.mergeResult.country,
       project: this.project.id,
-      role: '',
-      tags: [],
+      role: this.mergeResult.role,
+      tags: this.mergeResult.tags,
       identities: this.suggestions,
-      status: '',
-      reportsTo: '',
+      status: this.mergeResult.status,
+      reportsTo: this.mergeResult.reportsTo,
       username: this.mergeResult.username,
       ignorable: false
     }

@@ -4,6 +4,10 @@
     <mat-form-field appearance="fill">
       <mat-label>Name</mat-label>
       <input matInput [(ngModel)]="newEngineer.name">
+      <mat-select [(ngModel)]="name" (ngModelChange)="newEngineer.name = name" style="width: 10px">
+        <mat-option *ngFor="let character of characters" [value]="character">{{character}}
+        </mat-option>
+      </mat-select>
     </mat-form-field>
 
     <mat-form-field appearance="fill">

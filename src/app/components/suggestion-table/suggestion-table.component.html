@@ -8,7 +8,7 @@
         <button class="sortinghat-orange-bg mr-10" mat-button (click)="rejectMerge()">
           <mat-icon>call_split</mat-icon>
         </button>
-        <button class="sortinghat-cyan-bg" mat-button (click)="merge()">
+        <button class="sortinghat-cyan-bg" mat-button (click)="onMergeButtonClicked()">
           <mat-icon>merge_type</mat-icon>
         </button>
       </div>
@@ -16,7 +16,11 @@
         <mat-icon class="clean-name-icon sortinghat-orange" (click)="cleanName()"> format_size</mat-icon>
         <mat-form-field class="mr-10" style="width: 10rem">
           <mat-label>Name</mat-label>
-          <input matInput [(ngModel)]="mergeResult.name">
+          <input matInput [(ngModel)]="mergeResult.name" style="width: 90%">
+          <mat-select [(ngModel)]="name" (ngModelChange)="mergeResult.name = name" style="width: 10px">
+            <mat-option *ngFor="let character of characters" [value]="character">{{character}}
+            </mat-option>
+          </mat-select>
         </mat-form-field>
 
         <mat-form-field class="mr-10" style="width: 10rem">

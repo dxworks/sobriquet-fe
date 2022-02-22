@@ -1,9 +1,9 @@
 .mat-cell:first-of-type, .mat-header-cell:first-of-type, .mat-footer-cell:first-of-type {
-  padding-left: 0!important;
+  padding-left: 0 !important;
 }
 
 .mat-cell:last-of-type, .mat-header-cell:last-of-type, .mat-footer-cell:last-of-type {
-  padding-right: 0!important;
+  padding-right: 0 !important;
   flex: 0 0 5%;
 }
 
@@ -40,4 +40,12 @@
 .mlr-auto {
   margin-left: auto;
   margin-right: auto;
+}
+
+.icon {
+  cursor: pointer;
+}
+
+#name ::ng-deep.input.mat-input-element{
+  width: 90%;
 }

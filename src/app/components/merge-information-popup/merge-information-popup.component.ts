@@ -13,6 +13,7 @@ import {TagService} from '../../services/tag.service';
 import {RoleService} from '../../services/role.service';
 import {Project} from '../../data/project';
 import {MatTableDataSource} from '@angular/material/table';
+import {Characters} from '../../resources/characters';
 
 @Component({
   selector: 'app-merge-information-popup',
@@ -34,6 +35,10 @@ export class MergeInformationPopupComponent implements OnInit {
   project: Project;
   engineers: Engineer[] = [];
   dataSource: MatTableDataSource<Engineer>;
+  delete: boolean;
+  name: string;
+  characters = Characters;
+  tag: string[] = [];
   mergedEngineer: Engineer = new class implements Engineer {
     city: string;
     country: string;
@@ -65,12 +70,13 @@ export class MergeInformationPopupComponent implements OnInit {
   ngOnInit(): void {
     this.selectedEngineers = this.data.selected;
     this.project = this.data.project;
+    this.delete = this.data.delete;
     this.manageTeams();
     this.manageTags();
     this.manageRoles();
     this.manageEngineers();
     this.manageStatuses();
-    this.getMergedEngineerDetails();
+    this.data.mergedEngineer ? this.mergedEngineer = this.data.mergedEngineer : this.getMergedEngineerDetails();
     this.dataSource = new MatTableDataSource<Engineer>(this.selectedEngineers);
   }
 
@@ -136,6 +142,31 @@ export class MergeInformationPopupComponent implements OnInit {
 
   useProperty(value, property: string) {
     this.mergedEngineer[property] = value;
+    this.selectValue(value, property);
+  }
+
+  selectValue(value, property) {
+    switch (property) {
+      case 'tags': {
+        this.tagFormControl.setValue(value);
+        break;
+      }
+      case 'role': {
+        this.rolesFormControl.setValue([value]);
+        break;
+      }
+      case 'status': {
+        this.statusFormControl.setValue([value]);
+        break;
+      }
+      case 'teams': {
+        this.teamsFormControl.setValue(value);
+        break;
+      }
+      case 'reportsTo':{
+        this.engineersFormControl.setValue([value]);
+      }
+    }
   }
 
   getTags(engineerTags: { name: string }[]): string {
@@ -159,11 +190,19 @@ export class MergeInformationPopupComponent implements OnInit {
   }
 
   save() {
-    this.selectedEngineers.forEach(eng => {
-      eng.identities.forEach(identity => this.mergedEngineer.identities.push(identity));
-      this.engineerService.delete(eng.id).subscribe();
-    });
-    this.engineerService.add(this.mergedEngineer).subscribe(() => this.onCancelClick());
+    if (this.delete) {
+      this.selectedEngineers.forEach(eng => {
+        eng.identities.forEach(identity => this.mergedEngineer.identities.push(identity));
+        this.engineerService.delete(eng.id).subscribe();
+      });
+      this.engineerService.add(this.mergedEngineer).subscribe(() => this.onCancelClick());
+    } else {
+      this.dialogRef.close(this.mergedEngineer);
+    }
+  }
+
+  compareSimpleProperty(c1: any, c2: any): boolean {
+    return c1 === c2 || c1?.name === c2?.name || c1?.name === c2 || c1 === c2?.name;
   }
 
 }

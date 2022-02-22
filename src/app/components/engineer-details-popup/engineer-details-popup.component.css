@@ -10,14 +10,18 @@
   cursor: pointer;
 }
 
-.mat-column-actions{
+.mat-column-actions {
   flex: 0.12;
 }
 
-::ng-deep .mat-form-field-appearance-fill .mat-form-field-flex{
+::ng-deep .mat-form-field-appearance-fill .mat-form-field-flex {
   background: white;
 }
 
-::ng-deep.mat-form-field{
+::ng-deep.mat-form-field {
   width: 50%;
+}
+
+::ng-deep.mat-form-field-appearance-fill .mat-form-field-infix {
+  display: flex;
 }

@@ -12,6 +12,7 @@ import {TagService} from '../../services/tag.service';
 import {RoleService} from '../../services/role.service';
 import {Project} from '../../data/project';
 import {ProjectService} from '../../services/project.service';
+import {Characters} from '../../resources/characters';
 
 @Component({
   selector: 'app-new-engineer-popup',
@@ -34,6 +35,8 @@ export class NewEngineerPopupComponent implements OnInit {
   statuses = ['In Project', 'Leaving', 'Left'];
   engineers: Engineer[] = [];
   project: Project;
+  characters = Characters;
+  name: string;
 
   newEngineer: Engineer = new class implements Engineer {
     city: string;

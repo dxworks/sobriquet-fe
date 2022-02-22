@@ -39,6 +39,15 @@ export class ProjectPageComponent implements OnInit {
     })
   }
 
+  getEngineers(identities?) {
+    this.engineerService.getAll().subscribe(response => {
+      this.engineers = response.filter(eng => eng.project === this.project.id);
+      if (identities?.length > 0) {
+        this.identities = identities;
+      }
+    });
+  }
+
   manageProjectChanges(identities, engineers) {
     if (engineers) {
       engineers.forEach(eng => this.engineerService.delete(eng.id).subscribe());
@@ -47,10 +56,7 @@ export class ProjectPageComponent implements OnInit {
         this.identities = identities;
       }), 500);
     } else {
-      this.engineerService.getAll().subscribe(response => {
-        this.engineers = response.filter(eng => eng.project === this.project.id);
-        this.identities = identities;
-      });
+     this.getEngineers(identities);
     }
   }
 
@@ -73,5 +79,9 @@ export class ProjectPageComponent implements OnInit {
       }
     });
     this.demergedIdentities = newIdentities;
+  }
+
+  changeEngineerDetails() {
+    this.getEngineers(undefined)
   }
 }
