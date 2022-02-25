@@ -24,8 +24,8 @@ export class ProjectService {
     return this.httpClient.delete(`${environment.apiUrl}/deleteProject/${name}`);
   }
 
-  editProject(name: string, suggestions: Identity[]) {
-    return this.httpClient.put(`${environment.apiUrl}/editProject/${name}`, suggestions);
+  editProject(id: string, suggestions: Identity[]) {
+    return this.httpClient.put(`${environment.apiUrl}/editProject/${id}`, suggestions);
   }
 
   getById(id: string) {

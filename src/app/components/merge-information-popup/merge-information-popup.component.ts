@@ -160,13 +160,23 @@ export class MergeInformationPopupComponent implements OnInit {
         break;
       }
       case 'teams': {
-        this.teamsFormControl.setValue(value);
+        this.teamsFormControl.setValue(this.getSelectedTeams(value));
         break;
       }
       case 'reportsTo':{
-        this.engineersFormControl.setValue([value]);
+        this.engineersFormControl.setValue([this.engineers.find(eng => eng.id === value)]);
       }
     }
+  }
+
+  getSelectedTeams(value: string[]) {
+    const teams = [];
+    value.forEach(val => {
+      if (this.teams.find(team => team.id === val)) {
+        teams.push(this.teams.find(team => team.id === val));
+      }
+    });
+    return teams;
   }
 
   getTags(engineerTags: { name: string }[]): string {

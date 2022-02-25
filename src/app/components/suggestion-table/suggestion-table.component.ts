@@ -306,11 +306,24 @@ export class SuggestionTableComponent implements OnInit, OnChanges, AfterViewIni
       project: this.project.id,
       role: this.mergeResult.role,
       tags: [{name: 'BOT'}],
-      identities: this.suggestions,
+      identities: this.getMergeResultIdentities(),
       status: this.mergeResult.status,
       reportsTo: this.mergeResult.reportsTo,
       username: this.mergeResult.username,
       ignorable: false
+    }
+  }
+
+  getMergeResultIdentities() {
+    this.engineers.find(eng => {
+      if (eng.email === this.mergeResult.email && eng.identities.length > 0) {
+        this.mergeResult.identities = this.suggestions.concat(eng.identities);
+      }
+    });
+    if (this.mergeResult.identities.length === 0){
+      return this.suggestions;
+    } else {
+      return this.mergeResult.identities;
     }
   }
 
@@ -325,7 +338,7 @@ export class SuggestionTableComponent implements OnInit, OnChanges, AfterViewIni
       project: this.project.id,
       role: this.mergeResult.role,
       tags: this.mergeResult.tags,
-      identities: this.suggestions,
+      identities: this.getMergeResultIdentities(),
       status: this.mergeResult.status,
       reportsTo: this.mergeResult.reportsTo,
       username: this.mergeResult.username,
