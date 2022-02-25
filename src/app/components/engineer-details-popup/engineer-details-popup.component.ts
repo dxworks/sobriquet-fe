@@ -7,6 +7,7 @@ import {SelectionModel} from '@angular/cdk/collections';
 import {EngineerService} from '../../services/engineer.service';
 import {Project} from '../../data/project';
 import {ProjectService} from '../../services/project.service';
+import {Characters} from '../../resources/characters';
 
 @Component({
   selector: 'app-engineer-details-popup',
@@ -21,6 +22,8 @@ export class EngineerDetailsPopupComponent implements OnInit {
   selection = new SelectionModel<Identity>(true, []);
   displayedColumns = ['select', 'name', 'email', 'actions'];
   identities = [];
+  name: string;
+  characters = Characters;
 
   constructor(public dialogRef: MatDialogRef<EngineerDetailsPopupComponent>,
               @Inject(MAT_DIALOG_DATA) public data,
@@ -34,8 +37,6 @@ export class EngineerDetailsPopupComponent implements OnInit {
       this.project = response;
       this.identities = this.project.identities;
     });
-    const email = this.selectedEngineer.email;
-    this.selectedEngineer.identities = this.selectedEngineer.identities.filter(identity => identity.email !== email);
     this.dataSource = new MatTableDataSource<Identity>(this.selectedEngineer.identities);
   }
 

@@ -38,13 +38,14 @@
   margin-top: auto;
   margin-bottom: auto;
 }
+
 .page-button {
   margin-top: auto;
   margin-bottom: auto;
   color: rgba(0, 0, 0, .54);;
 }
 
-.mat-toolbar-row, .mat-toolbar-single-row{
+.mat-toolbar-row, .mat-toolbar-single-row {
   display: flex;
 }
 
@@ -60,4 +61,16 @@
   font: normal normal bold 25px/75px Muli;
   letter-spacing: 0px;
   color: #4A4343;
+}
+
+.clean-name-icon {
+  display: grid;
+  margin-top: auto;
+  margin-bottom: auto;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+::ng-deep.mat-form-field-appearance-fill .mat-form-field-infix {
+  display: flex;
 }

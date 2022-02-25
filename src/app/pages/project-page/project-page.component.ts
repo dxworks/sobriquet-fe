@@ -21,6 +21,7 @@ export class ProjectPageComponent implements OnInit {
   engineer: Engineer;
   suggestions: Identity[] = [];
   demergedIdentities: Identity[] = [];
+  allEngineers: Engineer[] = [];
 
   constructor(private activatedRoute: ActivatedRoute,
               private engineerService: EngineerService,
@@ -34,9 +35,18 @@ export class ProjectPageComponent implements OnInit {
 
   getIdentities() {
     this.projectService.getAllProjects().subscribe(response => {
-      this.project = response.find(project => project.name === this.activatedRoute.snapshot.url[this.activatedRoute.snapshot.url.length - 1].path);
+      this.project = response.find(project => project.name === this.activatedRoute.snapshot.url[1].path);
       this.identities = this.project?.identities;
     })
+  }
+
+  getEngineers(identities?) {
+    this.engineerService.getAll().subscribe(response => {
+      this.engineers = response.filter(eng => eng.project === this.project.id);
+      if (identities?.length > 0) {
+        this.identities = identities;
+      }
+    });
   }
 
   manageProjectChanges(identities, engineers) {
@@ -45,13 +55,23 @@ export class ProjectPageComponent implements OnInit {
       setTimeout(() => this.engineerService.getAll().subscribe(response => {
         this.engineers = response.filter(eng => eng.project === this.project.id);
         this.identities = identities;
+        this.removeDuplicate(engineers);
       }), 500);
     } else {
-      this.engineerService.getAll().subscribe(response => {
-        this.engineers = response.filter(eng => eng.project === this.project.id);
-        this.identities = identities;
-      });
+      this.getEngineers(identities);
     }
+  }
+
+  removeDuplicate(engineers: Engineer[]) {
+    engineers.forEach(eng => {
+      this.engineers.forEach(savedEng => {
+        if (eng.email === savedEng.email && savedEng.identities.length === 0) {
+          this.engineerService.delete(savedEng.id).subscribe(() => {
+            this.engineerService.getAll().subscribe(res => this.engineers = res.filter(eng => eng.project === this.project.id));
+          });
+        }
+      })
+    })
   }
 
   openFileUploadDialog() {
@@ -61,15 +81,39 @@ export class ProjectPageComponent implements OnInit {
       if (response) {
         this.getIdentities();
         this.engineers = response;
+        this.engineerService.getAll().subscribe(response => {
+          this.allEngineers = response;
+          this.getMergedIdentitiesOnMatch();
+        });
       }
     });
   }
 
-  manageDemerge($event){
+  getMergedIdentitiesOnMatch() {
+    const allIdentities = [];
+    this.identities.forEach(identity => {
+      this.allEngineers.forEach(engineer => {
+        if (engineer.identities.find(id => id.email === identity.email) && !allIdentities.includes(identity)) {
+          allIdentities.push(identity);
+        }
+      })
+    });
+    this.project.identities = this.identities.concat(allIdentities);
+    this.projectService.editProject(this.project.id, this.project.identities).subscribe();
+  }
+
+
+  manageDemerge($event) {
+    const newIdentities = [];
     $event.forEach(identity => {
       if (!this.demergedIdentities.includes(identity)) {
-        this.demergedIdentities.push(identity);
+        newIdentities.push(identity);
       }
-    })
+    });
+    this.demergedIdentities = newIdentities;
+  }
+
+  changeEngineerDetails() {
+    this.getEngineers(undefined)
   }
 }

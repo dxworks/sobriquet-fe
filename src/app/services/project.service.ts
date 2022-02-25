@@ -24,8 +24,8 @@ export class ProjectService {
     return this.httpClient.delete(`${environment.apiUrl}/deleteProject/${name}`);
   }
 
-  editProject(name: string, suggestions: Identity[]) {
-    return this.httpClient.put(`${environment.apiUrl}/editProject/${name}`, suggestions);
+  editProject(id: string, suggestions: Identity[]) {
+    return this.httpClient.put(`${environment.apiUrl}/editProject/${id}`, suggestions);
   }
 
   getById(id: string) {
@@ -40,5 +40,22 @@ export class ProjectService {
       $event.target.files.length === 1 ? selectedJSON = $event.target.files[0] : selectedJSON = $event.target.files;
     }
     return selectedJSON;
+  }
+
+  transformIdentitiesName(identities) {
+    identities?.forEach(identity => {
+      if (identity.lenght > 0) {
+        identity.forEach(id => {
+          id.firstName = id.name.split(' ')[0];
+          id.lastName = id.name.split(' ')[1];
+          delete id.name;
+        })
+      } else {
+        identity.firstName = identity.name.split(' ')[0];
+        identity.lastName = identity.name.split(' ')[1];
+        delete identity.name;
+      }
+    });
+    return identities;
   }
 }

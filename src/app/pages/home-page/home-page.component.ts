@@ -38,22 +38,22 @@ export class HomePageComponent implements OnInit {
   save() {
     if (this.selectedJSON instanceof File) {
       this.readFile(this.selectedJSON);
-      this.projectService.addProject(this.projectName, this.selectedJSON).subscribe(response => {
+      this.projectService.addProject(this.projectName, this.projectService.transformIdentitiesName(JSON.parse(localStorage.getItem(this.selectedJSON.name)))).subscribe(response => {
         this.getProjects();
         const identities: any = this.selectedJSON;
-        this.changeIdentityToEngineer(JSON.parse(localStorage.getItem(`${identities.name}`)), response.uuid)
-        this.router.navigate([`/identities/project/${response.name}`]).then();
+        this.changeIdentityToEngineer(this.projectService.transformIdentitiesName(JSON.parse(localStorage.getItem(identities.name))), response.uuid)
+        this.router.navigate([`/project/${response.name}/identities`]).then();
       });
     } else {
       let fileResults = [];
       for (let i = 0; i < this.selectedJSON.length; i++) {
         this.readFile(this.selectedJSON[i]);
-        fileResults.push(JSON.parse(localStorage.getItem(`${this.selectedJSON[i].name}`)));
+        fileResults.push(this.projectService.transformIdentitiesName(JSON.parse(localStorage.getItem(`${this.selectedJSON[i].name}`))));
       }
       this.projectService.addProject(this.projectName, this.transformIdentities(fileResults)).subscribe(response => {
         this.getProjects();
         this.changeIdentityToEngineer(this.transformIdentities(fileResults), response.uuid);
-        this.router.navigate([`/identities/project/${response.name}`]).then();
+        this.router.navigate([`/project/${response.name}/identities`]).then();
       });
     }
   }
@@ -97,7 +97,9 @@ export class HomePageComponent implements OnInit {
       role: '',
       identities: [],
       status: '',
-      reportsTo: ''
+      reportsTo: '',
+      username: identity.username,
+      ignorable: false
     }));
     this.saveEngineers();
   }

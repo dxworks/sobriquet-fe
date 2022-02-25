@@ -6,9 +6,9 @@ import {HomePageComponent} from './pages/home-page/home-page.component';
 
 const routes: Routes = [
   {path: '', component: HomePageComponent},
-  {path: 'identities/project/:name', component: ProjectPageComponent},
-  {path: 'identities/newProject/:name', component: ProjectPageComponent},
-  {path: 'teams/project/:name', component: TeamsPageComponent},
+  {path: 'project/:name/identities', component: ProjectPageComponent},
+  {path: 'newProject/:name/identities', component: ProjectPageComponent},
+  {path: 'project/:name/teams', component: TeamsPageComponent},
 ]
 
 @NgModule({

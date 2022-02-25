@@ -1,16 +1,90 @@
 <div class="container mat-elevation-z8" *ngIf="identities?.length > 0">
   <div class="header">
-    <div class="mt-5">
-      <button class="sortinghat-orange-bg mr-10" mat-button (click)="rejectMerge()">
-        <mat-icon>highlight_off</mat-icon>
-      </button>
-      <button class="sortinghat-cyan-bg" mat-button (click)="merge()">
-        <mat-icon>check_circle_outline</mat-icon>
-      </button>
-    </div>
     <mat-form-field>
       <input matInput (keyup)="handleInput($event)" placeholder="Filter">
     </mat-form-field>
+    <div class="d-flex jc-between">
+      <div class="mt-5">
+        <button class="sortinghat-orange-bg mr-10" mat-button (click)="rejectMerge()">
+          <mat-icon>call_split</mat-icon>
+        </button>
+        <button class="sortinghat-cyan-bg" mat-button (click)="onMergeButtonClicked()">
+          <mat-icon>merge_type</mat-icon>
+        </button>
+      </div>
+      <div class="flex">
+        <mat-icon class="clean-name-icon sortinghat-orange" (click)="cleanName()"> format_size</mat-icon>
+        <mat-form-field class="mr-10" style="width: 10rem">
+          <mat-label>Name</mat-label>
+          <input matInput [(ngModel)]="mergeResult.name" style="width: 90%">
+          <mat-select [(ngModel)]="name" (ngModelChange)="mergeResult.name = name" style="width: 10px">
+            <mat-option *ngFor="let character of characters" [value]="character">{{character}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field class="mr-10" style="width: 10rem">
+          <mat-label>Email Address</mat-label>
+          <input matInput [(ngModel)]="mergeResult.email">
+        </mat-form-field>
+
+        <mat-form-field class="mr-10" style="width: 10rem">
+          <mat-label>Username</mat-label>
+          <input matInput [(ngModel)]="mergeResult.username">
+        </mat-form-field>
+
+        <mat-form-field class="mr-10" style="width: 10rem">
+          <mat-label>City</mat-label>
+          <input matInput [(ngModel)]="mergeResult.city">
+        </mat-form-field>
+
+        <mat-form-field class="mr-10" style="width: 10rem">
+          <mat-label>Country</mat-label>
+          <input matInput [(ngModel)]="mergeResult.country">
+        </mat-form-field>
+
+        <mat-form-field class="mr-10" style="width: 10rem">
+          <mat-label>Senority</mat-label>
+          <input matInput [(ngModel)]="mergeResult.senority">
+        </mat-form-field>
+      </div>
+<!--      <div class="flex">-->
+<!--        <mat-form-field appearance="fill" class="mr-10" style="width: 10rem">-->
+<!--          <mat-label>Team</mat-label>-->
+<!--          <mat-select [formControl]="teamsFormControl" multiple>-->
+<!--            <mat-option *ngFor="let team of teams" [value]="team">{{team.name}}</mat-option>-->
+<!--          </mat-select>-->
+<!--        </mat-form-field>-->
+
+<!--        <mat-form-field appearance="fill" class="mr-10" style="width: 10rem">-->
+<!--          <mat-label>Role</mat-label>-->
+<!--          <mat-select [formControl]="rolesFormControl" multiple>-->
+<!--            <mat-option *ngFor="let role of roles" [value]="role">{{role.name}}</mat-option>-->
+<!--          </mat-select>-->
+<!--        </mat-form-field>-->
+
+<!--        <mat-form-field appearance="fill" class="mr-10" style="width: 10rem">-->
+<!--          <mat-label>Tag</mat-label>-->
+<!--          <mat-select [formControl]="tagFormControl" multiple>-->
+<!--            <mat-option *ngFor="let tag of tags" [value]="tag">{{tag.name}}</mat-option>-->
+<!--          </mat-select>-->
+<!--        </mat-form-field>-->
+
+<!--        <mat-form-field appearance="fill" class="mr-10" style="width: 10rem">-->
+<!--          <mat-label>Reports To</mat-label>-->
+<!--          <mat-select [formControl]="engineersFormControl" multiple>-->
+<!--            <mat-option *ngFor="let engineer of engineers" [value]="engineer">{{engineer.name}}</mat-option>-->
+<!--          </mat-select>-->
+<!--        </mat-form-field>-->
+
+<!--        <mat-form-field appearance="fill" class="mr-10" style="width: 10rem">-->
+<!--          <mat-label>Status</mat-label>-->
+<!--          <mat-select [formControl]="statusFormControl" multiple>-->
+<!--            <mat-option *ngFor="let status of statuses" [value]="status">{{status}}</mat-option>-->
+<!--          </mat-select>-->
+<!--        </mat-form-field>-->
+<!--      </div>-->
+    </div>
   </div>
 
   <mat-table #table [dataSource]="dataSource" class="table">
@@ -53,10 +127,10 @@
   </mat-table>
   <mat-toolbar-row class="jc-end">
     <div class="paginator-information">Cluster {{current}} of {{identitiesByCluster.length}}</div>
-    <button mat-button class="page-button" (click)="changePage({pageIndex: current - 2})" [disabled]="current === 1">
+    <button mat-button class="page-button" (click)="changePage({pageIndex: current - 2}, true)" [disabled]="current === 1">
       <mat-icon>navigate_before</mat-icon>
     </button>
-    <button mat-button class="page-button" (click)="changePage({pageIndex: current})"
+    <button mat-button class="page-button" (click)="changePage({pageIndex: current}, true)"
             [disabled]="current === identitiesByCluster.length">
       <mat-icon>navigate_next</mat-icon>
     </button>

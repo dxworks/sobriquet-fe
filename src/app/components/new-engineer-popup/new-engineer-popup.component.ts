@@ -11,6 +11,8 @@ import {Role} from '../../data/role';
 import {TagService} from '../../services/tag.service';
 import {RoleService} from '../../services/role.service';
 import {Project} from '../../data/project';
+import {ProjectService} from '../../services/project.service';
+import {Characters} from '../../resources/characters';
 
 @Component({
   selector: 'app-new-engineer-popup',
@@ -33,6 +35,8 @@ export class NewEngineerPopupComponent implements OnInit {
   statuses = ['In Project', 'Leaving', 'Left'];
   engineers: Engineer[] = [];
   project: Project;
+  characters = Characters;
+  name: string;
 
   newEngineer: Engineer = new class implements Engineer {
     city: string;
@@ -48,11 +52,14 @@ export class NewEngineerPopupComponent implements OnInit {
     teams: string[];
     status: string;
     reportsTo: string;
+    username: string;
+    ignorable: false;
   }();
 
   constructor(public dialogRef: MatDialogRef<NewEngineerPopupComponent>,
               @Inject(MAT_DIALOG_DATA) public data,
               private engineerService: EngineerService,
+              private projectService: ProjectService,
               private teamsService: TeamsService,
               private tagService: TagService,
               private roleService: RoleService) {
@@ -113,6 +120,4 @@ export class NewEngineerPopupComponent implements OnInit {
     this.newEngineer.identities = [];
     this.engineerService.add(this.newEngineer).subscribe(() => this.onCancelClick());
   }
-
-
 }

@@ -27,6 +27,7 @@ import {LiveAnnouncer} from '@angular/cdk/a11y';
 import {NewEngineerPopupComponent} from '../new-engineer-popup/new-engineer-popup.component';
 import {MatDialog} from '@angular/material/dialog';
 import {EngineerDetailsPopupComponent} from '../engineer-details-popup/engineer-details-popup.component';
+import {MergeInformationPopupComponent} from '../merge-information-popup/merge-information-popup.component';
 
 @Component({
   selector: 'app-engineers-table',
@@ -45,14 +46,14 @@ export class EngineersTableComponent implements OnInit, OnChanges {
   project: Project;
   @Input()
   suggestions: Identity[] = [];
-  @Input()
-  showAll = false;
 
   @Output()
-  identitiesChanged = new EventEmitter()
+  identitiesChanged = new EventEmitter();
+  @Output()
+  engineerChanged = new EventEmitter();
 
   dataSource: MatTableDataSource<Engineer>;
-  displayedColumns = ['select', 'firstname', 'email', 'city', 'country', 'position', 'role', 'roleActions', 'tags', 'tagsAction',
+  displayedColumns = ['select', 'firstname', 'email', 'username', 'city', 'country', 'position', 'role', 'roleActions', 'tags', 'tagsAction',
     'teams', 'teamsAction', 'reportsTo', 'reportsToAction', 'status', 'statusAction', 'actions'];
   teams: Team[] = [];
   filteredTeams: Team[] = [];
@@ -74,6 +75,8 @@ export class EngineersTableComponent implements OnInit, OnChanges {
   role: Role;
   statuses = ['In Project', 'Leaving', 'Left'];
   status: string;
+  searchValue: string;
+  showIgnored = false;
 
   constructor(private engineerService: EngineerService,
               private teamService: TeamsService,
@@ -84,14 +87,10 @@ export class EngineersTableComponent implements OnInit, OnChanges {
               private roleService: RoleService,
               private _liveAnnouncer: LiveAnnouncer,
               public dialog: MatDialog) {
-    this.showAll = !this.activatedRoute.snapshot.url.toString().includes('project');
   }
 
   ngOnInit(): void {
-    this.engineerService.getAll().subscribe(response => {
-      this.engineers = response.filter(engineer => engineer.project === this.project.id);
-      this.initializeData();
-    });
+    this.showEngineers();
     this.getTeams();
     this.getProjects();
     this.getTags();
@@ -102,11 +101,15 @@ export class EngineersTableComponent implements OnInit, OnChanges {
     if (!changes.engineer?.firstChange && !changes.engineers?.firstChange && this.project && this.engineer) {
       this.getEngineers();
     }
+
+    if (changes.engineers) {
+      this.showEngineers();
+    }
   }
 
   initializeData() {
     this.projectService.getAllProjects().subscribe(response => {
-      this.project = response.find(project => project.name === this.activatedRoute.snapshot.url[this.activatedRoute.snapshot.url.length - 1].path);
+      this.project = response.find(project => project.name === this.activatedRoute.snapshot.url[1].path);
       this.engineerCity = [];
       this.getEngineers();
     });
@@ -114,7 +117,7 @@ export class EngineersTableComponent implements OnInit, OnChanges {
 
   getEngineers() {
     this.engineers.forEach(engineer => {
-        this.getEngineerDetails(engineer);
+      this.getEngineerDetails(engineer);
     });
     this.getTableData(this.engineers);
   }
@@ -130,12 +133,14 @@ export class EngineersTableComponent implements OnInit, OnChanges {
   }
 
   applyFilter($event, property) {
-    if (property.endsWith('s') && property !== 'status') {
-      this.dataSource = new MatTableDataSource(this.engineers.concat(this.engineers.filter(engineer => engineer.project === this.project.id)).filter(engineer => engineer[property].find(prop => prop.name === $event.name || prop === $event.id)));
-    } else if (property === 'status') {
-      this.dataSource = new MatTableDataSource(this.engineers.concat(this.engineers.filter(engineer => engineer.project === this.project.id)).filter(engineer => engineer[property] === $event));
+    if ($event.length === 0) {
+      this.dataSource = new MatTableDataSource<Engineer>(this.engineers);
     } else {
-      this.dataSource = new MatTableDataSource(this.engineers.concat(this.engineers.filter(engineer => engineer.project === this.project.id)).filter(engineer => engineer[property] === $event.name));
+      if (property.endsWith('s') && property !== 'status') {
+        this.dataSource = new MatTableDataSource(this.engineers.filter(engineer => engineer[property].find(prop => $event.includes(prop.name) || $event.includes(prop))));
+      } else {
+        this.dataSource = new MatTableDataSource(this.engineers.filter(engineer => $event.includes(engineer[property])));
+      }
     }
   }
 
@@ -173,6 +178,7 @@ export class EngineersTableComponent implements OnInit, OnChanges {
 
   selectReportsTo($event, engineer: Engineer) {
     engineer.reportsTo = $event.id;
+    this.engineerChanged.emit();
     this.engineerService.edit(engineer).subscribe(() => {
       this.getEngineers();
     })
@@ -180,12 +186,14 @@ export class EngineersTableComponent implements OnInit, OnChanges {
 
   selectStatus($event, engineer: Engineer) {
     engineer.status = $event;
+    this.engineerChanged.emit();
     this.engineerService.edit(engineer).subscribe(() => {
       this.getEngineers();
     });
   }
 
   linkTeamToEngineer(teamId, engineerId) {
+    this.engineerChanged.emit();
     this.engineerService.linkTeam(engineerId, teamId).subscribe(() => this.getEngineers());
   }
 
@@ -193,11 +201,13 @@ export class EngineersTableComponent implements OnInit, OnChanges {
     if (onCreate) {
       engineer.tags.push(tag);
     }
+    this.engineerChanged.emit();
     this.engineerService.edit(engineer).subscribe(() => this.getEngineers());
   }
 
   linkRoleToEngineer($event, engineer) {
     engineer.role = $event.name;
+    this.engineerChanged.emit();
     this.engineerService.edit(engineer).subscribe(() => {
       this.getEngineers();
     });
@@ -219,6 +229,7 @@ export class EngineersTableComponent implements OnInit, OnChanges {
   }
 
   createTeam(engineer: Engineer) {
+    this.teams.push({name: this.newTeamName, description: ''});
     this.teamService.addTeam({name: this.newTeamName, description: ''}).subscribe(response => {
       let data: any = response;
       this.getTeams();
@@ -298,7 +309,7 @@ export class EngineersTableComponent implements OnInit, OnChanges {
   openDialog() {
     const dialogRef = this.dialog.open(NewEngineerPopupComponent, {data: {project: this.project}});
 
-    dialogRef.afterClosed().subscribe(() => this.initializeData());
+    dialogRef.afterClosed().subscribe(() => this.showEngineers());
   }
 
   openInfoDialog() {
@@ -318,5 +329,41 @@ export class EngineersTableComponent implements OnInit, OnChanges {
 
   getReportsTo(reportsTo) {
     return this.engineers.find(eng => eng.id === reportsTo)?.name;
+  }
+
+  search() {
+    this.dataSource = new MatTableDataSource(this.engineers
+      .filter(engineer => engineer.username.toLowerCase().includes(this.searchValue.toLowerCase()) ||
+        engineer.name.toLowerCase().includes(this.searchValue.toLowerCase()) ||
+        engineer.email.toLowerCase().includes(this.searchValue.toLowerCase()) ||
+        engineer.city.toLowerCase().includes(this.searchValue.toLowerCase()) ||
+        engineer.status.toLowerCase().includes(this.searchValue.toLowerCase()) ||
+        engineer.senority.toLowerCase().includes(this.searchValue.toLowerCase()) ||
+        engineer.country.toLowerCase().includes(this.searchValue.toLowerCase())));
+  }
+
+  ignore() {
+    this.selection.selected.forEach(selectedEngineer => {
+      selectedEngineer.ignorable = !this.showIgnored;
+      this.engineerService.edit(selectedEngineer).subscribe(() => this.selection.deselect(selectedEngineer));
+    });
+  }
+
+  showEngineers() {
+    this.engineerService.getAll().subscribe(response => {
+      this.engineers = response.filter(engineer => engineer.project === this.project.id && engineer.ignorable === this.showIgnored);
+      this.initializeData();
+    });
+  }
+
+  mergeEngineers() {
+    const dialogRef = this.dialog.open(MergeInformationPopupComponent, {
+      data: {
+        selected: this.selection.selected,
+        project: this.project,
+        delete: true
+      }
+    });
+    dialogRef.afterClosed().subscribe(() => this.showEngineers());
   }
 }

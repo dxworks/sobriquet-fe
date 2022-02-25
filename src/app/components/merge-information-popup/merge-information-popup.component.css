@@ -1,0 +1,51 @@
+.mat-cell:first-of-type, .mat-header-cell:first-of-type, .mat-footer-cell:first-of-type {
+  padding-left: 0 !important;
+}
+
+.mat-cell:last-of-type, .mat-header-cell:last-of-type, .mat-footer-cell:last-of-type {
+  padding-right: 0 !important;
+  flex: 0 0 5%;
+}
+
+.mat-cell, .mat-footer-cell {
+  display: grid;
+}
+
+.mat-column-teams {
+  flex: 0 0 8% !important;
+  justify-content: center;
+}
+
+.mat-column-city, .mat-column-country, .mat-column-username {
+  flex: 0 0 9% !important;
+}
+
+.mat-column-city {
+  flex: 0 0 5%;
+}
+
+.mat-column-tags, .mat-column-role {
+  flex: 0 0 5%;
+  justify-content: center;
+}
+
+.mat-column-email {
+  flex: 0 0 15% !important;
+}
+
+.mat-column-reportsTo, .mat-column-status {
+  justify-content: center;
+}
+
+.mlr-auto {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.icon {
+  cursor: pointer;
+}
+
+#name ::ng-deep.input.mat-input-element{
+  width: 90%;
+}
