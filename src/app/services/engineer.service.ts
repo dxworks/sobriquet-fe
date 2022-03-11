@@ -15,8 +15,12 @@ export class EngineerService {
     return this.httpClient.get<Engineer[]>(`${environment.apiUrl}/engineers`);
   }
 
-  add(engineer: Engineer) {
+  addEngineer(engineer: Engineer) {
     return this.httpClient.post(`${environment.apiUrl}/addEngineer`, engineer);
+  }
+
+  addEngineers(engineers: Engineer[]) {
+    return this.httpClient.post(`${environment.apiUrl}/addEngineers`, engineers);
   }
 
   linkTeam(engineerId: string, teamId: string) {
@@ -29,5 +33,14 @@ export class EngineerService {
 
   edit(engineer: Engineer) {
     return this.httpClient.put(`${environment.apiUrl}/editEngineer/${engineer.id}`, engineer);
+  }
+
+  anonymize(engineer: Engineer, name): Engineer {
+    engineer.name = name;
+    name.split(' ').length < 2
+      ? engineer.username = name.toLowerCase()
+      : engineer.username = name.split(' ')[0].toLowerCase() + '.' + name.split(' ')[0].toLowerCase();
+    engineer.email = engineer.username + '@gmail.com';
+    return engineer;
   }
 }

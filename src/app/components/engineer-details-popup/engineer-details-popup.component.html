@@ -4,7 +4,7 @@
     <mat-form-field appearance="fill" class="mr-10">
       <mat-label>Name</mat-label>
       <input matInput [(ngModel)]="selectedEngineer.name">
-      <mat-select [(ngModel)]="name" (ngModelChange)="selectedEngineer.name = name" style="width: 10px">
+      <mat-select [(ngModel)]="name" (ngModelChange)="anonymize()" style="width: 10px">
         <mat-option *ngFor="let character of characters" [value]="character">{{character}}
         </mat-option>
       </mat-select>

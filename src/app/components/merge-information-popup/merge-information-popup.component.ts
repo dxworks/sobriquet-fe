@@ -163,7 +163,7 @@ export class MergeInformationPopupComponent implements OnInit {
         this.teamsFormControl.setValue(this.getSelectedTeams(value));
         break;
       }
-      case 'reportsTo':{
+      case 'reportsTo': {
         this.engineersFormControl.setValue([this.engineers.find(eng => eng.id === value)]);
       }
     }
@@ -203,16 +203,43 @@ export class MergeInformationPopupComponent implements OnInit {
     if (this.delete) {
       this.selectedEngineers.forEach(eng => {
         eng.identities.forEach(identity => this.mergedEngineer.identities.push(identity));
+        if (this.mergedEngineer.identities.length === 0) {
+          this.mergedEngineer.identities = this.transformSelectedEngToIdentities();
+          this.projectService.editProject(this.project.id, this.project.identities).subscribe();
+        }
         this.engineerService.delete(eng.id).subscribe();
       });
-      this.engineerService.add(this.mergedEngineer).subscribe(() => this.onCancelClick());
+      this.engineerService.addEngineer(this.mergedEngineer).subscribe(() => this.onCancelClick());
     } else {
       this.dialogRef.close(this.mergedEngineer);
     }
+  }
+
+  transformSelectedEngToIdentities(): Identity[] {
+    const identities: Identity[] = [];
+    this.selectedEngineers.forEach(eng => {
+      identities.push({
+        firstName: eng.name.split(' ')[0],
+        lastName: eng.name.split(' ')[1],
+        username: eng.username,
+        email: eng.email,
+        source: '',
+        avatar: ''
+      });
+    })
+    this.removeIdentities(identities);
+    return identities;
+  }
+
+  removeIdentities(identities: Identity[]) {
+    identities.forEach(identity => this.project.identities.splice(this.project.identities.indexOf(this.project.identities.find(prId => prId.email === identity.email)), 1));
   }
 
   compareSimpleProperty(c1: any, c2: any): boolean {
     return c1 === c2 || c1?.name === c2?.name || c1?.name === c2 || c1 === c2?.name;
   }
 
+  anonymize() {
+    this.mergedEngineer = this.engineerService.anonymize(this.mergedEngineer, this.name);
+  }
 }

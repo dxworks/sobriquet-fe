@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit, Output, EventEmitter} from '@angular/core';
 import {Router} from '@angular/router';
 import {Project} from '../../data/project';
 
@@ -11,6 +11,11 @@ export class HeaderComponent implements OnInit {
 
   @Input()
   project: Project;
+  @Input()
+  currentView = ''
+
+  @Output()
+  scrollButtonClicked = new EventEmitter();
 
   urlPath: string;
 
@@ -28,5 +33,18 @@ export class HeaderComponent implements OnInit {
 
   goToHomePage() {
     this.router.navigate(['']);
+  }
+
+  getText() {
+      if (!this.currentView || this.currentView === 'authors') {
+        return 'Suggestions'
+      } else {
+        return 'Authors';
+      }
+  }
+
+  scroll(){
+    !this.currentView || this.currentView === 'authors' ? this.currentView = 'suggestions' : this.currentView = 'authors';
+    this.scrollButtonClicked.emit(this.currentView)
   }
 }

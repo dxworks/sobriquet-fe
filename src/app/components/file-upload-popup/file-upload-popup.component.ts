@@ -104,7 +104,7 @@ export class FileUploadPopupComponent implements OnInit {
   }
 
   saveEngineers(engineers) {
-    engineers.forEach(engineer => this.engineerService.add(engineer).subscribe());
+    this.engineerService.addEngineers(engineers).subscribe();
   }
 
 }

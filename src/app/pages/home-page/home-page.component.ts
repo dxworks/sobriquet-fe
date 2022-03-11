@@ -105,6 +105,6 @@ export class HomePageComponent implements OnInit {
   }
 
   saveEngineers() {
-    this.engineers.forEach(engineer => this.engineerService.add(engineer).subscribe());
+    this.engineerService.addEngineers(this.engineers).subscribe();
   }
 }

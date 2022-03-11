@@ -16,6 +16,12 @@
             (click)="goTo('/teams')">
       Teams
     </button>
+    <button *ngIf="router.url.includes('identities')"
+            class="scroll-button"
+            [class.selected]="urlPath.includes('teams')"
+            (click)="scroll()">
+      {{getText()}}
+    </button>
   </div>
 </div>
 
