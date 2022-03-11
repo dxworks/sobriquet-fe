@@ -361,7 +361,7 @@ export class EngineersTableComponent implements OnInit, OnChanges {
 
   showEngineers() {
     this.engineerService.getAll().subscribe(response => {
-      this.engineers = response.filter(engineer => engineer.project === this.project.id);
+      this.engineers = response.filter(engineer => engineer.project === this.project?.id);
       this.initializeData();
     });
   }

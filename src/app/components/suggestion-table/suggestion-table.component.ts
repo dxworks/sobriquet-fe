@@ -167,7 +167,7 @@ export class SuggestionTableComponent implements OnInit, OnChanges, AfterViewIni
   }
 
   getEngineers() {
-    this.engineersService.getAll().subscribe(response => this.engineers = response.filter(eng => eng.project === this.project.id));
+    this.engineersService.getAll().subscribe(response => this.engineers = response.filter(eng => eng.project === this.project?.id));
   }
 
   initTable() {

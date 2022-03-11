@@ -85,22 +85,28 @@ export class HomePageComponent implements OnInit {
   }
 
   changeIdentityToEngineer(identities, projectId) {
-    identities?.forEach(identity => this.engineers.push({
-      name: identity.firstName + ' ' + identity.lastName,
-      email: identity.email,
-      project: projectId,
-      tags: [],
-      teams: [],
-      country: '',
-      city: '',
-      senority: '',
-      role: '',
-      identities: [],
-      status: '',
-      reportsTo: '',
-      username: identity.username,
-      ignorable: false
-    }));
+    let newIdentity;
+    identities?.forEach(identity => {
+      newIdentity = {
+        name: identity?.firstName + ' ' + identity?.lastName,
+        email: identity?.email,
+        project: projectId,
+        tags: [],
+        teams: [],
+        country: '',
+        city: '',
+        senority: '',
+        role: '',
+        identities: [],
+        status: '',
+        reportsTo: '',
+        ignorable: false
+      };
+      if (identity.username) {
+        newIdentity.username = identity?.username;
+      }
+      this.engineers.push(newIdentity);
+    });
     this.saveEngineers();
   }
 
