@@ -37,6 +37,7 @@ import {EngineerDetailsPopupComponent} from './components/engineer-details-popup
 import {NewTeamPopupComponent} from './components/new-team-popup/new-team-popup.component';
 import {FileUploadPopupComponent} from './components/file-upload-popup/file-upload-popup.component';
 import { MergeInformationPopupComponent } from './components/merge-information-popup/merge-information-popup.component';
+import {MatTooltipModule} from '@angular/material/tooltip';
 
 @NgModule({
   declarations: [
@@ -81,7 +82,8 @@ import { MergeInformationPopupComponent } from './components/merge-information-p
     MatToolbarModule,
     DevExtremeModule,
     DxDiagramModule,
-    MatSortModule
+    MatSortModule,
+    MatTooltipModule
   ],
   providers: [],
   bootstrap: [AppComponent]

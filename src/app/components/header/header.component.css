@@ -1,28 +1,32 @@
 .header {
-  height: 100px;
+  height: 80px;
   border-bottom: 2px solid #DBDDDD;
   width: 100%;
   padding-bottom: 40px;
   display: flex;
   justify-content: space-between;
+  position: fixed;
+  background: white;
+  top: 0;
+  z-index: 2;
 }
 
 .logo {
   left: 0;
   top: 0;
-  height: 150px;
-  width: 200px;
+  height: 125px;
+  width: 185px;
   cursor: pointer;
 }
 
 .buttons-container {
-  margin-top: 3%;
+  margin-top: 2%;
 }
 
 .menu-button {
   text-align: center;
   font: normal normal bold 25px/75px Muli;
-  letter-spacing: 0px;
+  letter-spacing: 0;
   color: #4A4343;
   opacity: 1;
   background: white;
@@ -37,4 +41,20 @@
 .menu-button:hover {
   background: #FD8947;
   border-radius: 5px;
+  color: white;
+  cursor: pointer;
+}
+
+.scroll-button {
+  border: 1px solid #FD8947;
+  border-radius: 5px;
+  color: #FD8947;
+  box-shadow: 2px 2px lightgray;
+  text-align: center;
+  font: normal normal bold 20px/70px Muli;
+  letter-spacing: 0;
+  opacity: 1;
+  background: white;
+  margin-right: 25px;
+  cursor: pointer;
 }

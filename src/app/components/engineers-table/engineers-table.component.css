@@ -111,3 +111,15 @@ th.mat-header-cell, td.mat-cell, td.mat-footer-cell {
 .buttons-section {
   display: flex;
 }
+
+.grey {
+  color: rgba(0,0,0,.54);
+  font-weight: 600;
+}
+
+.overflow {
+  width: 99%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

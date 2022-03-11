@@ -1,18 +1,21 @@
-<app-header [project]="project"></app-header>
+<app-header [project]="project" [currentView]="currentView" (scrollButtonClicked)="scroll($event)"></app-header>
 <div class="flex h100p content">
   <div class="w-100p">
     <div class="grid">
       <div class="title">
         {{project?.name}}
       </div>
-        <img src="assets/upload.png" class="image" (click)="openFileUploadDialog()">
-      <app-engineers-table [engineers]="engineers"
+      <img src="assets/upload.png" class="image" matTooltip="Upload" (click)="openFileUploadDialog()">
+      <app-engineers-table id="authors"
+                           [engineers]="engineers"
                            [engineer]="engineer"
                            [project]="project"
                            [suggestions]="suggestions"
                            (engineerChanged)="changeEngineerDetails()"
+                           (manualMerge)="getIdentities()"
                            (identitiesChanged)="manageDemerge($event)"></app-engineers-table>
-      <app-suggestion-table [identities]="identities"
+      <app-suggestion-table id="suggestions"
+                            [identities]="identities"
                             [project]="project"
                             [engineers]="engineers"
                             [demergedIdentities]="demergedIdentities"

@@ -224,7 +224,7 @@ export class SuggestionTableComponent implements OnInit, OnChanges, AfterViewIni
   merge() {
     this.getSimilar();
     let data = this.buildData(this.checkBotIdentity());
-    this.engineersService.add(data).subscribe(() => {
+    this.engineersService.addEngineer(data).subscribe(() => {
       this.manageMerge(data)
     });
   }
@@ -316,7 +316,7 @@ export class SuggestionTableComponent implements OnInit, OnChanges, AfterViewIni
 
   getMergeResultIdentities() {
     this.engineers.find(eng => {
-      if (eng.email === this.mergeResult.email && eng.identities.length > 0) {
+      if (eng?.email === this.mergeResult.email && eng.identities.length > 0) {
         this.mergeResult.identities = this.suggestions.concat(eng.identities);
       }
     });
@@ -405,6 +405,10 @@ export class SuggestionTableComponent implements OnInit, OnChanges, AfterViewIni
 
   cleanName() {
     this.mergeResult.name = this.mergeSuggestionService.cleanName(this.mergeResult.name);
+  }
+
+  anonymize() {
+    this.mergeResult = this.engineersService.anonymize(this.mergeResult, this.name);
   }
 
 }

@@ -28,6 +28,8 @@ import {NewEngineerPopupComponent} from '../new-engineer-popup/new-engineer-popu
 import {MatDialog} from '@angular/material/dialog';
 import {EngineerDetailsPopupComponent} from '../engineer-details-popup/engineer-details-popup.component';
 import {MergeInformationPopupComponent} from '../merge-information-popup/merge-information-popup.component';
+import {MergeSuggestionService} from '../../services/ToolsService/merge-suggestion.service';
+import {Characters} from '../../resources/characters';
 
 @Component({
   selector: 'app-engineers-table',
@@ -51,6 +53,8 @@ export class EngineersTableComponent implements OnInit, OnChanges {
   identitiesChanged = new EventEmitter();
   @Output()
   engineerChanged = new EventEmitter();
+  @Output()
+  manualMerge = new EventEmitter();
 
   dataSource: MatTableDataSource<Engineer>;
   displayedColumns = ['select', 'firstname', 'email', 'username', 'city', 'country', 'position', 'role', 'roleActions', 'tags', 'tagsAction',
@@ -77,12 +81,15 @@ export class EngineersTableComponent implements OnInit, OnChanges {
   status: string;
   searchValue: string;
   showIgnored = false;
+  showAll = true;
+  characters = Characters;
 
   constructor(private engineerService: EngineerService,
               private teamService: TeamsService,
               private projectService: ProjectService,
               private tagService: TagService,
               private router: Router,
+              private mergeSuggestionService: MergeSuggestionService,
               private activatedRoute: ActivatedRoute,
               private roleService: RoleService,
               private _liveAnnouncer: LiveAnnouncer,
@@ -198,11 +205,11 @@ export class EngineersTableComponent implements OnInit, OnChanges {
   }
 
   linkTagToEngineer(tag, engineer, onCreate?) {
-    if (onCreate) {
+    if (onCreate && !engineer.tags.includes(tag)) {
       engineer.tags.push(tag);
+      this.engineerChanged.emit();
+      this.engineerService.edit(engineer).subscribe(() => this.getEngineers());
     }
-    this.engineerChanged.emit();
-    this.engineerService.edit(engineer).subscribe(() => this.getEngineers());
   }
 
   linkRoleToEngineer($event, engineer) {
@@ -345,14 +352,25 @@ export class EngineersTableComponent implements OnInit, OnChanges {
   ignore() {
     this.selection.selected.forEach(selectedEngineer => {
       selectedEngineer.ignorable = !this.showIgnored;
-      this.engineerService.edit(selectedEngineer).subscribe(() => this.selection.deselect(selectedEngineer));
+      this.engineerService.edit(selectedEngineer).subscribe(() => {
+        this.selection.deselect(selectedEngineer);
+        this.showEngineers();
+      });
     });
   }
 
   showEngineers() {
     this.engineerService.getAll().subscribe(response => {
+      this.engineers = response.filter(engineer => engineer.project === this.project.id);
+      this.initializeData();
+    });
+  }
+
+  showEngineersByIgnorableProperty() {
+    this.engineerService.getAll().subscribe(response => {
       this.engineers = response.filter(engineer => engineer.project === this.project.id && engineer.ignorable === this.showIgnored);
       this.initializeData();
+      this.showAll = false;
     });
   }
 
@@ -364,6 +382,30 @@ export class EngineersTableComponent implements OnInit, OnChanges {
         delete: true
       }
     });
-    dialogRef.afterClosed().subscribe(() => this.showEngineers());
+    dialogRef.afterClosed().subscribe(response => {
+      this.showEngineers();
+      if (!response) {
+        this.manualMerge.emit();
+      }
+    });
+  }
+
+  anonymize() {
+    this.selection.selected.forEach(eng => {
+      let index = Math.floor(Math.random() * this.characters.length);
+      eng.name = this.characters[index];
+      this.characters[index].split(' ').length > 1
+        ? eng.username = this.characters[index].split(' ')[0].toLowerCase() + '.' + this.characters[index].split(' ')[0].toLowerCase()
+        : eng.username = this.characters[index].split(' ')[0].toLowerCase();
+      eng.email = eng.username + '@gmail.com';
+      this.engineerService.edit(eng).subscribe(() => this.showEngineers());
+    });
+  }
+
+  sanitizeNames() {
+    this.selection.selected.forEach(eng => {
+      eng.name = this.mergeSuggestionService.cleanName(eng.name);
+      this.engineerService.edit(eng).subscribe(() => this.showEngineers());
+    });
   }
 }

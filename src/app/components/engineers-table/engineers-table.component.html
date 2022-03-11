@@ -1,17 +1,34 @@
 <div class="container mat-elevation-z8">
   <div class="header">
     <div class="mt-5 flex" style="justify-content: inherit">
-      <mat-checkbox class="example-margin" [(ngModel)]="showIgnored" (ngModelChange)="showEngineers()">Show ignored
-      </mat-checkbox>
+      <div class="d-flex">
+        <mat-checkbox class="example-margin mr-10" [(ngModel)]="showAll"
+                      (ngModelChange)="showEngineers(); showIgnored = false">All
+        </mat-checkbox>
+        <mat-checkbox class="example-margin" [(ngModel)]="showIgnored"
+                      (ngModelChange)="showEngineersByIgnorableProperty()">Ignored
+        </mat-checkbox>
+      </div>
       <div class="buttons-section">
-        <button mat-button class="sortinghat-cyan-bg add-button mr-10" (click)="mergeEngineers()">
-          <mat-icon>merge_type</mat-icon>
+        <button mat-button class="sortinghat-cyan-bg add-button mr-10" matTooltip="Sanitize Names"
+                (click)="sanitizeNames()" *ngIf="selection.selected.length > 0">
+          <mat-icon>text_fields</mat-icon>
         </button>
-        <button mat-button class="sortinghat-orange-bg add-button mr-10" (click)="ignore()">
+        <button mat-button class="sortinghat-orange-bg add-button mr-10" matTooltip="Anonymize"
+                (click)="anonymize()" *ngIf="selection.selected.length > 0">
+          <mat-icon>perm_identity</mat-icon>
+        </button>
+        <button mat-button class="sortinghat-cyan-bg add-button mr-10" matTooltip="Mark as ignored"
+                (click)="ignore()" *ngIf="selection.selected.length > 0">
           <mat-icon *ngIf="!showIgnored">block</mat-icon>
           <mat-icon *ngIf="showIgnored">check</mat-icon>
         </button>
-        <button mat-button class="sortinghat-cyan-bg add-button" (click)="openDialog()">
+        <button mat-button class="sortinghat-orange-bg add-button mr-10" matTooltip="Merge"
+                (click)="mergeEngineers()">
+          <mat-icon>merge_type</mat-icon>
+        </button>
+        <button mat-button class="sortinghat-cyan-bg add-button" matTooltip="Add"
+                (click)="openDialog()">
           <mat-icon>add</mat-icon>
         </button>
       </div>
@@ -71,35 +88,39 @@
     <ng-container matColumnDef="firstname">
       <mat-header-cell *matHeaderCellDef class="font-style-smaller" mat-sort-header="firstname"> Name
       </mat-header-cell>
-      <mat-cell *matCellDef="let engineer" class="font-style-smaller"> {{engineer?.name}} </mat-cell>
+      <mat-cell *matCellDef="let engineer" class="font-style-smaller"><p
+        [class.grey]="engineer?.ignorable">{{engineer?.name}}</p></mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="email">
       <mat-header-cell *matHeaderCellDef class="font-style-smaller" mat-sort-header="email"> Email address
       </mat-header-cell>
-      <mat-cell *matCellDef="let engineer" class="font-style-smaller">{{engineer?.email}}</mat-cell>
+      <mat-cell *matCellDef="let engineer" class="font-style-smaller" matTooltip="{{engineer.email}}"><p class="overflow"
+        [class.grey]="engineer?.ignorable"> {{engineer?.email}}</p></mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="username">
       <mat-header-cell *matHeaderCellDef class="font-style-smaller" mat-sort-header="username"> Username
       </mat-header-cell>
-      <mat-cell *matCellDef="let engineer" class="font-style-smaller">{{engineer?.username}}</mat-cell>
+      <mat-cell *matCellDef="let engineer" matTooltip="{{engineer.username}}" class="font-style-smaller"><p class="overflow"
+        [class.grey]="engineer?.ignorable">{{engineer?.username}}</p></mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="city">
       <mat-header-cell *matHeaderCellDef class="font-style-smaller" mat-sort-header="city"> City</mat-header-cell>
-      <mat-cell *matCellDef="let engineer">{{engineer?.city}}</mat-cell>
+      <mat-cell *matCellDef="let engineer"><p [class.grey]="engineer?.ignorable">{{engineer?.city}}</p></mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="country">
-      <mat-header-cell *matHeaderCellDef class="font-style-smaller" mat-sort-header="country"> Country</mat-header-cell>
-      <mat-cell *matCellDef="let engineer">{{engineer?.country}}</mat-cell>
+      <mat-header-cell *matHeaderCellDef class="font-style-smaller" mat-sort-header="country"> Country
+      </mat-header-cell>
+      <mat-cell *matCellDef="let engineer"><p [class.grey]="engineer?.ignorable">{{engineer?.country}}</p></mat-cell>
     </ng-container>
 
 
     <ng-container matColumnDef="position">
       <mat-header-cell *matHeaderCellDef class="font-style-smaller"> Senority</mat-header-cell>
-      <mat-cell *matCellDef="let engineer">{{engineer?.senority}}</mat-cell>
+      <mat-cell *matCellDef="let engineer"><p [class.grey]="engineer.ignorable">{{engineer?.senority}}</p></mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="role">
@@ -241,6 +262,7 @@
       <mat-cell *matCellDef="let engineer">
         <div>
           <button mat-button class="action-button" id="edit-button"
+                  matTooltip="Edit"
                   (click)="selectedEngineer = engineer; openInfoDialog()">
             <mat-icon class="edit-icon sortinghat-orange">edit</mat-icon>
           </button>

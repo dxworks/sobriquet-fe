@@ -22,6 +22,7 @@ export class ProjectPageComponent implements OnInit {
   suggestions: Identity[] = [];
   demergedIdentities: Identity[] = [];
   allEngineers: Engineer[] = [];
+  currentView = ''
 
   constructor(private activatedRoute: ActivatedRoute,
               private engineerService: EngineerService,
@@ -115,5 +116,10 @@ export class ProjectPageComponent implements OnInit {
 
   changeEngineerDetails() {
     this.getEngineers(undefined)
+  }
+
+  scroll($event) {
+    this.currentView = $event;
+    document.getElementById($event).scrollIntoView();
   }
 }

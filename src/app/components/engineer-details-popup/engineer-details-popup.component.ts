@@ -8,6 +8,7 @@ import {EngineerService} from '../../services/engineer.service';
 import {Project} from '../../data/project';
 import {ProjectService} from '../../services/project.service';
 import {Characters} from '../../resources/characters';
+import {MergeSuggestionService} from '../../services/ToolsService/merge-suggestion.service';
 
 @Component({
   selector: 'app-engineer-details-popup',
@@ -28,6 +29,7 @@ export class EngineerDetailsPopupComponent implements OnInit {
   constructor(public dialogRef: MatDialogRef<EngineerDetailsPopupComponent>,
               @Inject(MAT_DIALOG_DATA) public data,
               private engineerService: EngineerService,
+              private mergeSuggestionService: MergeSuggestionService,
               private projectService: ProjectService) {
   }
 
@@ -37,7 +39,16 @@ export class EngineerDetailsPopupComponent implements OnInit {
       this.project = response;
       this.identities = this.project.identities;
     });
-    this.dataSource = new MatTableDataSource<Identity>(this.selectedEngineer.identities);
+    this.dataSource = new MatTableDataSource<Identity>(this.selectedEngineer.identities.reduce((accumalator, current) => {
+      if (
+        !accumalator.some(
+          (item) => item.id === current.id && this.mergeSuggestionService.identitiesAreEqual(item, current)
+        )
+      ) {
+        accumalator.push(current);
+      }
+      return accumalator;
+    }, []));
   }
 
   onCancelClick(): void {
@@ -73,6 +84,10 @@ export class EngineerDetailsPopupComponent implements OnInit {
   rejectIdentity(identity: Identity) {
     this.selectedEngineer.identities.splice(this.selectedEngineer.identities.indexOf(identity), 1);
     this.dataSource.data = this.selectedEngineer.identities;
+  }
+
+  anonymize() {
+    this.selectedEngineer = this.engineerService.anonymize(this.selectedEngineer, this.name);
   }
 
 }
