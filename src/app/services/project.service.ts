@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../../environments/environment';
 import {Project} from '../data/project';
+import {MergeSuggestionService} from './ToolsService/merge-suggestion.service';
 import {Identity} from '../data/identity';
 
 @Injectable({
@@ -9,23 +10,24 @@ import {Identity} from '../data/identity';
 })
 export class ProjectService {
 
-  constructor(private httpClient: HttpClient) {
+  constructor(private httpClient: HttpClient,
+              private mergeSuggestionService: MergeSuggestionService) {
   }
 
   getAllProjects() {
     return this.httpClient.get<Project[]>(`${environment.apiUrl}/projects`);
   }
 
-  addProject(projectName: string, projectFiles: File | Identity[]) {
-    return this.httpClient.post<Project>(`${environment.apiUrl}/addProject/${projectName}`, projectFiles);
+  addProject(project: Project) {
+    return this.httpClient.post<Project>(`${environment.apiUrl}/addProject`, project);
   }
 
   delete(name: string) {
     return this.httpClient.delete(`${environment.apiUrl}/deleteProject/${name}`);
   }
 
-  editProject(id: string, suggestions: Identity[]) {
-    return this.httpClient.put(`${environment.apiUrl}/editProject/${id}`, suggestions);
+  editProject(id: string, project: Project) {
+    return this.httpClient.put(`${environment.apiUrl}/editProject/${id}`, project);
   }
 
   getById(id: string) {
@@ -57,5 +59,18 @@ export class ProjectService {
       }
     });
     return identities;
+  }
+
+  getUniqueIdentities(identities: Identity[]) {
+    return identities?.reduce((accumalator, current) => {
+      if (
+        !accumalator.some(
+          (item) => item.id === current.id && this.mergeSuggestionService.identitiesAreEqual(item, current)
+        )
+      ) {
+        accumalator.push(current);
+      }
+      return accumalator;
+    }, []);
   }
 }

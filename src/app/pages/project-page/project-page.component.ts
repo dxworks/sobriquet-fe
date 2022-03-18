@@ -28,48 +28,44 @@ export class ProjectPageComponent implements OnInit {
               private engineerService: EngineerService,
               public dialog: MatDialog,
               private projectService: ProjectService) {
-    this.getIdentities();
+    this.getProjectDetails();
   }
 
   ngOnInit(): void {
   }
 
-  getIdentities() {
+  getProjectDetails() {
     this.projectService.getAllProjects().subscribe(response => {
       this.project = response.find(project => project.name === this.activatedRoute.snapshot.url[1].path);
       this.identities = this.project?.identities;
+      this.engineers = this.project?.engineers
     })
   }
 
-  getEngineers(identities?) {
-    this.engineerService.getAll().subscribe(response => {
-      this.engineers = response.filter(eng => eng.project === this.project.id);
-      if (identities?.length > 0) {
-        this.identities = identities;
-      }
-    });
+  updateIdentities(identities?) {
+    if (identities?.length > 0) {
+      this.identities = identities;
+    }
   }
 
   manageProjectChanges(identities, engineers) {
     if (engineers) {
-      engineers.forEach(eng => this.engineerService.delete(eng.id).subscribe());
-      setTimeout(() => this.engineerService.getAll().subscribe(response => {
-        this.engineers = response.filter(eng => eng.project === this.project.id);
-        this.identities = identities;
-        this.removeDuplicate(engineers);
-      }), 500);
+      engineers.forEach(eng => this.project.engineers.splice(this.project.engineers.indexOf(eng), 1));
+      this.projectService.editProject(this.project.id, this.project).subscribe(() => this.getProjectDetails());
+      this.engineers = this.project.engineers;
+      this.identities = identities;
     } else {
-      this.getEngineers(identities);
+      this.updateIdentities(identities);
     }
   }
 
   removeDuplicate(engineers: Engineer[]) {
     engineers.forEach(eng => {
       this.engineers.forEach(savedEng => {
-        if (eng.email === savedEng.email && savedEng.identities.length === 0) {
-          this.engineerService.delete(savedEng.id).subscribe(() => {
-            this.engineerService.getAll().subscribe(res => this.engineers = res.filter(eng => eng.project === this.project.id));
-          });
+        if (eng?.email === savedEng?.email && savedEng?.identities.length === 0) {
+          this.project.engineers.splice(this.project.engineers.indexOf(savedEng), 1);
+          this.projectService.editProject(this.project.id, this.project).subscribe();
+          this.engineers = this.project.engineers;
         }
       })
     })
@@ -80,12 +76,10 @@ export class ProjectPageComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(response => {
       if (response) {
-        this.getIdentities();
+        this.getProjectDetails();
         this.engineers = response;
-        this.engineerService.getAll().subscribe(response => {
-          this.allEngineers = response;
-          this.getMergedIdentitiesOnMatch();
-        });
+        this.allEngineers = this.project.engineers;
+        this.getMergedIdentitiesOnMatch();
       }
     });
   }
@@ -100,7 +94,7 @@ export class ProjectPageComponent implements OnInit {
       })
     });
     this.project.identities = this.identities.concat(allIdentities);
-    this.projectService.editProject(this.project.id, this.project.identities).subscribe();
+    this.projectService.editProject(this.project.id, this.project).subscribe();
   }
 
 
@@ -115,7 +109,8 @@ export class ProjectPageComponent implements OnInit {
   }
 
   changeEngineerDetails() {
-    this.getEngineers(undefined)
+    this.getProjectDetails();
+    this.updateIdentities(undefined)
   }
 
   scroll($event) {

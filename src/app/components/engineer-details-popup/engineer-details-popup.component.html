@@ -3,7 +3,7 @@
   <div class="d-flex jc-around">
     <mat-form-field appearance="fill" class="mr-10">
       <mat-label>Name</mat-label>
-      <input matInput [(ngModel)]="selectedEngineer.name">
+      <input matInput [(ngModel)]="project.engineers[project.engineers.indexOf(selectedEngineer)].name">
       <mat-select [(ngModel)]="name" (ngModelChange)="anonymize()" style="width: 10px">
         <mat-option *ngFor="let character of characters" [value]="character">{{character}}
         </mat-option>
@@ -12,30 +12,30 @@
 
     <mat-form-field appearance="fill">
       <mat-label>Username</mat-label>
-      <input matInput [(ngModel)]="selectedEngineer.username">
+      <input matInput [(ngModel)]="project.engineers[project.engineers.indexOf(selectedEngineer)].username">
     </mat-form-field>
   </div>
 
   <div class="d-flex jc-around">
     <mat-form-field appearance="fill" class="mr-10">
       <mat-label>Senority</mat-label>
-      <input matInput [(ngModel)]="selectedEngineer.senority">
+      <input matInput [(ngModel)]="project.engineers[project.engineers.indexOf(selectedEngineer)].senority">
     </mat-form-field>
 
     <mat-form-field appearance="fill">
       <mat-label>Email Address</mat-label>
-      <input matInput [(ngModel)]="selectedEngineer.email">
+      <input matInput [(ngModel)]="project.engineers[project.engineers.indexOf(selectedEngineer)].email">
     </mat-form-field>
   </div>
   <div class="d-flex jc-around">
     <mat-form-field appearance="fill" class="mr-10">
       <mat-label>City</mat-label>
-      <input matInput [(ngModel)]="selectedEngineer.city">
+      <input matInput [(ngModel)]="project.engineers[project.engineers.indexOf(selectedEngineer)].city">
     </mat-form-field>
 
     <mat-form-field appearance="fill">
       <mat-label>Country</mat-label>
-      <input matInput [(ngModel)]="selectedEngineer.country">
+      <input matInput [(ngModel)]="project.engineers[project.engineers.indexOf(selectedEngineer)].country">
     </mat-form-field>
   </div>
 

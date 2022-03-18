@@ -19,7 +19,6 @@ import {ActivatedRoute} from '@angular/router';
 import {ProjectService} from '../../services/project.service';
 import {MatPaginator, MatPaginatorIntl} from '@angular/material/paginator';
 import {TagService} from '../../services/tag.service';
-import {Tag} from '../../data/tag';
 import {MergeInformationPopupComponent} from '../merge-information-popup/merge-information-popup.component';
 import {MatDialog} from '@angular/material/dialog';
 import {Characters} from '../../resources/characters';
@@ -57,23 +56,8 @@ export class SuggestionTableComponent implements OnInit, OnChanges, AfterViewIni
   current = 1;
   name: string;
   characters = Characters;
-  mergeResult: Engineer = new class implements Engineer {
-    city: string;
-    country: string;
-    email: string;
-    id: string;
-    identities: Identity[];
-    ignorable: boolean;
-    name: string;
-    project: string;
-    reportsTo: string;
-    role: string;
-    senority: string;
-    status: string;
-    tags: Tag[];
-    teams: string[];
-    username: string;
-  };
+  mergeResult: Engineer = new Engineer();
+  allEngineers: Engineer[] = [];
 
   constructor(private mergeSuggestionService: MergeSuggestionService,
               private engineersService: EngineerService,
@@ -85,17 +69,8 @@ export class SuggestionTableComponent implements OnInit, OnChanges, AfterViewIni
   }
 
   ngOnInit(): void {
-    this.getEngineers();
-    this.identities = this.project?.identities.reduce((accumalator, current) => {
-      if (
-        !accumalator.some(
-          (item) => item.id === current.id && this.mergeSuggestionService.identitiesAreEqual(item, current)
-        )
-      ) {
-        accumalator.push(current);
-      }
-      return accumalator;
-    }, []);
+    this.engineers = this.project?.engineers;
+    this.identities = this.projectService.getUniqueIdentities(this.project?.identities);
     this.prepareData();
     this.initTable();
     this.getMergedEngineerDetails();
@@ -115,36 +90,24 @@ export class SuggestionTableComponent implements OnInit, OnChanges, AfterViewIni
 
   ngOnChanges(changes: SimpleChanges) {
     if (!changes.project?.firstChange) {
-      this.getIdentitiesWithoutDuplicates();
+      this.identities = this.projectService.getUniqueIdentities(this.project.identities);
       this.prepareData();
-      this.getEngineers();
+      this.allEngineers = this.engineers = this.project.engineers;
       this.getMergedEngineerDetails();
+
     }
     if (changes.demergedIdentities && this.demergedIdentities.length > 0) {
-      this.getIdentitiesWithoutDuplicates();
+      this.identities = this.projectService.getUniqueIdentities(this.project.identities);
       this.demergedIdentities.forEach(identity => {
         if (!this.identities.find(id => id.email === identity.email)) {
           this.identities.push(identity);
         }
-      })
+      });
       this.project.identities = this.identities;
       this.prepareData();
-      this.getEngineers();
+      this.engineers = this.project.engineers;
       this.getMergedEngineerDetails();
     }
-  }
-
-  getIdentitiesWithoutDuplicates() {
-    this.identities = this.project?.identities.reduce((accumalator, current) => {
-      if (
-        !accumalator.some(
-          (item) => item.id === current.id && this.mergeSuggestionService.identitiesAreEqual(item, current)
-        )
-      ) {
-        accumalator.push(current);
-      }
-      return accumalator;
-    }, []);
   }
 
   getMergedEngineerDetails() {
@@ -166,18 +129,11 @@ export class SuggestionTableComponent implements OnInit, OnChanges, AfterViewIni
     }
   }
 
-  getEngineers() {
-    this.engineersService.getAll().subscribe(response => this.engineers = response.filter(eng => eng.project === this.project?.id));
-  }
-
   initTable() {
     this.pagination = [this.suggestions.length];
     this.paginator = new MatPaginator(new MatPaginatorIntl(), this.changeDetectorRef);
     this.paginator._displayedPageSizeOptions = [this.suggestions.length];
-    setTimeout(
-      () => {
-        this.dataSource.paginator = this.paginator;
-      });
+    setTimeout(() => this.dataSource.paginator = this.paginator);
   }
 
   prepareData() {
@@ -216,17 +172,15 @@ export class SuggestionTableComponent implements OnInit, OnChanges, AfterViewIni
   getSimilar() {
     const engForDelete = [];
     for (let i = 0; i < this.suggestions.length; i++) {
-      engForDelete.push(this.engineers.find(eng => eng.email === this.suggestions[i].email));
+      engForDelete.push(this.allEngineers.find(eng => eng.email === this.suggestions[i].email));
     }
-    this.engineers = engForDelete;
+    return engForDelete;
   }
 
   merge() {
-    this.getSimilar();
     let data = this.buildData(this.checkBotIdentity());
-    this.engineersService.addEngineer(data).subscribe(() => {
-      this.manageMerge(data)
-    });
+    this.project.engineers.push(data);
+    this.projectService.editProject(this.project.id, this.project).subscribe(() => this.manageMerge(data));
   }
 
   onMergeButtonClicked() {
@@ -263,7 +217,7 @@ export class SuggestionTableComponent implements OnInit, OnChanges, AfterViewIni
   manageMerge(data) {
     this.engineerEmitter.emit(data);
     this.manageIdentities();
-    this.demergedIdentities.length === 0 ? this.updateProjectIdentities(this.engineers) : this.updateProjectIdentities(null);
+    this.demergedIdentities.length === 0 ? this.updateProjectIdentities(this.getSimilar()) : this.updateProjectIdentities(null);
     this.sortIdentities();
     this.identitiesByCluster = this.mergeSuggestionService.buildCluster(this.identities);
     this.getSuggestions(this.identitiesByCluster[this.current - 1]);
@@ -295,53 +249,33 @@ export class SuggestionTableComponent implements OnInit, OnChanges, AfterViewIni
     return this.buildEngineer();
   }
 
-  buildBot(): Engineer {
-    return {
-      name: this.mergeResult.name,
-      email: this.mergeResult.email,
-      senority: this.mergeResult.senority,
-      teams: this.mergeResult.teams,
-      city: this.mergeResult.city,
-      country: this.mergeResult.country,
-      project: this.project.id,
-      role: this.mergeResult.role,
-      tags: [{name: 'BOT'}],
-      identities: this.getMergeResultIdentities(),
-      status: this.mergeResult.status,
-      reportsTo: this.mergeResult.reportsTo,
-      username: this.mergeResult.username,
-      ignorable: false
-    }
-  }
-
   getMergeResultIdentities() {
     this.engineers.find(eng => {
       if (eng?.email === this.mergeResult.email && eng.identities.length > 0) {
         this.mergeResult.identities = this.suggestions.concat(eng.identities);
       }
     });
-    if (this.mergeResult.identities.length === 0){
+    if (this.mergeResult.identities.length === 0) {
       return this.suggestions;
     } else {
       return this.mergeResult.identities;
     }
   }
 
+
+  buildBot(): Engineer {
+    return {
+      ...this.mergeResult,
+      tags: [{name: 'BOT'}],
+      identities: this.getMergeResultIdentities(),
+      ignorable: false
+    }
+  }
+
   buildEngineer(): Engineer {
     return {
-      name: this.mergeResult.name,
-      email: this.mergeResult.email,
-      senority: this.mergeResult.senority,
-      teams: this.mergeResult.teams,
-      city: this.mergeResult.city,
-      country: this.mergeResult.country,
-      project: this.project.id,
-      role: this.mergeResult.role,
-      tags: this.mergeResult.tags,
+      ...this.mergeResult,
       identities: this.getMergeResultIdentities(),
-      status: this.mergeResult.status,
-      reportsTo: this.mergeResult.reportsTo,
-      username: this.mergeResult.username,
       ignorable: false
     }
   }
@@ -356,7 +290,7 @@ export class SuggestionTableComponent implements OnInit, OnChanges, AfterViewIni
     this.suggestions.forEach(suggestion => {
       this.project.identities = this.project.identities.filter(identity => identity.username !== suggestion.username);
     });
-    this.projectService.editProject(this.project.id, this.project.identities).subscribe(() => this.projectEmitter.emit({
+    this.projectService.editProject(this.project.id, this.project).subscribe(() => this.projectEmitter.emit({
       projectIdentities: this.project.identities,
       engineers: engineers
     }));

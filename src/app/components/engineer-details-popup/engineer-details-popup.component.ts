@@ -35,20 +35,8 @@ export class EngineerDetailsPopupComponent implements OnInit {
 
   ngOnInit(): void {
     this.selectedEngineer = this.data.engineer;
-    this.projectService.getById(this.data.project.id).subscribe(response => {
-      this.project = response;
-      this.identities = this.project.identities;
-    });
-    this.dataSource = new MatTableDataSource<Identity>(this.selectedEngineer.identities.reduce((accumalator, current) => {
-      if (
-        !accumalator.some(
-          (item) => item.id === current.id && this.mergeSuggestionService.identitiesAreEqual(item, current)
-        )
-      ) {
-        accumalator.push(current);
-      }
-      return accumalator;
-    }, []));
+    this.project = this.data.project;
+    this.dataSource = new MatTableDataSource<Identity>(this.projectService.getUniqueIdentities(this.selectedEngineer.identities));
   }
 
   onCancelClick(): void {
@@ -56,10 +44,9 @@ export class EngineerDetailsPopupComponent implements OnInit {
   }
 
   save() {
-    this.engineerService.edit(this.selectedEngineer).subscribe(() => {
-      this.projectService.editProject(this.project.id, this.identities).subscribe();
+      this.project.identities = this.identities;
+      this.projectService.editProject(this.project.id, this.project).subscribe();
       this.dialogRef.close({projectIdentities: this.identities})
-    });
   }
 
   isAllSelected() {

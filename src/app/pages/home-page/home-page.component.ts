@@ -17,6 +17,7 @@ export class HomePageComponent implements OnInit {
   projects: Project[] = [];
   fileDropped = false;
   engineers: Engineer[] = [];
+  project: Project = new Project();
 
   constructor(private projectService: ProjectService,
               private engineerService: EngineerService,
@@ -38,11 +39,13 @@ export class HomePageComponent implements OnInit {
   save() {
     if (this.selectedJSON instanceof File) {
       this.readFile(this.selectedJSON);
-      this.projectService.addProject(this.projectName, this.projectService.transformIdentitiesName(JSON.parse(localStorage.getItem(this.selectedJSON.name)))).subscribe(response => {
+      this.changeIdentityToEngineer(this.projectService.transformIdentitiesName(JSON.parse(localStorage.getItem(this.selectedJSON.name))))
+      this.project.identities = this.projectService.transformIdentitiesName(JSON.parse(localStorage.getItem(this.selectedJSON.name)));
+      this.project.engineers = this.engineers;
+      this.project.name = this.projectName;
+      this.projectService.addProject(this.project).subscribe(() => {
         this.getProjects();
-        const identities: any = this.selectedJSON;
-        this.changeIdentityToEngineer(this.projectService.transformIdentitiesName(JSON.parse(localStorage.getItem(identities.name))), response.uuid)
-        this.router.navigate([`/project/${response.name}/identities`]).then();
+        this.router.navigate([`/project/${this.projectName}/identities`]).then();
       });
     } else {
       let fileResults = [];
@@ -50,9 +53,12 @@ export class HomePageComponent implements OnInit {
         this.readFile(this.selectedJSON[i]);
         fileResults.push(this.projectService.transformIdentitiesName(JSON.parse(localStorage.getItem(`${this.selectedJSON[i].name}`))));
       }
-      this.projectService.addProject(this.projectName, this.transformIdentities(fileResults)).subscribe(response => {
+      this.changeIdentityToEngineer(this.transformIdentities(fileResults));
+      this.project.name = this.projectName;
+      this.project.identities = this.transformIdentities(fileResults);
+      this.project.engineers = this.engineers;
+      this.projectService.addProject(this.project).subscribe(response => {
         this.getProjects();
-        this.changeIdentityToEngineer(this.transformIdentities(fileResults), response.uuid);
         this.router.navigate([`/project/${response.name}/identities`]).then();
       });
     }
@@ -84,33 +90,23 @@ export class HomePageComponent implements OnInit {
     reader.readAsText(file);
   }
 
-  changeIdentityToEngineer(identities, projectId) {
-    let newIdentity;
+  changeIdentityToEngineer(identities) {
     identities?.forEach(identity => {
-      newIdentity = {
-        name: identity?.firstName + ' ' + identity?.lastName,
-        email: identity?.email,
-        project: projectId,
-        tags: [],
-        teams: [],
-        country: '',
-        city: '',
-        senority: '',
-        role: '',
-        identities: [],
-        status: '',
-        reportsTo: '',
-        ignorable: false
-      };
+      let engineer = new Engineer();
       if (identity.username) {
-        newIdentity.username = identity?.username;
+        engineer.username = identity.username;
       }
-      this.engineers.push(newIdentity);
+      if (identity.firstName) {
+        identity.lastName ? engineer.name = identity.firstName + ' ' + identity.lastName : engineer.name = identity.firstName;
+      } else {
+        if (identity.lastName) {
+          engineer.name = identity.lastName;
+        }
+      }
+      if (identity.email) {
+        engineer.email = identity.email;
+      }
+      this.engineers.push(engineer);
     });
-    this.saveEngineers();
-  }
-
-  saveEngineers() {
-    this.engineerService.addEngineers(this.engineers).subscribe();
   }
 }

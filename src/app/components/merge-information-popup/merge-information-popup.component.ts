@@ -39,23 +39,7 @@ export class MergeInformationPopupComponent implements OnInit {
   name: string;
   characters = Characters;
   tag: string[] = [];
-  mergedEngineer: Engineer = new class implements Engineer {
-    city: string;
-    country: string;
-    email: string;
-    id: string;
-    identities: Identity[];
-    ignorable: boolean;
-    name: string;
-    project: string;
-    reportsTo: string;
-    role: string;
-    senority: string;
-    status: string;
-    tags: Tag[];
-    teams: string[];
-    username: string;
-  };
+  mergedEngineer: Engineer = new Engineer();
   displayedColumns = ['name', 'email', 'username', 'city', 'country', 'senority', 'role', 'tags', 'teams', 'reportsTo', 'status'];
 
   constructor(public dialogRef: MatDialogRef<MergeInformationPopupComponent>,
@@ -82,20 +66,9 @@ export class MergeInformationPopupComponent implements OnInit {
 
   getMergedEngineerDetails() {
     this.mergedEngineer = {
-      city: this.selectedEngineers[0].city,
-      country: this.selectedEngineers[0].country,
-      email: this.selectedEngineers[0].email,
+      ...this.selectedEngineers[0],
       identities: [],
-      ignorable: false,
-      name: this.selectedEngineers[0].name,
-      project: this.selectedEngineers[0].project,
-      reportsTo: this.selectedEngineers[0].reportsTo,
-      role: this.selectedEngineers[0].role,
-      senority: this.selectedEngineers[0].senority,
-      status: this.selectedEngineers[0].status,
-      tags: this.selectedEngineers[0].tags,
-      teams: this.selectedEngineers[0].teams,
-      username: this.selectedEngineers[0].username,
+      ignorable: false
     }
   }
 
@@ -111,9 +84,7 @@ export class MergeInformationPopupComponent implements OnInit {
 
   manageTags() {
     this.tagService.getAllTags().subscribe(response => this.tags = response);
-    this.tagFormControl.valueChanges.subscribe(response => response.forEach(element => {
-      !this.mergedEngineer.tags ? this.mergedEngineer.tags = [element] : this.mergedEngineer.tags.push(element);
-    }));
+    this.tagFormControl.valueChanges.subscribe(response => response.forEach(element => !this.mergedEngineer.tags ? this.mergedEngineer.tags = [element] : this.mergedEngineer.tags.push(element)));
   }
 
   manageRoles() {
@@ -124,10 +95,7 @@ export class MergeInformationPopupComponent implements OnInit {
   }
 
   manageEngineers() {
-    this.engineerService.getAll().subscribe(response => this.engineers = response.filter(eng => eng.project === this.project.id))
-    this.engineersFormControl.valueChanges.subscribe(response => response.forEach(element => {
-      this.mergedEngineer.reportsTo = element.id
-    }));
+    this.engineersFormControl.valueChanges.subscribe(response => response.forEach(element => this.mergedEngineer.reportsTo = element.id));
   }
 
   manageStatuses() {
@@ -205,11 +173,12 @@ export class MergeInformationPopupComponent implements OnInit {
         eng.identities.forEach(identity => this.mergedEngineer.identities.push(identity));
         if (this.mergedEngineer.identities.length === 0) {
           this.mergedEngineer.identities = this.transformSelectedEngToIdentities();
-          this.projectService.editProject(this.project.id, this.project.identities).subscribe();
         }
-        this.engineerService.delete(eng.id).subscribe();
+        this.project.engineers.splice(this.project.engineers.indexOf(eng), 1);
+        this.projectService.editProject(this.project.id, this.project).subscribe();
       });
-      this.engineerService.addEngineer(this.mergedEngineer).subscribe(() => this.onCancelClick());
+      this.project.engineers.push(this.mergedEngineer);
+      this.projectService.editProject(this.project.id, this.project).subscribe(() => this.onCancelClick());
     } else {
       this.dialogRef.close(this.mergedEngineer);
     }

@@ -1,7 +1,9 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {ProjectService} from '../../services/project.service';
-import {EngineerService} from '../../services/engineer.service';
+import {Project} from '../../data/project';
+import {Identity} from '../../data/identity';
+import {Engineer} from '../../data/engineer';
 
 @Component({
   selector: 'app-file-upload-popup',
@@ -12,18 +14,19 @@ export class FileUploadPopupComponent implements OnInit {
 
   fileDropped = false;
   selectedJSON: File | File[];
-  projectIdentities = []
-  projectId = '';
+  projectIdentities: Identity[] = []
+  projectEngineers: Engineer[] = [];
+  project: Project;
 
   constructor(public dialogRef: MatDialogRef<FileUploadPopupComponent>,
               private projectService: ProjectService,
-              private engineerService: EngineerService,
               @Inject(MAT_DIALOG_DATA) public data) {
   }
 
   ngOnInit(): void {
-    this.projectId = this.data.project.id;
+    this.project = this.data.project;
     this.projectIdentities = this.data.project.identities;
+    this.projectEngineers = this.data.project.engineers;
   }
 
   upload($event): void {
@@ -33,10 +36,10 @@ export class FileUploadPopupComponent implements OnInit {
   save() {
     if (this.selectedJSON instanceof File) {
       this.readFile(this.selectedJSON);
-      this.projectService.editProject(this.projectId, this.projectIdentities.concat(this.projectService.transformIdentitiesName(JSON.parse(localStorage.getItem(this.selectedJSON.name))))).subscribe(() => {
-        const identities: any = this.selectedJSON;
-        const engineers = this.changeIdentityToEngineer(this.projectService.transformIdentitiesName(JSON.parse(localStorage.getItem(identities.name))), this.projectId)
-        this.dialogRef.close(engineers);
+      this.project.identities = this.projectIdentities.concat(this.projectService.transformIdentitiesName(JSON.parse(localStorage.getItem(this.selectedJSON.name))));
+      this.project.engineers = this.projectEngineers.concat(this.changeIdentityToEngineer(this.projectService.transformIdentitiesName(JSON.parse(localStorage.getItem(this.selectedJSON.name)))));
+      this.projectService.editProject(this.project.id, this.project).subscribe(() => {
+        this.dialogRef.close(this.project.engineers);
       });
     } else {
       let fileResults = [];
@@ -44,9 +47,10 @@ export class FileUploadPopupComponent implements OnInit {
         this.readFile(this.selectedJSON[i]);
         fileResults.push(this.projectService.transformIdentitiesName(JSON.parse(localStorage.getItem(`${this.selectedJSON[i].name}`))));
       }
-      this.projectService.editProject(this.projectId, this.projectIdentities.concat(this.transformIdentities(fileResults))).subscribe(() => {
-        const engineers = this.changeIdentityToEngineer(this.transformIdentities(fileResults), this.projectId);
-        this.dialogRef.close(engineers);
+      this.project.identities = this.projectIdentities.concat(this.transformIdentities(fileResults));
+      this.project.engineers = this.projectEngineers.concat(this.changeIdentityToEngineer(this.transformIdentities(fileResults)));
+      this.projectService.editProject(this.project.id, this.project).subscribe(() => {
+        this.dialogRef.close(this.project.engineers);
       });
     }
   }
@@ -81,12 +85,12 @@ export class FileUploadPopupComponent implements OnInit {
     reader.readAsText(file);
   }
 
-  changeIdentityToEngineer(identities, projectId) {
+  changeIdentityToEngineer(identities) {
     const engineers = [];
     identities?.forEach(identity => engineers.push({
       name: identity.firstName + ' ' + identity.lastName,
       email: identity.email,
-      project: projectId,
+      project: '',
       tags: [],
       teams: [],
       country: '',
@@ -99,12 +103,6 @@ export class FileUploadPopupComponent implements OnInit {
       username: identity.username,
       ignorable: false
     }));
-    this.saveEngineers(engineers);
     return engineers;
   }
-
-  saveEngineers(engineers) {
-    this.engineerService.addEngineers(engineers).subscribe();
-  }
-
 }
