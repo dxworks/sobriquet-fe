@@ -28,29 +28,23 @@ export class ProjectPageComponent implements OnInit {
               private engineerService: EngineerService,
               public dialog: MatDialog,
               private projectService: ProjectService) {
-    this.getIdentities();
   }
 
   ngOnInit(): void {
+    this.getIdentities();
+    this.getEngineersByPage(0, 50, this.project.id);
   }
 
   getIdentities() {
-    this.projectService.getAllProjects().subscribe(response => {
-      this.project = response.find(project => project.name === this.activatedRoute.snapshot.url[1].path);
-      this.identities = this.project?.identities;
-    })
+    this.project = JSON.parse(localStorage.getItem('project'));
+    this.identities = this.project.identities;
   }
 
-  getEngineers(identities?) {
-    this.engineerService.getAll().subscribe(response => {
-      this.engineers = response.filter(eng => eng.project === this.project.id);
-      if (identities?.length > 0) {
-        this.identities = identities;
-      }
-    });
+  getEngineersByPage(pageIndex: number, pageSize: number, projectId: string) {
+    this.engineerService.getByPage(pageIndex, pageSize, projectId).subscribe(response => this.engineers = response);
   }
 
-  manageProjectChanges(identities, engineers) {
+  manageProjectChanges(identities: Identity[], engineers: Engineer[]) {
     if (engineers) {
       engineers.forEach(eng => this.engineerService.delete(eng.id).subscribe());
       setTimeout(() => this.engineerService.getAll().subscribe(response => {
@@ -59,7 +53,7 @@ export class ProjectPageComponent implements OnInit {
         this.removeDuplicate(engineers);
       }), 500);
     } else {
-      this.getEngineers(identities);
+      // this.getEngineers(identities);
     }
   }
 
@@ -115,7 +109,7 @@ export class ProjectPageComponent implements OnInit {
   }
 
   changeEngineerDetails() {
-    this.getEngineers(undefined)
+    // this.getEngineers(undefined)
   }
 
   scroll($event) {

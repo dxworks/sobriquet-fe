@@ -69,7 +69,7 @@
       </div>
     </div>
   </div>
-  <mat-table #table [dataSource]="dataSource" *ngIf="dataSource?.data.length > 0"
+  <mat-table #table [dataSource]="dataSource" *ngIf="dataSource?.data?.length > 0"
              matSort (matSortChange)="sortData($event)">
     <ng-container matColumnDef="select">
       <th mat-header-cell *matHeaderCellDef>
@@ -95,14 +95,16 @@
     <ng-container matColumnDef="email">
       <mat-header-cell *matHeaderCellDef class="font-style-smaller" mat-sort-header="email"> Email address
       </mat-header-cell>
-      <mat-cell *matCellDef="let engineer" class="font-style-smaller" matTooltip="{{engineer.email}}"><p class="overflow"
+      <mat-cell *matCellDef="let engineer" class="font-style-smaller" matTooltip="{{engineer.email}}"><p
+        class="overflow"
         [class.grey]="engineer?.ignorable"> {{engineer?.email}}</p></mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="username">
       <mat-header-cell *matHeaderCellDef class="font-style-smaller" mat-sort-header="username"> Username
       </mat-header-cell>
-      <mat-cell *matCellDef="let engineer" matTooltip="{{engineer.username}}" class="font-style-smaller"><p class="overflow"
+      <mat-cell *matCellDef="let engineer" matTooltip="{{engineer.username}}" class="font-style-smaller"><p
+        class="overflow"
         [class.grey]="engineer?.ignorable">{{engineer?.username}}</p></mat-cell>
     </ng-container>
 
@@ -275,7 +277,8 @@
     <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
   </mat-table>
   <mat-toolbar-row>
-    <mat-paginator [pageSizeOptions]="[50,100, 500, 1000]"
+    <mat-paginator #paginator
+                   [pageSizeOptions]="[50,100, 500, 1000]"
                    pageSize="50"
                    showFirstLastButtons>
     </mat-paginator>

@@ -7,7 +7,7 @@ import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {ProjectPageComponent} from './pages/project-page/project-page.component';
-import {HttpClientModule} from '@angular/common/http';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {MatTableModule} from '@angular/material/table';
 import {MatCardModule} from '@angular/material/card';
 import {MatButtonModule} from '@angular/material/button';
@@ -22,7 +22,6 @@ import {MatSelectModule} from '@angular/material/select';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {HomePageComponent} from './pages/home-page/home-page.component';
-import {ProjectComponent} from './components/project/project.component';
 import {SuggestionTableComponent} from './components/suggestion-table/suggestion-table.component';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {EngineersTableComponent} from './components/engineers-table/engineers-table.component';
@@ -36,8 +35,11 @@ import {NewEngineerPopupComponent} from './components/new-engineer-popup/new-eng
 import {EngineerDetailsPopupComponent} from './components/engineer-details-popup/engineer-details-popup.component';
 import {NewTeamPopupComponent} from './components/new-team-popup/new-team-popup.component';
 import {FileUploadPopupComponent} from './components/file-upload-popup/file-upload-popup.component';
-import { MergeInformationPopupComponent } from './components/merge-information-popup/merge-information-popup.component';
+import {MergeInformationPopupComponent} from './components/merge-information-popup/merge-information-popup.component';
 import {MatTooltipModule} from '@angular/material/tooltip';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {RequestInterceptor} from './interceptors/request.interceptor';
+import {ProjectCardComponent} from './components/project-card/project-card.component';
 
 @NgModule({
   declarations: [
@@ -46,7 +48,7 @@ import {MatTooltipModule} from '@angular/material/tooltip';
     HeaderComponent,
     TeamsPageComponent,
     HomePageComponent,
-    ProjectComponent,
+    ProjectCardComponent,
     SuggestionTableComponent,
     EngineersTableComponent,
     DragAndDropDirective,
@@ -83,9 +85,10 @@ import {MatTooltipModule} from '@angular/material/tooltip';
     DevExtremeModule,
     DxDiagramModule,
     MatSortModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatProgressSpinnerModule
   ],
-  providers: [],
+  providers: [{provide: HTTP_INTERCEPTORS, useClass: RequestInterceptor, multi: true}],
   bootstrap: [AppComponent]
 })
 export class AppModule {

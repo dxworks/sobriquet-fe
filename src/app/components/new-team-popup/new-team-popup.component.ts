@@ -10,11 +10,7 @@ import {TeamsService} from '../../services/teams.service';
 })
 export class NewTeamPopupComponent implements OnInit {
 
-  newTeam: Team = new class implements Team {
-    description: string;
-    id: string;
-    name: string;
-  };
+  newTeam: Team = new Team();
 
   constructor(private dialogRef: MatDialogRef<NewTeamPopupComponent>,
               private teamsService: TeamsService) {

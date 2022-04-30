@@ -1,7 +1,7 @@
 import {Tag} from './tag';
 import {Identity} from './identity';
 
-export interface Engineer {
+export class Engineer {
   id?: string;
   name: string;
   senority: string;

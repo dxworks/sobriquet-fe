@@ -38,23 +38,7 @@ export class NewEngineerPopupComponent implements OnInit {
   characters = Characters;
   name: string;
 
-  newEngineer: Engineer = new class implements Engineer {
-    city: string;
-    country: string;
-    email: string;
-    name: string;
-    id: string;
-    identities: Identity[];
-    senority: string;
-    project: string;
-    role: string;
-    tags: Tag[];
-    teams: string[];
-    status: string;
-    reportsTo: string;
-    username: string;
-    ignorable: false;
-  }();
+  newEngineer: Engineer = new Engineer();
 
   constructor(public dialogRef: MatDialogRef<NewEngineerPopupComponent>,
               @Inject(MAT_DIALOG_DATA) public data,

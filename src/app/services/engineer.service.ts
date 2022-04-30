@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../../environments/environment';
 import {Engineer} from '../data/engineer';
+import {Observable} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -11,28 +12,32 @@ export class EngineerService {
   constructor(private httpClient: HttpClient) {
   }
 
-  getAll() {
+  getAll(): Observable<Engineer[]> {
     return this.httpClient.get<Engineer[]>(`${environment.apiUrl}/engineers`);
   }
 
-  addEngineer(engineer: Engineer) {
-    return this.httpClient.post(`${environment.apiUrl}/addEngineer`, engineer);
+  getByPage(pageIndex: number, pageSize: number, projectId: string): Observable<Engineer[]> {
+    return this.httpClient.get<Engineer[]>(`${environment.apiUrl}/engineers/${pageIndex}/${pageSize}/${projectId}`);
   }
 
-  addEngineers(engineers: Engineer[]) {
-    return this.httpClient.post(`${environment.apiUrl}/addEngineers`, engineers);
+  addEngineer(engineer: Engineer): Observable<Engineer> {
+    return this.httpClient.post<Engineer>(`${environment.apiUrl}/addEngineer`, engineer);
   }
 
-  linkTeam(engineerId: string, teamId: string) {
-    return this.httpClient.put(`${environment.apiUrl}/addTeam/${engineerId}/${teamId}`, null);
+  addEngineers(engineers: Engineer[]): Observable<Engineer[]> {
+    return this.httpClient.post<Engineer[]>(`${environment.apiUrl}/addEngineers`, engineers);
+  }
+
+  linkTeam(engineerId: string, teamId: string): Observable<Engineer> {
+    return this.httpClient.put<Engineer>(`${environment.apiUrl}/addTeam/${engineerId}/${teamId}`, null);
   }
 
   delete(engineerId: String) {
     return this.httpClient.delete(`${environment.apiUrl}/deleteEngineer/${engineerId}`);
   }
 
-  edit(engineer: Engineer) {
-    return this.httpClient.put(`${environment.apiUrl}/editEngineer/${engineer.id}`, engineer);
+  edit(engineer: Engineer): Observable<Engineer> {
+    return this.httpClient.put<Engineer>(`${environment.apiUrl}/editEngineer/${engineer.id}`, engineer);
   }
 
   anonymize(engineer: Engineer, name): Engineer {

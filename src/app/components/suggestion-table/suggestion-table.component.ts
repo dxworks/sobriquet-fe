@@ -11,7 +11,7 @@ import {
 } from '@angular/core';
 import {Identity} from '../../data/identity';
 import {MatTableDataSource} from '@angular/material/table';
-import {MergeSuggestionService} from '../../services/ToolsService/merge-suggestion.service';
+import {MergeSuggestionService} from '../../tool-services/merge-suggestion.service';
 import {Engineer} from '../../data/engineer';
 import {Project} from '../../data/project';
 import {EngineerService} from '../../services/engineer.service';
@@ -19,7 +19,6 @@ import {ActivatedRoute} from '@angular/router';
 import {ProjectService} from '../../services/project.service';
 import {MatPaginator, MatPaginatorIntl} from '@angular/material/paginator';
 import {TagService} from '../../services/tag.service';
-import {Tag} from '../../data/tag';
 import {MergeInformationPopupComponent} from '../merge-information-popup/merge-information-popup.component';
 import {MatDialog} from '@angular/material/dialog';
 import {Characters} from '../../resources/characters';
@@ -57,23 +56,7 @@ export class SuggestionTableComponent implements OnInit, OnChanges, AfterViewIni
   current = 1;
   name: string;
   characters = Characters;
-  mergeResult: Engineer = new class implements Engineer {
-    city: string;
-    country: string;
-    email: string;
-    id: string;
-    identities: Identity[];
-    ignorable: boolean;
-    name: string;
-    project: string;
-    reportsTo: string;
-    role: string;
-    senority: string;
-    status: string;
-    tags: Tag[];
-    teams: string[];
-    username: string;
-  };
+  mergeResult: Engineer = new Engineer();
 
   constructor(private mergeSuggestionService: MergeSuggestionService,
               private engineersService: EngineerService,
@@ -85,7 +68,6 @@ export class SuggestionTableComponent implements OnInit, OnChanges, AfterViewIni
   }
 
   ngOnInit(): void {
-    this.getEngineers();
     this.identities = this.project?.identities.reduce((accumalator, current) => {
       if (
         !accumalator.some(
@@ -117,7 +99,6 @@ export class SuggestionTableComponent implements OnInit, OnChanges, AfterViewIni
     if (!changes.project?.firstChange) {
       this.getIdentitiesWithoutDuplicates();
       this.prepareData();
-      this.getEngineers();
       this.getMergedEngineerDetails();
     }
     if (changes.demergedIdentities && this.demergedIdentities.length > 0) {
@@ -129,7 +110,6 @@ export class SuggestionTableComponent implements OnInit, OnChanges, AfterViewIni
       })
       this.project.identities = this.identities;
       this.prepareData();
-      this.getEngineers();
       this.getMergedEngineerDetails();
     }
   }
@@ -166,10 +146,6 @@ export class SuggestionTableComponent implements OnInit, OnChanges, AfterViewIni
     }
   }
 
-  getEngineers() {
-    this.engineersService.getAll().subscribe(response => this.engineers = response.filter(eng => eng.project === this.project.id));
-  }
-
   initTable() {
     this.pagination = [this.suggestions.length];
     this.paginator = new MatPaginator(new MatPaginatorIntl(), this.changeDetectorRef);
@@ -181,7 +157,7 @@ export class SuggestionTableComponent implements OnInit, OnChanges, AfterViewIni
   }
 
   prepareData() {
-    this.sortIdentities();
+    // this.sortIdentities();
     this.identitiesByCluster = this.mergeSuggestionService.buildCluster(this.identities);
     this.getSuggestions(this.identities);
     this.changePage({pageIndex: 0});

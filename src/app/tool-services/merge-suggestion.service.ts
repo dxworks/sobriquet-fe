@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {Identity} from '../../data/identity';
+import {Identity} from '../data/identity';
 
 @Injectable({
   providedIn: 'root'

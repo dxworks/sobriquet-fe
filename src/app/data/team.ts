@@ -1,4 +1,4 @@
-export interface Team {
+export class Team {
   id?: string;
   name: string;
   description: string;

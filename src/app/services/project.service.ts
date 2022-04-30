@@ -3,6 +3,7 @@ import {HttpClient} from '@angular/common/http';
 import {environment} from '../../environments/environment';
 import {Project} from '../data/project';
 import {Identity} from '../data/identity';
+import {Observable} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -12,11 +13,11 @@ export class ProjectService {
   constructor(private httpClient: HttpClient) {
   }
 
-  getAllProjects() {
+  getAllProjects(): Observable<Project[]> {
     return this.httpClient.get<Project[]>(`${environment.apiUrl}/projects`);
   }
 
-  addProject(projectName: string, projectFiles: File | Identity[]) {
+  addProject(projectName: string, projectFiles: File | Identity[]): Observable<Project> {
     return this.httpClient.post<Project>(`${environment.apiUrl}/addProject/${projectName}`, projectFiles);
   }
 
@@ -24,12 +25,12 @@ export class ProjectService {
     return this.httpClient.delete(`${environment.apiUrl}/deleteProject/${name}`);
   }
 
-  editProject(id: string, suggestions: Identity[]) {
-    return this.httpClient.put(`${environment.apiUrl}/editProject/${id}`, suggestions);
+  editProject(id: string, suggestions: Identity[]): Observable<Project> {
+    return this.httpClient.put<Project>(`${environment.apiUrl}/editProject/${id}`, suggestions);
   }
 
-  getById(id: string) {
-    return this.httpClient.get<Project>(`${environment.apiUrl}/project/${id}`);
+  getByName(name: string): Observable<Project> {
+    return this.httpClient.get<Project>(`${environment.apiUrl}/project/${name}`);
   }
 
   upload($event, fileDropped) {

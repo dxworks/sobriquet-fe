@@ -8,7 +8,7 @@ import {EngineerService} from '../../services/engineer.service';
 import {Project} from '../../data/project';
 import {ProjectService} from '../../services/project.service';
 import {Characters} from '../../resources/characters';
-import {MergeSuggestionService} from '../../services/ToolsService/merge-suggestion.service';
+import {MergeSuggestionService} from '../../tool-services/merge-suggestion.service';
 
 @Component({
   selector: 'app-engineer-details-popup',
@@ -35,7 +35,7 @@ export class EngineerDetailsPopupComponent implements OnInit {
 
   ngOnInit(): void {
     this.selectedEngineer = this.data.engineer;
-    this.projectService.getById(this.data.project.id).subscribe(response => {
+    this.projectService.getByName(this.data.project.id).subscribe(response => {
       this.project = response;
       this.identities = this.project.identities;
     });

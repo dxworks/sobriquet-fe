@@ -39,23 +39,7 @@ export class MergeInformationPopupComponent implements OnInit {
   name: string;
   characters = Characters;
   tag: string[] = [];
-  mergedEngineer: Engineer = new class implements Engineer {
-    city: string;
-    country: string;
-    email: string;
-    id: string;
-    identities: Identity[];
-    ignorable: boolean;
-    name: string;
-    project: string;
-    reportsTo: string;
-    role: string;
-    senority: string;
-    status: string;
-    tags: Tag[];
-    teams: string[];
-    username: string;
-  };
+  mergedEngineer: Engineer = new Engineer();
   displayedColumns = ['name', 'email', 'username', 'city', 'country', 'senority', 'role', 'tags', 'teams', 'reportsTo', 'status'];
 
   constructor(public dialogRef: MatDialogRef<MergeInformationPopupComponent>,
