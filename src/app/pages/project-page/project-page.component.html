@@ -7,7 +7,7 @@
       </div>
       <img src="assets/upload.png" class="image" matTooltip="Upload" (click)="openFileUploadDialog()">
       <app-engineers-table id="authors"
-                           [engineers]="project?.engineers"
+                           [engineers]="engineers"
                            [engineer]="engineer"
                            [project]="project"
                            [suggestions]="suggestions"
@@ -15,9 +15,9 @@
                            (manualMerge)="getProjectDetails()"
                            (identitiesChanged)="manageDemerge($event)"></app-engineers-table>
       <app-suggestion-table id="suggestions"
-                            [identities]="project?.identities"
+                            [identities]="identities"
                             [project]="project"
-                            [engineers]="project?.engineers"
+                            [engineers]="engineers"
                             [demergedIdentities]="demergedIdentities"
                             (projectEmitter)="manageProjectChanges($event.projectIdentities, $event.engineers)"
                             (engineerEmitter)="engineer = $event"

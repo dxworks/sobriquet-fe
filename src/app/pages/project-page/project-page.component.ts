@@ -19,6 +19,8 @@ export class ProjectPageComponent implements OnInit {
   engineer: Engineer;
   suggestions: Identity[] = [];
   demergedIdentities: Identity[] = [];
+  engineers: Engineer[] = [];
+  identities: Identity[] = []
   allEngineers: Engineer[] = [];
   currentView = ''
 
@@ -37,12 +39,14 @@ export class ProjectPageComponent implements OnInit {
   getProjectDetails() {
     this.projectService.allProjects$.subscribe(projects => {
       this.project = projects.find(project => project.name === this.router.url.split('/')[2]);
+      this.identities = this.project.identities.slice();
+      this.engineers = this.project.engineers.slice();
     });
   }
 
   updateIdentities(identities?) {
     if (identities?.length > 0) {
-      this.project.identities = identities;
+      this.identities = identities;
     }
   }
 
@@ -50,7 +54,8 @@ export class ProjectPageComponent implements OnInit {
     if (engineers) {
       engineers.forEach(eng => this.project.engineers.splice(this.project.engineers.indexOf(eng), 1));
       this.projectService.editProject(this.project.id, this.project).subscribe(() => this.getProjectDetails());
-      this.project.identities = identities;
+      this.identities = identities;
+      this.engineers = this.project.engineers;
     } else {
       this.updateIdentities(identities);
     }
@@ -58,10 +63,11 @@ export class ProjectPageComponent implements OnInit {
 
   removeDuplicate(engineers: Engineer[]) {
     engineers.forEach(eng => {
-      this.project.engineers.forEach(savedEng => {
+      this.engineers.forEach(savedEng => {
         if (eng?.email === savedEng?.email && savedEng?.identities.length === 0) {
           this.project.engineers.splice(this.project.engineers.indexOf(savedEng), 1);
           this.projectService.editProject(this.project.id, this.project).subscribe();
+          this.engineers = this.project.engineers;
         }
       })
     })
@@ -73,7 +79,7 @@ export class ProjectPageComponent implements OnInit {
     dialogRef.afterClosed().subscribe(response => {
       if (response) {
         this.getProjectDetails();
-        this.project.engineers = response;
+        this.engineers = response;
         this.allEngineers = this.project.engineers;
         this.getMergedIdentitiesOnMatch();
       }
@@ -82,14 +88,14 @@ export class ProjectPageComponent implements OnInit {
 
   getMergedIdentitiesOnMatch() {
     const allIdentities = [];
-    this.project.identities.forEach(identity => {
+    this.identities.forEach(identity => {
       this.allEngineers.forEach(engineer => {
         if (engineer.identities.find(id => id.email === identity.email) && !allIdentities.includes(identity)) {
           allIdentities.push(identity);
         }
       })
     });
-    this.project.identities = this.project.identities.concat(allIdentities);
+    this.project.identities = this.identities.concat(allIdentities);
     this.projectService.editProject(this.project.id, this.project).subscribe();
   }
 
