@@ -5,13 +5,13 @@
       <div class="title">
         {{project?.name}}
       </div>
-      <img src="assets/upload.png" class="image" matTooltip="Upload" (click)="openFileUploadDialog()">
+      <mat-icon matTooltip="Upload" (click)="openFileUploadDialog()" class="icon">cloud_upload</mat-icon>
       <app-engineers-table id="authors"
                            [engineers]="engineers"
                            [engineer]="engineer"
                            [project]="project"
                            [suggestions]="suggestions"
-                           (engineerChanged)="changeEngineerDetails()"
+                           (engineerChanged)="getIdentities()"
                            (manualMerge)="getIdentities()"
                            (identitiesChanged)="manageDemerge($event)"></app-engineers-table>
       <app-suggestion-table id="suggestions"

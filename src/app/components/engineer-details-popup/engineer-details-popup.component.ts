@@ -35,10 +35,8 @@ export class EngineerDetailsPopupComponent implements OnInit {
 
   ngOnInit(): void {
     this.selectedEngineer = this.data.engineer;
-    this.projectService.getByName(this.data.project.id).subscribe(response => {
-      this.project = response;
-      this.identities = this.project.identities;
-    });
+    this.project = this.data.project;
+    this.identities = this.data.project.identities
     this.dataSource = new MatTableDataSource<Identity>(this.selectedEngineer.identities.reduce((accumalator, current) => {
       if (
         !accumalator.some(

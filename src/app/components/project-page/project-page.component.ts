@@ -1,10 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {Identity} from '../../data/identity';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {Project} from '../../data/project';
 import {Engineer} from '../../data/engineer';
 import {ProjectService} from '../../services/project.service';
-import {FileUploadPopupComponent} from '../../components/file-upload-popup/file-upload-popup.component';
+import {FileUploadPopupComponent} from '../file-upload-popup/file-upload-popup.component';
 import {MatDialog} from '@angular/material/dialog';
 import {EngineerService} from '../../services/engineer.service';
 
@@ -27,33 +27,34 @@ export class ProjectPageComponent implements OnInit {
   constructor(private activatedRoute: ActivatedRoute,
               private engineerService: EngineerService,
               public dialog: MatDialog,
+              private router: Router,
               private projectService: ProjectService) {
   }
 
   ngOnInit(): void {
-    this.getIdentities();
-    this.getEngineersByPage(0, 50, this.project.id);
+    this.getIdentities()
   }
 
   getIdentities() {
-    this.project = JSON.parse(localStorage.getItem('project'));
-    this.identities = this.project.identities;
+    this.projectService.engineersByProject.forEach((key, value) => {
+      if (value.name === this.router.url.split('/')[2]) {
+        this.project = value;
+        this.identities = this.project.identities.slice();
+        // this.engineers = key.slice();
+      }
+    })
   }
 
-  getEngineersByPage(pageIndex: number, pageSize: number, projectId: string) {
-    this.engineerService.getByPage(pageIndex, pageSize, projectId).subscribe(response => this.engineers = response);
-  }
-
-  manageProjectChanges(identities: Identity[], engineers: Engineer[]) {
+  manageProjectChanges(identities, engineers) {
     if (engineers) {
       engineers.forEach(eng => this.engineerService.delete(eng.id).subscribe());
-      setTimeout(() => this.engineerService.getAll().subscribe(response => {
+      setTimeout(() => this.engineerService.allEngineers$.subscribe(response => {
         this.engineers = response.filter(eng => eng.project === this.project.id);
         this.identities = identities;
         this.removeDuplicate(engineers);
       }), 500);
     } else {
-      // this.getEngineers(identities);
+      this.getIdentities();
     }
   }
 
@@ -62,7 +63,7 @@ export class ProjectPageComponent implements OnInit {
       this.engineers.forEach(savedEng => {
         if (eng.email === savedEng.email && savedEng.identities.length === 0) {
           this.engineerService.delete(savedEng.id).subscribe(() => {
-            this.engineerService.getAll().subscribe(res => this.engineers = res.filter(eng => eng.project === this.project.id));
+            this.engineerService.allEngineers$.subscribe(res => this.engineers = res.filter(eng => eng.project === this.project.id));
           });
         }
       })
@@ -76,7 +77,7 @@ export class ProjectPageComponent implements OnInit {
       if (response) {
         this.getIdentities();
         this.engineers = response;
-        this.engineerService.getAll().subscribe(response => {
+        this.engineerService.allEngineers$.subscribe(response => {
           this.allEngineers = response;
           this.getMergedIdentitiesOnMatch();
         });
@@ -106,10 +107,6 @@ export class ProjectPageComponent implements OnInit {
       }
     });
     this.demergedIdentities = newIdentities;
-  }
-
-  changeEngineerDetails() {
-    // this.getEngineers(undefined)
   }
 
   scroll($event) {

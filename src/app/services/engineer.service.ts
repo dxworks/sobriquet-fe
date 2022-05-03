@@ -2,22 +2,23 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../../environments/environment';
 import {Engineer} from '../data/engineer';
-import {Observable} from 'rxjs';
+import {BehaviorSubject, Observable} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class EngineerService {
 
+  private allEngineersBehaviorSubject: BehaviorSubject<Engineer[]> = new BehaviorSubject<Engineer[]>([]);
+
+  allEngineers$: Observable<Engineer[]> = this.allEngineersBehaviorSubject.asObservable();
+
   constructor(private httpClient: HttpClient) {
+    this.getAll();
   }
 
-  getAll(): Observable<Engineer[]> {
-    return this.httpClient.get<Engineer[]>(`${environment.apiUrl}/engineers`);
-  }
-
-  getByPage(pageIndex: number, pageSize: number, projectId: string): Observable<Engineer[]> {
-    return this.httpClient.get<Engineer[]>(`${environment.apiUrl}/engineers/${pageIndex}/${pageSize}/${projectId}`);
+  getAll() {
+    return this.httpClient.get<Engineer[]>(`${environment.apiUrl}/engineers`).subscribe(response => this.allEngineersBehaviorSubject.next(response));
   }
 
   addEngineer(engineer: Engineer): Observable<Engineer> {

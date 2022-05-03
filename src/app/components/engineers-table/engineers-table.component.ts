@@ -30,7 +30,6 @@ import {EngineerDetailsPopupComponent} from '../engineer-details-popup/engineer-
 import {MergeInformationPopupComponent} from '../merge-information-popup/merge-information-popup.component';
 import {MergeSuggestionService} from '../../tool-services/merge-suggestion.service';
 import {Characters} from '../../resources/characters';
-import {MatPaginator} from '@angular/material/paginator';
 
 @Component({
   selector: 'app-engineers-table',
@@ -40,7 +39,6 @@ import {MatPaginator} from '@angular/material/paginator';
 export class EngineersTableComponent implements OnInit, OnChanges {
 
   @ViewChild(MatSort) sort: MatSort = new MatSort();
-  @ViewChild('paginator') paginator: MatPaginator;
 
   @Input()
   engineer: Engineer;
@@ -68,7 +66,6 @@ export class EngineersTableComponent implements OnInit, OnChanges {
   newTeamName: string = '';
   newTagName: string = '';
   newRoleName: string = '';
-  projects: Project[] = [];
   tags: Tag[] = [];
   tag: Tag;
   selection = new SelectionModel<Engineer>(true, []);
@@ -99,6 +96,7 @@ export class EngineersTableComponent implements OnInit, OnChanges {
   }
 
   ngOnInit(): void {
+    this.initializeData();
     this.getTeams();
     this.getTags();
     this.getRoles();
@@ -109,7 +107,7 @@ export class EngineersTableComponent implements OnInit, OnChanges {
       this.getEngineers();
     }
 
-    if (!changes.engineers?.firstChange) {
+    if (changes.engineers) {
       this.initializeData();
     }
   }
@@ -120,7 +118,7 @@ export class EngineersTableComponent implements OnInit, OnChanges {
   }
 
   getEngineers() {
-    this.engineers?.forEach(engineer => {
+    this.engineers.forEach(engineer => {
       this.getEngineerDetails(engineer);
     });
     this.getTableData(this.engineers);
@@ -353,10 +351,7 @@ export class EngineersTableComponent implements OnInit, OnChanges {
   }
 
   showEngineers() {
-    this.engineerService.getByPage(this.paginator.pageIndex, this.paginator.pageSize, this.project.id).subscribe(response => {
-      this.engineers = response;
-      this.initializeData();
-    });
+    console.log('showEngineers(): ', this.engineers);
   }
 
   showEngineersByIgnorableProperty() {

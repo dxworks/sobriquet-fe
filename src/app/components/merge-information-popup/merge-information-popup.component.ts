@@ -108,7 +108,7 @@ export class MergeInformationPopupComponent implements OnInit {
   }
 
   manageEngineers() {
-    this.engineerService.getAll().subscribe(response => this.engineers = response.filter(eng => eng.project === this.project.id))
+    this.engineerService.allEngineers$.subscribe(response => this.engineers = response.filter(eng => eng.project === this.project.id))
     this.engineersFormControl.valueChanges.subscribe(response => response.forEach(element => {
       this.mergedEngineer.reportsTo = element.id
     }));

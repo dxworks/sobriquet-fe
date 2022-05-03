@@ -14,11 +14,10 @@
   color: #FD8947;
 }
 
-.image {
-  display: grid;
-  margin-right: 40px;
-  cursor: pointer;
-  width: 25px;
+.icon {
   margin-left: auto;
-  margin-top: auto;
+  margin-right: 45px;
+  cursor: pointer;
+  zoom: 1.2;
+  color: #1FAFA9;
 }

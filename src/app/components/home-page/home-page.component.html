@@ -18,6 +18,8 @@
     <button mat-button class="sortinghat-orange-bg save-button font-style-smaller" (click)="save()">SAVE</button>
   </div>
   <div class="block">
-    <app-project-card *ngFor="let project of projects" [project]="project" (projectDeleted)="getProjects()"></app-project-card>
+    <app-project-card *ngFor="let project of projects"
+                      [project]="project"
+                      (projectDeleted)="getProjects()"></app-project-card>
   </div>
 </div>

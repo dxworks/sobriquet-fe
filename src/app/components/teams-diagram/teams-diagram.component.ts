@@ -43,14 +43,14 @@ export class TeamsDiagramComponent implements OnInit, OnChanges {
   }
 
   getProject() {
-    this.projectService.getAllProjects().subscribe(response => {
+    this.projectService.allProjects$.subscribe(response => {
       this.project = response.find(project => project.name === this.router.url.split('/')[2]);
       this.getData();
     })
   }
 
   getData() {
-    this.engineerService.getAll().subscribe(engineers => {
+    this.engineerService.allEngineers$.subscribe(engineers => {
       if (!this.showAllTeams) {
         this.nodes = this.diagramService.transformEngineersForSingleTeamSelection(engineers.filter(engineer => engineer.teams.includes(this.team.id) && engineer.project === this.project.id));
         this.prepareDiagram();
