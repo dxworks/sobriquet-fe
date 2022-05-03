@@ -4,18 +4,23 @@ import {environment} from '../../environments/environment';
 import {Project} from '../data/project';
 import {MergeSuggestionService} from './ToolsService/merge-suggestion.service';
 import {Identity} from '../data/identity';
+import {BehaviorSubject, Observable} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProjectService {
+  private allProjectsBehaviorSubject: BehaviorSubject<Project[]> = new BehaviorSubject<Project[]>([]);
+
+  allProjects$: Observable<Project[]> = this.allProjectsBehaviorSubject.asObservable();
 
   constructor(private httpClient: HttpClient,
               private mergeSuggestionService: MergeSuggestionService) {
+    this.getAllProjects();
   }
 
-  getAllProjects() {
-    return this.httpClient.get<Project[]>(`${environment.apiUrl}/projects`);
+  getAllProjects(){
+    return this.httpClient.get<Project[]>(`${environment.apiUrl}/projects`).subscribe(res => this.allProjectsBehaviorSubject.next(res));
   }
 
   addProject(project: Project) {
@@ -30,8 +35,8 @@ export class ProjectService {
     return this.httpClient.put(`${environment.apiUrl}/editProject/${id}`, project);
   }
 
-  getById(id: string) {
-    return this.httpClient.get<Project>(`${environment.apiUrl}/project/${id}`);
+  getByName(name: string) {
+    return this.httpClient.get<Project>(`${environment.apiUrl}/project/${name}`);
   }
 
   upload($event, fileDropped) {

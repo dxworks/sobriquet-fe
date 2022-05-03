@@ -169,7 +169,7 @@
     <ng-container matColumnDef="tagsAction">
       <mat-header-cell *matHeaderCellDef class="font-style-smaller"></mat-header-cell>
       <mat-cell *matCellDef="let engineer">
-        <mat-select *ngIf=engineer [(ngModel)]="engineer.tags[engineer.tags.length]"
+        <mat-select *ngIf=engineer [(ngModel)]="engineer.tags[engineer.tags?.length]"
                     (ngModelChange)="selectTag($event, engineer)">
           <mat-form-field appearance="fill" class="dropdown-input">
             <input matInput placeholder="Search or create tag" [(ngModel)]="newTagName"

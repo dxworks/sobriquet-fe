@@ -29,7 +29,7 @@ export class HomePageComponent implements OnInit {
   }
 
   getProjects() {
-    this.projectService.getAllProjects().subscribe(response => this.projects = response);
+    this.projectService.allProjects$.subscribe(response => this.projects = response);
   }
 
   upload($event): void {

@@ -7,7 +7,7 @@ import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {ProjectPageComponent} from './pages/project-page/project-page.component';
-import {HttpClientModule} from '@angular/common/http';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {MatTableModule} from '@angular/material/table';
 import {MatCardModule} from '@angular/material/card';
 import {MatButtonModule} from '@angular/material/button';
@@ -38,6 +38,8 @@ import {NewTeamPopupComponent} from './components/new-team-popup/new-team-popup.
 import {FileUploadPopupComponent} from './components/file-upload-popup/file-upload-popup.component';
 import { MergeInformationPopupComponent } from './components/merge-information-popup/merge-information-popup.component';
 import {MatTooltipModule} from '@angular/material/tooltip';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {RequestInterceptor} from './interceptors/request.interceptor';
 
 @NgModule({
   declarations: [
@@ -83,9 +85,10 @@ import {MatTooltipModule} from '@angular/material/tooltip';
     DevExtremeModule,
     DxDiagramModule,
     MatSortModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatProgressSpinnerModule
   ],
-  providers: [],
+  providers: [{provide: HTTP_INTERCEPTORS, useClass: RequestInterceptor, multi: true}],
   bootstrap: [AppComponent]
 })
 export class AppModule {

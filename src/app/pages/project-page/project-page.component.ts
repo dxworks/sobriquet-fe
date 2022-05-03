@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {Identity} from '../../data/identity';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {Project} from '../../data/project';
 import {Engineer} from '../../data/engineer';
 import {ProjectService} from '../../services/project.service';
@@ -16,8 +16,6 @@ import {EngineerService} from '../../services/engineer.service';
 export class ProjectPageComponent implements OnInit {
 
   project: Project;
-  identities: Identity[] = [];
-  engineers: Engineer[] = [];
   engineer: Engineer;
   suggestions: Identity[] = [];
   demergedIdentities: Identity[] = [];
@@ -27,7 +25,9 @@ export class ProjectPageComponent implements OnInit {
   constructor(private activatedRoute: ActivatedRoute,
               private engineerService: EngineerService,
               public dialog: MatDialog,
-              private projectService: ProjectService) {
+              private projectService: ProjectService,
+              private router: Router,
+  ) {
     this.getProjectDetails();
   }
 
@@ -35,16 +35,14 @@ export class ProjectPageComponent implements OnInit {
   }
 
   getProjectDetails() {
-    this.projectService.getAllProjects().subscribe(response => {
-      this.project = response.find(project => project.name === this.activatedRoute.snapshot.url[1].path);
-      this.identities = this.project?.identities;
-      this.engineers = this.project?.engineers
-    })
+    this.projectService.allProjects$.subscribe(projects => {
+      this.project = projects.find(project => project.name === this.router.url.split('/')[2]);
+    });
   }
 
   updateIdentities(identities?) {
     if (identities?.length > 0) {
-      this.identities = identities;
+      this.project.identities = identities;
     }
   }
 
@@ -52,8 +50,7 @@ export class ProjectPageComponent implements OnInit {
     if (engineers) {
       engineers.forEach(eng => this.project.engineers.splice(this.project.engineers.indexOf(eng), 1));
       this.projectService.editProject(this.project.id, this.project).subscribe(() => this.getProjectDetails());
-      this.engineers = this.project.engineers;
-      this.identities = identities;
+      this.project.identities = identities;
     } else {
       this.updateIdentities(identities);
     }
@@ -61,11 +58,10 @@ export class ProjectPageComponent implements OnInit {
 
   removeDuplicate(engineers: Engineer[]) {
     engineers.forEach(eng => {
-      this.engineers.forEach(savedEng => {
+      this.project.engineers.forEach(savedEng => {
         if (eng?.email === savedEng?.email && savedEng?.identities.length === 0) {
           this.project.engineers.splice(this.project.engineers.indexOf(savedEng), 1);
           this.projectService.editProject(this.project.id, this.project).subscribe();
-          this.engineers = this.project.engineers;
         }
       })
     })
@@ -77,7 +73,7 @@ export class ProjectPageComponent implements OnInit {
     dialogRef.afterClosed().subscribe(response => {
       if (response) {
         this.getProjectDetails();
-        this.engineers = response;
+        this.project.engineers = response;
         this.allEngineers = this.project.engineers;
         this.getMergedIdentitiesOnMatch();
       }
@@ -86,14 +82,14 @@ export class ProjectPageComponent implements OnInit {
 
   getMergedIdentitiesOnMatch() {
     const allIdentities = [];
-    this.identities.forEach(identity => {
+    this.project.identities.forEach(identity => {
       this.allEngineers.forEach(engineer => {
         if (engineer.identities.find(id => id.email === identity.email) && !allIdentities.includes(identity)) {
           allIdentities.push(identity);
         }
       })
     });
-    this.project.identities = this.identities.concat(allIdentities);
+    this.project.identities = this.project.identities.concat(allIdentities);
     this.projectService.editProject(this.project.id, this.project).subscribe();
   }
 

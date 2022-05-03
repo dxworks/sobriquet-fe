@@ -107,6 +107,7 @@ export class EngineersTableComponent implements OnInit, OnChanges {
       this.getEngineers();
     }
     if (this.project || (changes.engineers && this.project)) {
+      console.log(this.engineers, this.project)
       this.showEngineers();
     }
   }
@@ -340,6 +341,7 @@ export class EngineersTableComponent implements OnInit, OnChanges {
 
   showEngineers() {
     this.engineers = this.project.engineers;
+    console.log(this.engineers);
     this.initializeData();
   }
 

@@ -137,7 +137,7 @@ export class SuggestionTableComponent implements OnInit, OnChanges, AfterViewIni
   }
 
   prepareData() {
-    this.sortIdentities();
+    // this.sortIdentities();
     this.identitiesByCluster = this.mergeSuggestionService.buildCluster(this.identities);
     this.getSuggestions(this.identities);
     this.changePage({pageIndex: 0});
