@@ -1,10 +1,10 @@
-import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {environment} from '../../environments/environment';
-import {Project} from '../data/project';
-import {MergeSuggestionService} from '../tools-services/merge-suggestion.service';
-import {Identity} from '../data/identity';
-import {BehaviorSubject, Observable} from 'rxjs';
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../environments/environment';
+import { Project } from '../data/project';
+import { MergeSuggestionService } from '../tools-services/merge-suggestion.service';
+import { Identity } from '../data/identity';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +19,7 @@ export class ProjectService {
     this.getAllProjects();
   }
 
-  getAllProjects(){
+  getAllProjects() {
     return this.httpClient.get<Project[]>(`${environment.apiUrl}/projects`).subscribe(res => this.allProjectsBehaviorSubject.next(res));
   }
 
@@ -33,10 +33,6 @@ export class ProjectService {
 
   editProject(id: string, project: Project) {
     return this.httpClient.put(`${environment.apiUrl}/editProject/${id}`, project);
-  }
-
-  getByName(name: string) {
-    return this.httpClient.get<Project>(`${environment.apiUrl}/project/${name}`);
   }
 
   upload($event, fileDropped) {
