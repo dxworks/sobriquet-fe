@@ -1,0 +1,26 @@
+<app-header [project]="project" [currentView]="currentView" (scrollButtonClicked)="scroll($event)"></app-header>
+<div class="flex h100p content">
+  <div class="w-100p">
+    <div class="grid">
+      <div class="d-flex align-items-center">
+        <p class="title">{{project?.name}}</p>
+        <i class="pi pi-upload icon"></i>
+      </div>
+      <app-engineers-table id="authors"
+                           [engineers]="engineers"
+                           [engineer]="engineer"
+                           [project]="project"
+                           [suggestions]="suggestions"
+                           (engineerChanged)="changeEngineerDetails()"
+                           (identitiesChanged)="manageDemerge($event)"></app-engineers-table>
+      <!--      <app-suggestion-table id="suggestions"-->
+      <!--                            [identities]="identities"-->
+      <!--                            [project-card]="project-card"-->
+      <!--                            [engineers]="engineers"-->
+      <!--                            [demergedIdentities]="demergedIdentities"-->
+      <!--                            (projectEmitter)="manageProjectChanges($event.projectIdentities, $event.engineers)"-->
+      <!--                            (engineerEmitter)="engineer = $event"-->
+      <!--                            (suggestionsEmitter)="suggestions = $event"></app-suggestion-table>-->
+    </div>
+  </div>
+</div>

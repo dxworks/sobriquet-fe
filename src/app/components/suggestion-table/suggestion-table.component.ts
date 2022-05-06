@@ -11,7 +11,7 @@ import {
 } from '@angular/core';
 import {Identity} from '../../data/identity';
 import {MatTableDataSource} from '@angular/material/table';
-import {MergeSuggestionService} from '../../services/ToolsService/merge-suggestion.service';
+import {MergeSuggestionService} from '../../tools-services/merge-suggestion.service';
 import {Engineer} from '../../data/engineer';
 import {Project} from '../../data/project';
 import {EngineerService} from '../../services/engineer.service';

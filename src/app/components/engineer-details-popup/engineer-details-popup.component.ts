@@ -8,7 +8,7 @@ import {EngineerService} from '../../services/engineer.service';
 import {Project} from '../../data/project';
 import {ProjectService} from '../../services/project.service';
 import {Characters} from '../../resources/characters';
-import {MergeSuggestionService} from '../../services/ToolsService/merge-suggestion.service';
+import {MergeSuggestionService} from '../../tools-services/merge-suggestion.service';
 
 @Component({
   selector: 'app-engineer-details-popup',

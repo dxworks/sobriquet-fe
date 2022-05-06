@@ -1,284 +1,270 @@
-<div class="container mat-elevation-z8">
-  <div class="header">
-    <div class="mt-5 flex" style="justify-content: inherit">
-      <div class="d-flex">
-        <mat-checkbox class="example-margin mr-10" [(ngModel)]="showAll"
-                      (ngModelChange)="showEngineers(); showIgnored = false">All
-        </mat-checkbox>
-        <mat-checkbox class="example-margin" [(ngModel)]="showIgnored"
-                      (ngModelChange)="showEngineersByIgnorableProperty()">Ignored
-        </mat-checkbox>
-      </div>
-      <div class="buttons-section">
-        <button mat-button class="sortinghat-cyan-bg add-button mr-10" matTooltip="Sanitize Names"
-                (click)="sanitizeNames()" *ngIf="selection.selected.length > 0">
-          <mat-icon>text_fields</mat-icon>
-        </button>
-        <button mat-button class="sortinghat-orange-bg add-button mr-10" matTooltip="Anonymize"
-                (click)="anonymize()" *ngIf="selection.selected.length > 0">
-          <mat-icon>perm_identity</mat-icon>
-        </button>
-        <button mat-button class="sortinghat-cyan-bg add-button mr-10" matTooltip="Mark as ignored"
-                (click)="ignore()" *ngIf="selection.selected.length > 0">
-          <mat-icon *ngIf="!showIgnored">block</mat-icon>
-          <mat-icon *ngIf="showIgnored">check</mat-icon>
-        </button>
-        <button mat-button class="sortinghat-orange-bg add-button mr-10" matTooltip="Merge"
-                (click)="mergeEngineers()">
-          <mat-icon>merge_type</mat-icon>
-        </button>
-        <button mat-button class="sortinghat-cyan-bg add-button" matTooltip="Add"
-                (click)="openDialog()">
-          <mat-icon>add</mat-icon>
-        </button>
-      </div>
-    </div>
-    <div class="d-flex" style="justify-content: inherit">
-      <div>
-        <mat-form-field appearance="fill">
-          <mat-label>Filter by Tag</mat-label>
-          <mat-select [(ngModel)]="tag" (ngModelChange)="applyFilter($event, 'tags')" multiple>
-            <mat-option *ngFor="let tag of tags" [value]="tag.name">{{tag.name}}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-        <mat-form-field appearance="fill">
-          <mat-label>Filter by Role</mat-label>
-          <mat-select [(ngModel)]="role" (ngModelChange)="applyFilter($event, 'role')" multiple>
-            <mat-option *ngFor="let role of roles" [value]="role.name">{{role.name}}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-        <mat-form-field appearance="fill">
-          <mat-label>Filter by Team</mat-label>
-          <mat-select [(ngModel)]="team" (ngModelChange)="applyFilter($event, 'teams')" multiple>
-            <mat-option *ngFor="let team of teams" [value]="team.id">{{team.name}}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-        <mat-form-field appearance="fill">
-          <mat-label>Filter by Status</mat-label>
-          <mat-select [(ngModel)]="status" (ngModelChange)="applyFilter($event, 'status')" multiple>
-            <mat-option *ngFor="let status of statuses" [value]="status">{{status}}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
-      <div>
-        <input matInput [(ngModel)]="searchValue" (ngModelChange)="search()" placeholder="Search..." class="search">
-      </div>
-    </div>
-  </div>
-  <mat-table #table [dataSource]="dataSource" *ngIf="dataSource?.data.length > 0"
-             matSort (matSortChange)="sortData($event)">
-    <ng-container matColumnDef="select">
-      <th mat-header-cell *matHeaderCellDef>
-        <mat-checkbox (change)="$event ? masterToggle() : null"
-                      [checked]="selection.hasValue() && isAllSelected()"
-                      [indeterminate]="selection.hasValue() && !isAllSelected()">
-        </mat-checkbox>
-      </th>
-      <td mat-cell *matCellDef="let row">
-        <mat-checkbox (click)="$event.stopPropagation()"
-                      (change)="$event ? selection.toggle(row) : null"
-                      [checked]="selection.isSelected(row)">
-        </mat-checkbox>
-      </td>
-    </ng-container>
-    <ng-container matColumnDef="firstname">
-      <mat-header-cell *matHeaderCellDef class="font-style-smaller" mat-sort-header="firstname"> Name
-      </mat-header-cell>
-      <mat-cell *matCellDef="let engineer" class="font-style-smaller"><p
-        [class.grey]="engineer?.ignorable">{{engineer?.name}}</p></mat-cell>
-    </ng-container>
-
-    <ng-container matColumnDef="email">
-      <mat-header-cell *matHeaderCellDef class="font-style-smaller" mat-sort-header="email"> Email address
-      </mat-header-cell>
-      <mat-cell *matCellDef="let engineer" class="font-style-smaller" matTooltip="{{engineer.email}}"><p class="overflow"
-        [class.grey]="engineer?.ignorable"> {{engineer?.email}}</p></mat-cell>
-    </ng-container>
-
-    <ng-container matColumnDef="username">
-      <mat-header-cell *matHeaderCellDef class="font-style-smaller" mat-sort-header="username"> Username
-      </mat-header-cell>
-      <mat-cell *matCellDef="let engineer" matTooltip="{{engineer.username}}" class="font-style-smaller"><p class="overflow"
-        [class.grey]="engineer?.ignorable">{{engineer?.username}}</p></mat-cell>
-    </ng-container>
-
-    <ng-container matColumnDef="city">
-      <mat-header-cell *matHeaderCellDef class="font-style-smaller" mat-sort-header="city"> City</mat-header-cell>
-      <mat-cell *matCellDef="let engineer"><p [class.grey]="engineer?.ignorable">{{engineer?.city}}</p></mat-cell>
-    </ng-container>
-
-    <ng-container matColumnDef="country">
-      <mat-header-cell *matHeaderCellDef class="font-style-smaller" mat-sort-header="country"> Country
-      </mat-header-cell>
-      <mat-cell *matCellDef="let engineer"><p [class.grey]="engineer?.ignorable">{{engineer?.country}}</p></mat-cell>
-    </ng-container>
-
-
-    <ng-container matColumnDef="position">
-      <mat-header-cell *matHeaderCellDef class="font-style-smaller"> Senority</mat-header-cell>
-      <mat-cell *matCellDef="let engineer"><p [class.grey]="engineer.ignorable">{{engineer?.senority}}</p></mat-cell>
-    </ng-container>
-
-    <ng-container matColumnDef="role">
-      <mat-header-cell *matHeaderCellDef class="font-style-smaller jc-center"> Role</mat-header-cell>
-      <mat-cell *matCellDef="let engineer">
-        <mat-chip-list
-          cdkDropList
-          cdkDropListOrientation="horizontal">
-          <mat-chip *ngIf="engineer?.role">
-            {{engineer.role}}
-          </mat-chip>
-        </mat-chip-list>
-      </mat-cell>
-    </ng-container>
-
-    <ng-container matColumnDef="roleActions">
-      <mat-header-cell *matHeaderCellDef class="font-style-smaller"></mat-header-cell>
-      <mat-cell *matCellDef="let engineer">
-        <mat-select *ngIf="engineer" [(ngModel)]="engineer.role" (ngModelChange)="selectRole($event, engineer)">
-          <mat-form-field appearance="fill" class="dropdown-input">
-            <input matInput placeholder="Search or create role" [(ngModel)]="newRoleName"
-                   (ngModelChange)="filteredRoles = this.searchRole()">
-          </mat-form-field>
-          <mat-option *ngIf="filteredRoles.length === 0" (click)="selectRole($event, engineer)">
-            <mat-icon>add</mat-icon>
-            Create new role ({{newRoleName}})
-          </mat-option>
-          <mat-option *ngFor="let role of filteredRoles" [value]="role">{{role.name}}</mat-option>
-        </mat-select>
-      </mat-cell>
-    </ng-container>
-
-    <ng-container matColumnDef="tags">
-      <mat-header-cell *matHeaderCellDef class="font-style-smaller jc-center"> Tags</mat-header-cell>
-      <mat-cell *matCellDef="let engineer">
-        <mat-chip-list
-          cdkDropList
-          cdkDropListOrientation="horizontal">
-          <mat-chip *ngFor="let tag of engineer?.tags">
-            {{tag?.name}}
-          </mat-chip>
-        </mat-chip-list>
-      </mat-cell>
-    </ng-container>
-
-    <ng-container matColumnDef="tagsAction">
-      <mat-header-cell *matHeaderCellDef class="font-style-smaller"></mat-header-cell>
-      <mat-cell *matCellDef="let engineer">
-        <mat-select *ngIf=engineer [(ngModel)]="engineer.tags[engineer.tags?.length]"
-                    (ngModelChange)="selectTag($event, engineer)">
-          <mat-form-field appearance="fill" class="dropdown-input">
-            <input matInput placeholder="Search or create tag" [(ngModel)]="newTagName"
-                   (ngModelChange)="filteredTags = this.searchTag()">
-          </mat-form-field>
-          <mat-option *ngIf="filteredTags.length === 0" (click)="selectTag($event, engineer)">
-            <mat-icon>add</mat-icon>
-            Create new tag ({{newTagName}})
-          </mat-option>
-          <mat-option *ngFor="let tag of filteredTags" [value]="tag">{{tag.name}}</mat-option>
-        </mat-select>
-      </mat-cell>
-    </ng-container>
-
-    <ng-container matColumnDef="teams">
-      <mat-header-cell *matHeaderCellDef class="font-style-smaller jc-center"> Teams</mat-header-cell>
-      <mat-cell *matCellDef="let engineer">
-        <mat-chip-list
-          cdkDropList
-          cdkDropListOrientation="horizontal">
-          <mat-chip *ngFor="let team of engineer?.teams">
-            {{getTeamName(team)}}
-          </mat-chip>
-        </mat-chip-list>
-      </mat-cell>
-    </ng-container>
-
-    <ng-container matColumnDef="teamsAction">
-      <mat-header-cell *matHeaderCellDef class="font-style-smaller"></mat-header-cell>
-      <mat-cell *matCellDef="let engineer">
-        <mat-select *ngIf="engineer" [(ngModel)]="engineer.teams[0]" (ngModelChange)="selectTeam($event, engineer)">
-          <mat-form-field appearance="fill" class="dropdown-input">
-            <input matInput placeholder="Search or create team" [(ngModel)]="newTeamName"
-                   (ngModelChange)="filteredTeams = this.searchTeam()">
-          </mat-form-field>
-          <mat-option *ngIf="filteredTeams.length === 0" (click)="manageTeamSelection($event, engineer)">
-            <mat-icon>add</mat-icon>
-            Create new team ({{newTeamName}})
-          </mat-option>
-          <mat-option *ngFor="let team of filteredTeams" [value]="team">{{team.name}}</mat-option>
-        </mat-select>
-      </mat-cell>
-    </ng-container>
-
-    <ng-container matColumnDef="reportsTo">
-      <mat-header-cell *matHeaderCellDef class="font-style-smaller jc-center"> Reports To</mat-header-cell>
-      <mat-cell *matCellDef="let engineer">
-        <mat-chip-list
-          cdkDropList
-          cdkDropListOrientation="horizontal">
-          {{getReportsTo(engineer.reportsTo)}}
-        </mat-chip-list>
-      </mat-cell>
-    </ng-container>
-
-    <ng-container matColumnDef="reportsToAction">
-      <mat-header-cell *matHeaderCellDef class="font-style-smaller"></mat-header-cell>
-      <mat-cell *matCellDef="let engineer">
-        <mat-select *ngIf="engineer" [(ngModel)]="engineer.reportsTo"
-                    (ngModelChange)="selectReportsTo($event, engineer)">
-          <mat-option *ngFor="let engineer of engineers" [value]="engineer">{{engineer.name}}</mat-option>
-        </mat-select>
-      </mat-cell>
-    </ng-container>
-
-    <ng-container matColumnDef="status">
-      <mat-header-cell *matHeaderCellDef class="font-style-smaller jc-center"> Status</mat-header-cell>
-      <mat-cell *matCellDef="let engineer">
-        <mat-chip-list
-          cdkDropList
-          cdkDropListOrientation="horizontal">
-          <mat-chip *ngIf="engineer.status">
-            {{engineer.status}}
-          </mat-chip>
-        </mat-chip-list>
-      </mat-cell>
-    </ng-container>
-
-    <ng-container matColumnDef="statusAction">
-      <mat-header-cell *matHeaderCellDef class="font-style-smaller"></mat-header-cell>
-      <mat-cell *matCellDef="let engineer">
-        <mat-select *ngIf="engineer" [(ngModel)]="engineer.status" (ngModelChange)="selectStatus($event, engineer)">
-          <mat-option *ngFor="let status of statuses" [value]="status">{{status}}</mat-option>
-        </mat-select>
-      </mat-cell>
-    </ng-container>
-
-    <ng-container matColumnDef="actions">
-      <mat-header-cell *matHeaderCellDef alignment="center" class="font-style-smaller"></mat-header-cell>
-      <mat-cell *matCellDef="let engineer">
+<div class="container">
+  <p-table #dt [value]="engineers"
+           [(selection)]="selectedEngineers" dataKey="id" styleClass="p-datatable-customers"
+           [frozenColumns]="[{field: 'name', header: 'Name' }]"
+           [rowHover]="true"
+           [rows]="10" [showCurrentPageReport]="true" [rowsPerPageOptions]="[10,25,50]" [loading]="loading"
+           responsiveLayout="scroll"
+           [paginator]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+           [filterDelay]="0" [globalFilterFields]="['name','country','representative.name','status']">
+    <ng-template pTemplate="caption">
+      <div class="d-flex jc-between align-items-center">
+        <div class="d-flex">
+          <p-checkbox class="mr-10" [(ngModel)]="showAll" label="All" [binary]="true"
+                      (ngModelChange)="showEngineers(); showIgnored = false">
+          </p-checkbox>
+          <p-checkbox [(ngModel)]="showIgnored" label="Ignored" [binary]="true"
+                      (ngModelChange)="showEngineersByIgnorableProperty()">
+          </p-checkbox>
+        </div>
         <div>
+          <span class="p-input-icon-left">
+             <i class="pi pi-search"></i>
+             <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
+                    placeholder="Search"/>
+          </span>
+        </div>
+        <div class="buttons-section">
+          <button mat-button class="sortinghat-cyan-bg add-button mr-10" matTooltip="Sanitize Names"
+                  (click)="sanitizeNames()" *ngIf="selectedEngineers.length > 0">
+            <mat-icon>text_fields</mat-icon>
+          </button>
+          <button mat-button class="sortinghat-orange-bg add-button mr-10" matTooltip="Anonymize"
+                  (click)="anonymize()" *ngIf="selectedEngineers.length > 0">
+            <mat-icon>perm_identity</mat-icon>
+          </button>
+          <button mat-button class="sortinghat-cyan-bg add-button mr-10" matTooltip="Mark as ignored"
+                  (click)="ignore()" *ngIf="selectedEngineers.length > 0">
+            <mat-icon *ngIf="!showIgnored">block</mat-icon>
+            <mat-icon *ngIf="showIgnored">check</mat-icon>
+          </button>
+          <button mat-button class="sortinghat-orange-bg add-button mr-10" matTooltip="Merge"
+                  (click)="mergeEngineers()">
+            <mat-icon>merge_type</mat-icon>
+          </button>
+          <button mat-button class="sortinghat-cyan-bg add-button" matTooltip="Add"
+                  (click)="openDialog()">
+            <mat-icon>add</mat-icon>
+          </button>
+        </div>
+      </div>
+    </ng-template>
+    <ng-template pTemplate="header">
+      <tr>
+        <th>
+          <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+        </th>
+        <th pSortableColumn="name">
+          <div class="flex jc-between align-items-center">
+            Name
+            <p-sortIcon field="name"></p-sortIcon>
+          </div>
+        </th>
+        <th pSortableColumn="email" [colSpan]="0.1">
+          <div class="flex jc-start align-items-center">
+            Email
+            <p-sortIcon field="email"></p-sortIcon>
+          </div>
+        </th>
+        <th pSortableColumn="username">
+          <div class="flex jc-between align-items-center">
+            Username
+            <p-sortIcon field="username"></p-sortIcon>
+          </div>
+        </th>
+        <th pSortableColumn="city">
+          <div class="flex jc-between align-items-center">
+            City
+            <p-sortIcon field="city"></p-sortIcon>
+          </div>
+        </th>
+        <th pSortableColumn="country">
+          <div class="flex jc-between align-items-center">
+            Country
+            <p-sortIcon field="country"></p-sortIcon>
+          </div>
+        </th>
+        <th pSortableColumn="seniority">
+          <div class="flex jc-between align-items-center">
+            Seniority
+            <p-sortIcon field="seniority"></p-sortIcon>
+          </div>
+        </th>
+        <th pSortableColumn="role">
+          <div class="flex jc-between align-items-center">
+            Role
+            <p-sortIcon field="role"></p-sortIcon>
+            <p-columnFilter type="text" field="role" display="menu" class="ml-auto"></p-columnFilter>
+          </div>
+        </th>
+        <th pSortableColumn="tags">
+          <div class="flex jc-between align-items-center">
+            Tags
+            <p-sortIcon field="tags"></p-sortIcon>
+            <p-columnFilter type="text" field="tags" display="menu" class="ml-auto"></p-columnFilter>
+          </div>
+        </th>
+        <th pSortableColumn="teams">
+          <div class="flex jc-between align-items-center">
+            Teams
+            <p-sortIcon field="teams"></p-sortIcon>
+            <p-columnFilter type="text" field="teams" display="menu" class="ml-auto"></p-columnFilter>
+          </div>
+        </th>
+        <th pSortableColumn="reportsTo">
+          <div class="flex jc-between align-items-center">
+            Superior
+            <p-sortIcon field="reportsTo"></p-sortIcon>
+            <p-columnFilter type="text" field="reportsTo" display="menu" class="ml-auto"></p-columnFilter>
+          </div>
+        </th>
+        <th pSortableColumn="status">
+          <div class="flex jc-between align-items-center">
+            Status
+            <p-sortIcon field="status"></p-sortIcon>
+            <p-columnFilter type="text" field="status" display="menu" class="ml-auto"></p-columnFilter>
+          </div>
+        </th>
+        <th pSortableColumn="actions">
+          <div class="flex jc-between align-items-center">
+            Actions
+          </div>
+        </th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-engineer>
+      <tr class="p-selectable-row">
+        <td>
+          <p-tableCheckbox [value]="engineer"></p-tableCheckbox>
+        </td>
+        <td>
+          <span class="p-column-title">Name</span>
+          {{engineer.name}}
+        </td>
+        <td>
+          <span class="p-column-title">Email</span>
+          <span class="image-text">{{engineer.email}}</span>
+        </td>
+        <td>
+          <span class="p-column-title">Username</span>
+          <span class="image-text">{{engineer.username}}</span>
+        </td>
+        <td>
+          <span class="p-column-title">City</span>
+          {{engineer.city}}
+        </td>
+        <td>
+          <span class="p-column-title">Country</span>
+          {{engineer.country}}
+        </td>
+        <td>
+          <span class="p-column-title">Seniority</span>
+          <span>{{engineer.senority}}</span>
+        </td>
+        <td>
+          <span class="p-column-title">Role</span>
+          <div class="d-flex jc-between">
+            <span>{{engineer.role}}</span>
+            <mat-select [(ngModel)]="engineer.role" (ngModelChange)="selectRole($event, engineer)">
+              <mat-form-field appearance="fill" class="dropdown-input">
+                <input matInput placeholder="Search or create role" [(ngModel)]="newRoleName"
+                       (ngModelChange)="filteredRoles = this.searchRole()">
+              </mat-form-field>
+              <mat-option *ngIf="filteredRoles.length === 0" (click)="selectRole($event, engineer)">
+                <mat-icon>add</mat-icon>
+                Create new role ({{newRoleName}})
+              </mat-option>
+              <mat-option *ngFor="let role of filteredRoles" [value]="role">{{role.name}}</mat-option>
+            </mat-select>
+          </div>
+        </td>
+        <td>
+          <span class="p-column-title">Tags</span>
+          <div class="d-flex jc-between">
+            <mat-chip-list
+              cdkDropList
+              cdkDropListOrientation="horizontal">
+              <mat-chip *ngFor="let tag of engineer?.tags">
+                {{tag?.name}}
+              </mat-chip>
+            </mat-chip-list>
+            <mat-select *ngIf=engineer [(ngModel)]="engineer.tags[engineer.tags?.length]"
+                        (ngModelChange)="selectTag($event, engineer)">
+              <mat-form-field appearance="fill" class="dropdown-input">
+                <input matInput placeholder="Search or create tag" [(ngModel)]="newTagName"
+                       (ngModelChange)="filteredTags = this.searchTag()">
+              </mat-form-field>
+              <mat-option *ngIf="filteredTags.length === 0" (click)="selectTag($event, engineer)">
+                <mat-icon>add</mat-icon>
+                Create new tag ({{newTagName}})
+              </mat-option>
+              <mat-option *ngFor="let tag of filteredTags" [value]="tag">{{tag.name}}</mat-option>
+            </mat-select>
+          </div>
+        </td>
+        <td>
+          <span class="p-column-title">Teams</span>
+          <div class="d-flex jc-between">
+            <mat-chip-list
+              cdkDropList
+              cdkDropListOrientation="horizontal">
+              <mat-chip *ngFor="let team of engineer?.teams">
+                {{getTeamName(team)}}
+              </mat-chip>
+            </mat-chip-list>
+            <mat-select *ngIf="engineer" [(ngModel)]="engineer.teams[0]" (ngModelChange)="selectTeam($event, engineer)">
+              <mat-form-field appearance="fill" class="dropdown-input">
+                <input matInput placeholder="Search or create team" [(ngModel)]="newTeamName"
+                       (ngModelChange)="filteredTeams = this.searchTeam()">
+              </mat-form-field>
+              <mat-option *ngIf="filteredTeams.length === 0" (click)="manageTeamSelection($event, engineer)">
+                <mat-icon>add</mat-icon>
+                Create new team ({{newTeamName}})
+              </mat-option>
+              <mat-option *ngFor="let team of filteredTeams" [value]="team">{{team.name}}</mat-option>
+            </mat-select>
+          </div>
+        </td>
+        <td>
+          <span class="p-column-title">Superior</span>
+          <div class="d-flex jc-between" [class.jc-end]="!getReportsTo(engineer.reportsTo)">
+            {{getReportsTo(engineer.reportsTo)}}
+            <mat-select *ngIf="engineer" [(ngModel)]="engineer.reportsTo"
+                        (ngModelChange)="selectReportsTo($event, engineer)">
+              <mat-option *ngFor="let engineer of engineers" [value]="engineer">{{engineer.name}}</mat-option>
+            </mat-select>
+          </div>
+        </td>
+        <td>
+          <span class="p-column-title">Status</span>
+          <div class="d-flex jc-between">
+            <mat-chip-list
+              cdkDropList
+              cdkDropListOrientation="horizontal">
+              <mat-chip *ngIf="engineer.status">
+                {{engineer.status}}
+              </mat-chip>
+            </mat-chip-list>
+            <mat-select *ngIf="engineer" [(ngModel)]="engineer.status" (ngModelChange)="selectStatus($event, engineer)">
+              <mat-option *ngFor="let status of statuses" [value]="status">{{status}}</mat-option>
+            </mat-select>
+          </div>
+        </td>
+        <td>
+          <span class="p-column-title">Actions</span>
           <button mat-button class="action-button" id="edit-button"
                   matTooltip="Edit"
                   (click)="selectedEngineer = engineer; openInfoDialog()">
             <mat-icon class="edit-icon sortinghat-orange">edit</mat-icon>
           </button>
           <span class="button-number">{{engineer.identities?.length}}</span>
-        </div>
-      </mat-cell>
-    </ng-container>
-
-    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-  </mat-table>
-  <mat-toolbar-row>
-    <mat-paginator [pageSizeOptions]="[50,100, 500, 1000]"
-                   (page)="dataSource.paginator = paginator"
-                   pageSize="50"
-                   showFirstLastButtons>
-    </mat-paginator>
-  </mat-toolbar-row>
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="8">No engineers found.</td>
+      </tr>
+    </ng-template>
+  </p-table>
 </div>

@@ -6,30 +6,25 @@ import {
   Output,
   EventEmitter,
   SimpleChanges,
-  ViewChild
 } from '@angular/core';
-import {Engineer} from '../../data/engineer';
-import {Project} from '../../data/project';
-import {MatTableDataSource} from '@angular/material/table';
-import {Identity} from '../../data/identity';
-import {Team} from '../../data/team';
-import {TeamsService} from '../../services/teams.service';
-import {ProjectService} from '../../services/project.service';
-import {TagService} from '../../services/tag.service';
-import {Tag} from '../../data/tag';
-import {RoleService} from '../../services/role.service';
-import {ActivatedRoute, Router} from '@angular/router';
-import {Role} from '../../data/role';
-import {SelectionModel} from '@angular/cdk/collections';
-import {MatSort, Sort} from '@angular/material/sort';
-import {LiveAnnouncer} from '@angular/cdk/a11y';
-import {NewEngineerPopupComponent} from '../new-engineer-popup/new-engineer-popup.component';
-import {MatDialog} from '@angular/material/dialog';
-import {EngineerDetailsPopupComponent} from '../engineer-details-popup/engineer-details-popup.component';
-import {MergeInformationPopupComponent} from '../merge-information-popup/merge-information-popup.component';
-import {MergeSuggestionService} from '../../services/ToolsService/merge-suggestion.service';
-import {Characters} from '../../resources/characters';
-import {MatPaginator} from '@angular/material/paginator';
+import { Engineer } from '../../data/engineer';
+import { Project } from '../../data/project';
+import { Identity } from '../../data/identity';
+import { Team } from '../../data/team';
+import { TeamsService } from '../../services/teams.service';
+import { ProjectService } from '../../services/project.service';
+import { TagService } from '../../services/tag.service';
+import { Tag } from '../../data/tag';
+import { RoleService } from '../../services/role.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Role } from '../../data/role';
+import { LiveAnnouncer } from '@angular/cdk/a11y';
+import { NewEngineerPopupComponent } from '../new-engineer-popup/new-engineer-popup.component';
+import { MatDialog } from '@angular/material/dialog';
+import { EngineerDetailsPopupComponent } from '../engineer-details-popup/engineer-details-popup.component';
+import { MergeInformationPopupComponent } from '../merge-information-popup/merge-information-popup.component';
+import { MergeSuggestionService } from '../../tools-services/merge-suggestion.service';
+import { Characters } from '../../resources/characters';
 
 @Component({
   selector: 'app-engineers-table',
@@ -37,9 +32,6 @@ import {MatPaginator} from '@angular/material/paginator';
   styleUrls: ['./engineers-table.component.css']
 })
 export class EngineersTableComponent implements OnInit, OnChanges {
-
-  @ViewChild(MatSort) sort: MatSort = new MatSort();
-  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
   @Input()
   engineer: Engineer;
@@ -57,9 +49,6 @@ export class EngineersTableComponent implements OnInit, OnChanges {
   @Output()
   manualMerge = new EventEmitter();
 
-  dataSource: MatTableDataSource<Engineer>;
-  displayedColumns = ['select', 'firstname', 'email', 'username', 'city', 'country', 'position', 'role', 'roleActions', 'tags', 'tagsAction',
-    'teams', 'teamsAction', 'reportsTo', 'reportsToAction', 'status', 'statusAction', 'actions'];
   teams: Team[] = [];
   filteredTeams: Team[] = [];
   filteredTags: Tag[] = [];
@@ -70,7 +59,6 @@ export class EngineersTableComponent implements OnInit, OnChanges {
   projects: Project[] = [];
   tags: Tag[] = [];
   tag: Tag;
-  selection = new SelectionModel<Engineer>(true, []);
   roles: Role[] = [];
   engineerCity: string[] = [];
   engineerCountry: string[] = [];
@@ -84,6 +72,8 @@ export class EngineersTableComponent implements OnInit, OnChanges {
   showIgnored = false;
   showAll = true;
   characters = Characters;
+  selectedEngineers: Engineer[] = [];
+  loading: boolean;
 
   constructor(private teamService: TeamsService,
               private projectService: ProjectService,
@@ -107,7 +97,6 @@ export class EngineersTableComponent implements OnInit, OnChanges {
       this.getEngineers();
     }
     if (this.project || (changes.engineers && this.project)) {
-      console.log(this.engineers, this.project)
       this.showEngineers();
     }
   }
@@ -118,33 +107,13 @@ export class EngineersTableComponent implements OnInit, OnChanges {
   }
 
   getEngineers() {
-    this.engineers.forEach(engineer => {
-      this.getEngineerDetails(engineer);
-    });
-    this.getTableData(this.engineers);
+    this.engineers.forEach(engineer => this.getEngineerDetails(engineer));
   }
 
   getEngineerDetails(engineer: Engineer) {
     engineer?.city ? this.engineerCity.push(engineer.city) : this.engineerCity.push('');
     engineer?.country ? this.engineerCountry.push(engineer.country) : this.engineerCountry.push('');
     engineer?.senority ? this.engineerPosition.push(engineer.senority) : this.engineerPosition.push('');
-  }
-
-  getTableData(engineers: Engineer[]) {
-    this.dataSource = new MatTableDataSource(engineers);
-    this.dataSource.paginator = this.paginator;
-  }
-
-  applyFilter($event, property: string) {
-    if ($event.length === 0) {
-      this.dataSource = new MatTableDataSource<Engineer>(this.engineers);
-    } else {
-      if (property.endsWith('s') && property !== 'status') {
-        this.dataSource = new MatTableDataSource(this.engineers.filter(engineer => engineer[property].find(prop => $event.includes(prop.name) || $event.includes(prop))));
-      } else {
-        this.dataSource = new MatTableDataSource(this.engineers.filter(engineer => $event.includes(engineer[property])));
-      }
-    }
   }
 
   getTeams() {
@@ -252,52 +221,8 @@ export class EngineersTableComponent implements OnInit, OnChanges {
     }
   }
 
-  isAllSelected() {
-    const numSelected = this.selection.selected.length;
-    const numRows = this.dataSource.data.length;
-    return numSelected === numRows;
-  }
-
-  masterToggle() {
-    if (this.isAllSelected()) {
-      this.selection.clear();
-      return;
-    }
-
-    this.selection.select(...this.dataSource.data);
-  }
-
-  sortData(sort: Sort) {
-    const data = this.dataSource.data.slice();
-    if (!sort.active || sort.direction === '') {
-      this.dataSource.data = data;
-      return;
-    }
-
-    this.dataSource.data = data.sort((a, b) => {
-      const isAsc = sort.direction === 'asc';
-      switch (sort.active) {
-        case 'firstname':
-          return this.compare(a.name, b.name, isAsc);
-        case 'email':
-          return this.compare(a.email, b.email, isAsc);
-        case 'city':
-          return this.compare(a.city, b.city, isAsc);
-        case 'country':
-          return this.compare(a.country, b.country, isAsc);
-        default:
-          return 0;
-      }
-    });
-  }
-
-  compare(a: number | string, b: number | string, isAsc: boolean) {
-    return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
-  }
-
   openDialog() {
     const dialogRef = this.dialog.open(NewEngineerPopupComponent, {data: {project: this.project}});
-
     dialogRef.afterClosed().subscribe(() => this.showEngineers());
   }
 
@@ -320,40 +245,27 @@ export class EngineersTableComponent implements OnInit, OnChanges {
     return this.engineers.find(eng => eng.id === reportsTo)?.name;
   }
 
-  search() {
-    this.dataSource = new MatTableDataSource(this.engineers
-      .filter(engineer => engineer.username.toLowerCase().includes(this.searchValue.toLowerCase()) ||
-        engineer.name.toLowerCase().includes(this.searchValue.toLowerCase()) ||
-        engineer.email.toLowerCase().includes(this.searchValue.toLowerCase()) ||
-        engineer.city.toLowerCase().includes(this.searchValue.toLowerCase()) ||
-        engineer.status.toLowerCase().includes(this.searchValue.toLowerCase()) ||
-        engineer.senority.toLowerCase().includes(this.searchValue.toLowerCase()) ||
-        engineer.country.toLowerCase().includes(this.searchValue.toLowerCase())));
-  }
-
   ignore() {
-    this.selection.selected.forEach(selectedEngineer => {
+    this.selectedEngineers.forEach(selectedEngineer => {
       this.project.engineers.find(eng => eng === selectedEngineer).ignorable = !this.showIgnored;
       this.projectService.editProject(this.project.id, this.project).subscribe(() => this.engineerChanged.emit());
-      this.selection.deselect(selectedEngineer);
     });
   }
 
   showEngineers() {
     this.engineers = this.project.engineers;
-    console.log(this.engineers);
     this.initializeData();
   }
 
   showEngineersByIgnorableProperty() {
-    this.getTableData(this.engineers.filter(engineer => engineer.ignorable === this.showIgnored));
+    this.engineers = this.engineers.filter(engineer => engineer.ignorable === this.showIgnored);
     this.showAll = false;
   }
 
   mergeEngineers() {
     const dialogRef = this.dialog.open(MergeInformationPopupComponent, {
       data: {
-        selected: this.selection.selected,
+        selected: this.selectedEngineers,
         project: this.project,
         delete: true
       }
@@ -367,7 +279,7 @@ export class EngineersTableComponent implements OnInit, OnChanges {
   }
 
   anonymize() {
-    this.selection.selected.forEach(eng => {
+    this.selectedEngineers.forEach(eng => {
       const selectedEngineer = this.project.engineers.find(engineer => engineer.id === eng.id);
       let index = Math.floor(Math.random() * this.characters.length);
       selectedEngineer.name = this.characters[index];
@@ -380,7 +292,7 @@ export class EngineersTableComponent implements OnInit, OnChanges {
   }
 
   sanitizeNames() {
-    this.selection.selected.forEach(eng => {
+    this.selectedEngineers.forEach(eng => {
       this.project.engineers.find(engineer => engineer.id === eng.id).name = this.mergeSuggestionService.cleanName(eng.name);
       this.projectService.editProject(this.project.id, this.project).subscribe(() => this.engineerChanged.emit());
     });

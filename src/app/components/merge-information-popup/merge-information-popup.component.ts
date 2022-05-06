@@ -1,19 +1,19 @@
-import {Component, Inject, OnInit} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {Engineer} from '../../data/engineer';
-import {Tag} from '../../data/tag';
-import {Identity} from '../../data/identity';
-import {Team} from '../../data/team';
-import {Role} from '../../data/role';
-import {FormControl} from '@angular/forms';
-import {EngineerService} from '../../services/engineer.service';
-import {ProjectService} from '../../services/project.service';
-import {TeamsService} from '../../services/teams.service';
-import {TagService} from '../../services/tag.service';
-import {RoleService} from '../../services/role.service';
-import {Project} from '../../data/project';
-import {MatTableDataSource} from '@angular/material/table';
-import {Characters} from '../../resources/characters';
+import { Component, Inject, OnInit } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { Engineer } from '../../data/engineer';
+import { Tag } from '../../data/tag';
+import { Identity } from '../../data/identity';
+import { Team } from '../../data/team';
+import { Role } from '../../data/role';
+import { FormControl } from '@angular/forms';
+import { EngineerService } from '../../services/engineer.service';
+import { ProjectService } from '../../services/project.service';
+import { TeamsService } from '../../services/teams.service';
+import { TagService } from '../../services/tag.service';
+import { RoleService } from '../../services/role.service';
+import { Project } from '../../data/project';
+import { MatTableDataSource } from '@angular/material/table';
+import { Characters } from '../../resources/characters';
 
 @Component({
   selector: 'app-merge-information-popup',

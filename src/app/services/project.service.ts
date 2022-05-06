@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../../environments/environment';
 import {Project} from '../data/project';
-import {MergeSuggestionService} from './ToolsService/merge-suggestion.service';
+import {MergeSuggestionService} from '../tools-services/merge-suggestion.service';
 import {Identity} from '../data/identity';
 import {BehaviorSubject, Observable} from 'rxjs';
 

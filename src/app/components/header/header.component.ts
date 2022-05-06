@@ -1,6 +1,6 @@
-import {Component, Input, OnInit, Output, EventEmitter} from '@angular/core';
-import {Router} from '@angular/router';
-import {Project} from '../../data/project';
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
+import { Router } from '@angular/router';
+import { Project } from '../../data/project';
 
 @Component({
   selector: 'app-header',
@@ -35,15 +35,7 @@ export class HeaderComponent implements OnInit {
     this.router.navigate(['']);
   }
 
-  getText() {
-      if (!this.currentView || this.currentView === 'authors') {
-        return 'Suggestions'
-      } else {
-        return 'Authors';
-      }
-  }
-
-  scroll(){
+  scroll() {
     !this.currentView || this.currentView === 'authors' ? this.currentView = 'suggestions' : this.currentView = 'authors';
     this.scrollButtonClicked.emit(this.currentView)
   }

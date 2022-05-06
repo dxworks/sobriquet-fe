@@ -1,7 +1,7 @@
-import {Component, OnInit} from '@angular/core';
-import {MatDialogRef} from '@angular/material/dialog';
-import {Team} from '../../data/team';
-import {TeamsService} from '../../services/teams.service';
+import { Component, OnInit } from '@angular/core';
+import { MatDialogRef } from '@angular/material/dialog';
+import { Team } from '../../data/team';
+import { TeamsService } from '../../services/teams.service';
 
 @Component({
   selector: 'app-new-team-popup',

@@ -1,10 +1,10 @@
-import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
-import {Team} from '../../data/team';
-import {DiagramService} from '../../services/ToolsService/diagram.service';
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Team } from '../../data/team';
+import { DiagramService } from '../../tools-services/diagram.service';
 import ArrayStore from 'devextreme/data/array_store';
-import {Router} from '@angular/router';
-import {Project} from '../../data/project';
-import {ProjectService} from '../../services/project.service';
+import { Router } from '@angular/router';
+import { Project } from '../../data/project';
+import { ProjectService } from '../../services/project.service';
 
 @Component({
   selector: 'app-teams-diagram',
@@ -48,13 +48,13 @@ export class TeamsDiagramComponent implements OnInit, OnChanges {
   }
 
   getData() {
-      if (!this.showAllTeams) {
-        this.nodes = this.diagramService.transformEngineersForSingleTeamSelection(this.project.engineers.filter(engineer => engineer.teams.includes(this.team.id) && engineer.project === this.project.id));
-        this.prepareDiagram();
-      } else {
-        this.nodes = this.diagramService.transformEngineersForHQ(this.project.engineers.filter(engineer => engineer.teams && engineer.project === this.project.id));
-        this.prepareDiagram();
-      }
+    if (!this.showAllTeams) {
+      this.nodes = this.diagramService.transformEngineersForSingleTeamSelection(this.project.engineers.filter(engineer => engineer.teams.includes(this.team.id) && engineer.project === this.project.id));
+      this.prepareDiagram();
+    } else {
+      this.nodes = this.diagramService.transformEngineersForHQ(this.project.engineers.filter(engineer => engineer.teams && engineer.project === this.project.id));
+      this.prepareDiagram();
+    }
   }
 
   prepareDiagram() {

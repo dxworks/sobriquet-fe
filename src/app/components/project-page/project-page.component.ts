@@ -1,12 +1,12 @@
-import {Component, OnInit} from '@angular/core';
-import {Identity} from '../../data/identity';
-import {ActivatedRoute, Router} from '@angular/router';
-import {Project} from '../../data/project';
-import {Engineer} from '../../data/engineer';
-import {ProjectService} from '../../services/project.service';
-import {FileUploadPopupComponent} from '../../components/file-upload-popup/file-upload-popup.component';
-import {MatDialog} from '@angular/material/dialog';
-import {EngineerService} from '../../services/engineer.service';
+import { Component, OnInit } from '@angular/core';
+import { Identity } from '../../data/identity';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Project } from '../../data/project';
+import { Engineer } from '../../data/engineer';
+import { ProjectService } from '../../services/project.service';
+import { FileUploadPopupComponent } from '../file-upload-popup/file-upload-popup.component';
+import { MatDialog } from '@angular/material/dialog';
+import { EngineerService } from '../../services/engineer.service';
 
 @Component({
   selector: 'app-project-page',
@@ -22,7 +22,8 @@ export class ProjectPageComponent implements OnInit {
   engineers: Engineer[] = [];
   identities: Identity[] = []
   allEngineers: Engineer[] = [];
-  currentView = ''
+  currentView = '';
+  subscription;
 
   constructor(private activatedRoute: ActivatedRoute,
               private engineerService: EngineerService,
@@ -30,17 +31,17 @@ export class ProjectPageComponent implements OnInit {
               private projectService: ProjectService,
               private router: Router,
   ) {
-    this.getProjectDetails();
   }
 
   ngOnInit(): void {
+    this.getProjectDetails();
   }
 
   getProjectDetails() {
-    this.projectService.allProjects$.subscribe(projects => {
+    this.subscription = this.projectService.allProjects$.subscribe(projects => {
       this.project = projects.find(project => project.name === this.router.url.split('/')[2]);
-      this.identities = this.project.identities.slice();
-      this.engineers = this.project.engineers.slice();
+      this.identities = this.project?.identities;
+      this.engineers = this.project?.engineers;
     });
   }
 

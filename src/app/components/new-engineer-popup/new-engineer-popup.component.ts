@@ -1,18 +1,17 @@
-import {Component, Inject, Input, OnInit} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {Team} from '../../data/team';
-import {FormControl} from '@angular/forms';
-import {Engineer} from '../../data/engineer';
-import {EngineerService} from '../../services/engineer.service';
-import {TeamsService} from '../../services/teams.service';
-import {Identity} from '../../data/identity';
-import {Tag} from '../../data/tag';
-import {Role} from '../../data/role';
-import {TagService} from '../../services/tag.service';
-import {RoleService} from '../../services/role.service';
-import {Project} from '../../data/project';
-import {ProjectService} from '../../services/project.service';
-import {Characters} from '../../resources/characters';
+import { Component, Inject, Input, OnInit } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { Team } from '../../data/team';
+import { FormControl } from '@angular/forms';
+import { Engineer } from '../../data/engineer';
+import { EngineerService } from '../../services/engineer.service';
+import { TeamsService } from '../../services/teams.service';
+import { Tag } from '../../data/tag';
+import { Role } from '../../data/role';
+import { TagService } from '../../services/tag.service';
+import { RoleService } from '../../services/role.service';
+import { Project } from '../../data/project';
+import { ProjectService } from '../../services/project.service';
+import { Characters } from '../../resources/characters';
 
 @Component({
   selector: 'app-new-engineer-popup',
@@ -37,7 +36,6 @@ export class NewEngineerPopupComponent implements OnInit {
   project: Project;
   characters = Characters;
   name: string;
-
   newEngineer: Engineer = new Engineer();
 
   constructor(public dialogRef: MatDialogRef<NewEngineerPopupComponent>,

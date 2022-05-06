@@ -1,9 +1,9 @@
-import {Component, OnInit} from '@angular/core';
-import {ProjectService} from '../../services/project.service';
-import {Project} from '../../data/project';
-import {Router} from '@angular/router';
-import {Engineer} from '../../data/engineer';
-import {EngineerService} from '../../services/engineer.service';
+import { Component, OnInit } from '@angular/core';
+import { ProjectService } from '../../services/project.service';
+import { Project } from '../../data/project';
+import { Router } from '@angular/router';
+import { Engineer } from '../../data/engineer';
+import { EngineerService } from '../../services/engineer.service';
 
 @Component({
   selector: 'app-home-page',

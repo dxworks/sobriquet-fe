@@ -1,9 +1,9 @@
-import {Component, Inject, OnInit} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {ProjectService} from '../../services/project.service';
-import {Project} from '../../data/project';
-import {Identity} from '../../data/identity';
-import {Engineer} from '../../data/engineer';
+import { Component, Inject, OnInit } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { ProjectService } from '../../services/project.service';
+import { Project } from '../../data/project';
+import { Identity } from '../../data/identity';
+import { Engineer } from '../../data/engineer';
 
 @Component({
   selector: 'app-file-upload-popup',
@@ -85,24 +85,25 @@ export class FileUploadPopupComponent implements OnInit {
     reader.readAsText(file);
   }
 
-  changeIdentityToEngineer(identities) {
+  changeIdentityToEngineer(identities: Identity[]) {
     const engineers = [];
-    identities?.forEach(identity => engineers.push({
-      name: identity.firstName + ' ' + identity.lastName,
-      email: identity.email,
-      project: '',
-      tags: [],
-      teams: [],
-      country: '',
-      city: '',
-      senority: '',
-      role: '',
-      identities: [],
-      status: '',
-      reportsTo: '',
-      username: identity.username,
-      ignorable: false
-    }));
+    identities?.forEach(identity => {
+      let engineer = new Engineer();
+      if (identity.username) {
+        engineer.username = identity.username;
+      }
+      if (identity.firstName) {
+        identity.lastName ? engineer.name = identity.firstName + ' ' + identity.lastName : engineer.name = identity.firstName;
+      } else {
+        if (identity.lastName) {
+          engineer.name = identity.lastName;
+        }
+      }
+      if (identity.email) {
+        engineer.email = identity.email;
+      }
+      engineers.push(engineer);
+    });
     return engineers;
   }
 }
