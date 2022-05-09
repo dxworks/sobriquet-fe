@@ -1,7 +1,6 @@
 <div class="container">
   <p-table #dt [value]="engineers"
            [(selection)]="selectedEngineers" dataKey="id" styleClass="p-datatable-customers"
-           [frozenColumns]="[{field: 'name', header: 'Name' }]"
            [rowHover]="true"
            [rows]="10" [showCurrentPageReport]="true" [rowsPerPageOptions]="[10,25,50]" [loading]="loading"
            responsiveLayout="scroll"
@@ -60,7 +59,7 @@
             <p-sortIcon field="name"></p-sortIcon>
           </div>
         </th>
-        <th pSortableColumn="email" [colSpan]="0.1">
+        <th pSortableColumn="email">
           <div class="flex jc-start align-items-center">
             Email
             <p-sortIcon field="email"></p-sortIcon>

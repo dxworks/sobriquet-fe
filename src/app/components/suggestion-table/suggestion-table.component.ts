@@ -6,31 +6,26 @@ import {
   EventEmitter,
   OnChanges,
   SimpleChanges,
-  ViewChild,
-  AfterViewInit, ChangeDetectorRef
+  ChangeDetectorRef
 } from '@angular/core';
-import {Identity} from '../../data/identity';
-import {MatTableDataSource} from '@angular/material/table';
-import {MergeSuggestionService} from '../../tools-services/merge-suggestion.service';
-import {Engineer} from '../../data/engineer';
-import {Project} from '../../data/project';
-import {EngineerService} from '../../services/engineer.service';
-import {ActivatedRoute} from '@angular/router';
-import {ProjectService} from '../../services/project.service';
-import {MatPaginator, MatPaginatorIntl} from '@angular/material/paginator';
-import {TagService} from '../../services/tag.service';
-import {MergeInformationPopupComponent} from '../merge-information-popup/merge-information-popup.component';
-import {MatDialog} from '@angular/material/dialog';
-import {Characters} from '../../resources/characters';
+import { Identity } from '../../data/identity';
+import { MergeSuggestionService } from '../../tools-services/merge-suggestion.service';
+import { Engineer } from '../../data/engineer';
+import { Project } from '../../data/project';
+import { EngineerService } from '../../services/engineer.service';
+import { ActivatedRoute } from '@angular/router';
+import { ProjectService } from '../../services/project.service';
+import { TagService } from '../../services/tag.service';
+import { MergeInformationPopupComponent } from '../merge-information-popup/merge-information-popup.component';
+import { MatDialog } from '@angular/material/dialog';
+import { Characters } from '../../resources/characters';
 
 @Component({
   selector: 'app-suggestion-table',
   templateUrl: './suggestion-table.component.html',
   styleUrls: ['./suggestion-table.component.css']
 })
-export class SuggestionTableComponent implements OnInit, OnChanges, AfterViewInit {
-
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+export class SuggestionTableComponent implements OnInit, OnChanges {
 
   @Input()
   identities: Identity[] = [];
@@ -48,8 +43,6 @@ export class SuggestionTableComponent implements OnInit, OnChanges, AfterViewIni
   @Output()
   suggestionsEmitter = new EventEmitter();
 
-  dataSource: MatTableDataSource<Identity>;
-  displayedColumns = ['firstname', 'lastname', 'username', 'email', 'source', 'actions'];
   suggestions: Identity[] = [];
   pagination: number[];
   identitiesByCluster = [];
@@ -58,6 +51,7 @@ export class SuggestionTableComponent implements OnInit, OnChanges, AfterViewIni
   characters = Characters;
   mergeResult: Engineer = new Engineer();
   allEngineers: Engineer[] = [];
+  selectedIdentities: Identity[] = [];
 
   constructor(private mergeSuggestionService: MergeSuggestionService,
               private engineersService: EngineerService,
@@ -74,18 +68,6 @@ export class SuggestionTableComponent implements OnInit, OnChanges, AfterViewIni
     this.prepareData();
     this.initTable();
     this.getMergedEngineerDetails();
-  }
-
-  ngAfterViewInit() {
-    this.pagination = [this.suggestions.length];
-    if (this.dataSource) {
-      this.paginator = new MatPaginator(new MatPaginatorIntl(), this.changeDetectorRef);
-      this.paginator._displayedPageSizeOptions = [this.suggestions.length];
-      setTimeout(
-        () => {
-          this.dataSource.paginator = this.paginator;
-        });
-    }
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -131,9 +113,6 @@ export class SuggestionTableComponent implements OnInit, OnChanges, AfterViewIni
 
   initTable() {
     this.pagination = [this.suggestions.length];
-    this.paginator = new MatPaginator(new MatPaginatorIntl(), this.changeDetectorRef);
-    this.paginator._displayedPageSizeOptions = [this.suggestions.length];
-    setTimeout(() => this.dataSource.paginator = this.paginator);
   }
 
   prepareData() {
@@ -154,15 +133,6 @@ export class SuggestionTableComponent implements OnInit, OnChanges, AfterViewIni
       this.merge();
     }
     this.pagination = [this.suggestions.length];
-  }
-
-  handleInput($event) {
-    return this.applyFilter($event.target.value);
-  }
-
-  applyFilter(filterValue: string) {
-    filterValue = filterValue.trim();
-    this.dataSource.filter = filterValue;
   }
 
   checkIdentity(identity: Identity) {
@@ -301,17 +271,8 @@ export class SuggestionTableComponent implements OnInit, OnChanges, AfterViewIni
     if (getSuggestions) {
       this.getSuggestions(this.identitiesByCluster[$event.pageIndex]);
     }
-    this.dataSource = new MatTableDataSource(this.identitiesByCluster[$event.pageIndex]);
     this.initTable();
     this.getMergedEngineerDetails();
-  }
-
-  manageCheckboxChange($event, identity) {
-    if ($event.checked) {
-      this.suggestions.push(identity);
-    } else {
-      this.suggestions.splice(this.suggestions.indexOf(identity), 1);
-    }
   }
 
   getSourceDisplayIcon(source: string) {

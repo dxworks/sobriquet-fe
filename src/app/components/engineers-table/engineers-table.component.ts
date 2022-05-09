@@ -56,7 +56,6 @@ export class EngineersTableComponent implements OnInit, OnChanges {
   newTeamName: string = '';
   newTagName: string = '';
   newRoleName: string = '';
-  projects: Project[] = [];
   tags: Tag[] = [];
   tag: Tag;
   roles: Role[] = [];
@@ -68,12 +67,12 @@ export class EngineersTableComponent implements OnInit, OnChanges {
   role: Role;
   statuses = ['In Project', 'Leaving', 'Left'];
   status: string;
-  searchValue: string;
   showIgnored = false;
   showAll = true;
   characters = Characters;
   selectedEngineers: Engineer[] = [];
   loading: boolean;
+  frozenCols = [{field: 'name', header: 'Name'}];
 
   constructor(private teamService: TeamsService,
               private projectService: ProjectService,

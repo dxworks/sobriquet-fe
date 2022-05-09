@@ -45,13 +45,13 @@ export class ProjectPageComponent implements OnInit {
     });
   }
 
-  updateIdentities(identities?) {
+  updateIdentities(identities?: Identity[]) {
     if (identities?.length > 0) {
       this.identities = identities;
     }
   }
 
-  manageProjectChanges(identities, engineers) {
+  manageProjectChanges(identities: Identity[], engineers: Engineer[]) {
     if (engineers) {
       engineers.forEach(eng => this.project.engineers.splice(this.project.engineers.indexOf(eng), 1));
       this.projectService.editProject(this.project.id, this.project).subscribe(() => this.getProjectDetails());

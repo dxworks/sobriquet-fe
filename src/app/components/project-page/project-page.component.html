@@ -4,7 +4,7 @@
     <div class="grid">
       <div class="d-flex align-items-center">
         <p class="title">{{project?.name}}</p>
-        <i class="pi pi-upload icon"></i>
+        <i class="pi pi-upload icon" (click)="openFileUploadDialog()"></i>
       </div>
       <app-engineers-table id="authors"
                            [engineers]="engineers"
@@ -13,14 +13,14 @@
                            [suggestions]="suggestions"
                            (engineerChanged)="changeEngineerDetails()"
                            (identitiesChanged)="manageDemerge($event)"></app-engineers-table>
-      <!--      <app-suggestion-table id="suggestions"-->
-      <!--                            [identities]="identities"-->
-      <!--                            [project-card]="project-card"-->
-      <!--                            [engineers]="engineers"-->
-      <!--                            [demergedIdentities]="demergedIdentities"-->
-      <!--                            (projectEmitter)="manageProjectChanges($event.projectIdentities, $event.engineers)"-->
-      <!--                            (engineerEmitter)="engineer = $event"-->
-      <!--                            (suggestionsEmitter)="suggestions = $event"></app-suggestion-table>-->
+      <app-suggestion-table id="suggestions"
+                            [identities]="identities"
+                            [project]="project"
+                            [engineers]="engineers"
+                            [demergedIdentities]="demergedIdentities"
+                            (projectEmitter)="manageProjectChanges($event.projectIdentities, $event.engineers)"
+                            (engineerEmitter)="engineer = $event"
+                            (suggestionsEmitter)="suggestions = $event"></app-suggestion-table>
     </div>
   </div>
 </div>

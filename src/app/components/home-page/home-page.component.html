@@ -1,10 +1,7 @@
 <div class="h100p content">
   <div class="new-project-container grid">
     <div class="input">
-      <mat-form-field appearance="fill">
-        <mat-label>Project name</mat-label>
-        <input matInput [(ngModel)]="projectName">
-      </mat-form-field>
+      <input type="text" pInputText [(ngModel)]="projectName" placeholder="Project name..."/>
     </div>
     <div class="file-upload" appDragDropFileUpload (fileDropped)="fileDropped = true; upload($event)">
       <span class="info">Drag and drop files here</span>
