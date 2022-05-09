@@ -43,6 +43,7 @@ import { RequestInterceptor } from './interceptors/request.interceptor';
 import { TableModule } from 'primeng/table';
 import { InputTextModule } from 'primeng/inputtext';
 import { CheckboxModule } from 'primeng/checkbox';
+import { DropdownModule } from 'primeng/dropdown';
 
 @NgModule({
   declarations: [
@@ -93,6 +94,7 @@ import { CheckboxModule } from 'primeng/checkbox';
     TableModule,
     InputTextModule,
     CheckboxModule,
+    DropdownModule
   ],
   providers: [{provide: HTTP_INTERCEPTORS, useClass: RequestInterceptor, multi: true}],
   bootstrap: [AppComponent]

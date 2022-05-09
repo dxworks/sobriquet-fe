@@ -1,5 +1,5 @@
-import {Injectable} from '@angular/core';
-import {Identity} from '../data/identity';
+import { Injectable } from '@angular/core';
+import { Identity } from '../data/identity';
 
 @Injectable({
   providedIn: 'root'
@@ -16,6 +16,10 @@ export class MergeSuggestionService {
   identitiesAreSimilar(firstIdentity: Identity, secondIdentity: Identity) {
     return this.firstNameIsSimilar(firstIdentity?.firstName, secondIdentity?.firstName) || this.lastNameIsSimilar(firstIdentity?.lastName, secondIdentity?.lastName) ||
       this.emailIsSimilar(firstIdentity?.email, secondIdentity?.email) || this.usernameIsSimilar(firstIdentity?.username, secondIdentity?.username);
+  }
+
+  fullNameIsSimilar(name1: string, name2: string) {
+    return this.getCleanSortedName(name1) === this.getCleanSortedName(name2);
   }
 
   firstNameIsSimilar(firstname1: string, firstname2: string) {
@@ -99,33 +103,22 @@ export class MergeSuggestionService {
     return [];
   }
 
-  buildCluster(identities) {
-    let cluster = [];
-    let identitiesByCluster = [];
-    for (let i = 0; i < identities?.length; i++) {
-      if (this.identitiesAreSimilar(identities[i], identities[i + 1])) {
-        if (!cluster.includes(identities[i])) {
-          cluster.push(identities[i]);
-        }
-        if (!cluster.includes(identities[i + 1])) {
-          cluster.push(identities[i + 1]);
-        }
-      } else if (!cluster.includes(identities[i])) {
-        cluster.push(identities[i]);
-        identitiesByCluster.push(cluster);
-        cluster = [];
+  buildCluster(identities: Identity[]) {
+    let cluster = new Map<string, Identity[]>();
+    identities?.forEach(identity => {
+      if (  Array.from(cluster.keys()).find(key => this.fullNameIsSimilar(key, identity.firstName + ' ' + identity.lastName))) {
+        cluster.get(  Array.from(cluster.keys()).find(key => this.fullNameIsSimilar(key, identity.firstName + ' ' + identity.lastName))).push(identity)
       } else {
-        identitiesByCluster.push(cluster);
-        cluster = [];
+        cluster.set(identity.firstName + ' ' + identity.lastName, [identity]);
       }
-    }
-    return identitiesByCluster;
+    })
+    return Array.from(cluster.values());
   }
 
   cleanName(name: string): string {
     name = name.replace(/[^a-zA-Z ]/g, '');
-    return name.split(' ')[0].substr(0, 1).toUpperCase() + name.split(' ')[0].substr(1) + ' ' +
-      name.split(' ')[1].substr(0, 1).toUpperCase() + name.split(' ')[1].substr(1);
+    return name.split(' ')[0].slice(0, 1).toUpperCase() + name.split(' ')[0].slice(1) + ' ' +
+      name.split(' ')[1].slice(0, 1).toUpperCase() + name.split(' ')[1].slice(1);
   }
 
   identitiesAreEqual(firstIdentity: Identity, secondIdentity: Identity) {
@@ -136,4 +129,26 @@ export class MergeSuggestionService {
       firstIdentity.source === secondIdentity.source;
   }
 
+  getSourceDisplayIcon(source: string) {
+    switch (source) {
+      case 'jira' :
+        return 'assets/source/jira.png'
+      case 'github':
+        return 'assets/source/github.png'
+      case 'bitbucket':
+        return 'assets/source/bitbucket.png'
+      case 'circle':
+        return 'assets/source/circle.png'
+      case 'gitlab':
+        return 'assets/source/gitlab.png'
+      case 'jenkins':
+        return 'assets/source/jenkins.png'
+      case 'pivotal':
+        return 'assets/source/pivotal.png'
+      case 'travis':
+        return 'assets/source/travis.png'
+      default:
+        return 'assets/source/git.png'
+    }
+  }
 }

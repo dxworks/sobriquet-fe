@@ -1,14 +1,14 @@
-import {Component, Inject, OnInit} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {Engineer} from '../../data/engineer';
-import {Identity} from '../../data/identity';
-import {MatTableDataSource} from '@angular/material/table';
-import {SelectionModel} from '@angular/cdk/collections';
-import {EngineerService} from '../../services/engineer.service';
-import {Project} from '../../data/project';
-import {ProjectService} from '../../services/project.service';
-import {Characters} from '../../resources/characters';
-import {MergeSuggestionService} from '../../tools-services/merge-suggestion.service';
+import { Component, Inject, OnInit } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { Engineer } from '../../data/engineer';
+import { Identity } from '../../data/identity';
+import { MatTableDataSource } from '@angular/material/table';
+import { SelectionModel } from '@angular/cdk/collections';
+import { EngineerService } from '../../services/engineer.service';
+import { Project } from '../../data/project';
+import { ProjectService } from '../../services/project.service';
+import { Characters } from '../../resources/characters';
+import { MergeSuggestionService } from '../../tools-services/merge-suggestion.service';
 
 @Component({
   selector: 'app-engineer-details-popup',
@@ -44,9 +44,9 @@ export class EngineerDetailsPopupComponent implements OnInit {
   }
 
   save() {
-      this.project.identities = this.identities;
-      this.projectService.editProject(this.project.id, this.project).subscribe();
-      this.dialogRef.close({projectIdentities: this.identities})
+    this.identities = this.project.identities = this.project.identities.concat(this.selection.selected);
+    this.projectService.editProject(this.project.id, this.project).subscribe();
+    this.dialogRef.close({projectIdentities: this.identities})
   }
 
   isAllSelected() {

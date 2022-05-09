@@ -39,6 +39,7 @@ export class FileUploadPopupComponent implements OnInit {
       this.project.identities = this.projectIdentities.concat(this.projectService.transformIdentitiesName(JSON.parse(localStorage.getItem(this.selectedJSON.name))));
       this.project.engineers = this.projectEngineers.concat(this.changeIdentityToEngineer(this.projectService.transformIdentitiesName(JSON.parse(localStorage.getItem(this.selectedJSON.name)))));
       this.projectService.editProject(this.project.id, this.project).subscribe(() => {
+        this.projectService.getAllProjects();
         this.dialogRef.close(this.project.engineers);
       });
     } else {
@@ -50,6 +51,7 @@ export class FileUploadPopupComponent implements OnInit {
       this.project.identities = this.projectIdentities.concat(this.transformIdentities(fileResults));
       this.project.engineers = this.projectEngineers.concat(this.changeIdentityToEngineer(this.transformIdentities(fileResults)));
       this.projectService.editProject(this.project.id, this.project).subscribe(() => {
+        this.projectService.getAllProjects();
         this.dialogRef.close(this.project.engineers);
       });
     }

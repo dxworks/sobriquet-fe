@@ -19,8 +19,7 @@
                             [engineers]="engineers"
                             [demergedIdentities]="demergedIdentities"
                             (projectEmitter)="manageProjectChanges($event.projectIdentities, $event.engineers)"
-                            (engineerEmitter)="engineer = $event"
-                            (suggestionsEmitter)="suggestions = $event"></app-suggestion-table>
+                            (engineerEmitter)="engineer = $event"></app-suggestion-table>
     </div>
   </div>
 </div>

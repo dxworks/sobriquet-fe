@@ -45,6 +45,7 @@ export class HomePageComponent implements OnInit {
       this.project.name = this.projectName;
       this.projectService.addProject(this.project).subscribe(() => {
         this.getProjects();
+        this.projectService.getAllProjects();
         this.router.navigate([`/project/${this.projectName}/identities`]).then();
       });
     } else {
@@ -59,6 +60,7 @@ export class HomePageComponent implements OnInit {
       this.project.engineers = this.engineers;
       this.projectService.addProject(this.project).subscribe(response => {
         this.getProjects();
+        this.projectService.getAllProjects();
         this.router.navigate([`/project/${response.name}/identities`]).then();
       });
     }
@@ -108,5 +110,10 @@ export class HomePageComponent implements OnInit {
       }
       this.engineers.push(engineer);
     });
+  }
+
+  onDelete() {
+    this.projectService.getAllProjects();
+    this.getProjects();
   }
 }

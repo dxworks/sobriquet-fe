@@ -155,14 +155,15 @@ export class EngineersTableComponent implements OnInit, OnChanges {
 
   linkTeamToEngineer(teamId: string, engineer: Engineer) {
     this.project.engineers.find(eng => eng === engineer).teams.push(teamId);
+    if (this.project.engineers.find(eng => eng === engineer).teams.find(team => team.description)) {
+      this.project.engineers.find(eng => eng === engineer).teams.splice(this.project.engineers.find(eng => eng === engineer).teams.indexOf(this.project.engineers.find(eng => eng === engineer).teams.find(team => team.description)), 1);
+    }
     this.projectService.editProject(this.project.id, this.project).subscribe(() => this.engineerChanged.emit());
   }
 
-  linkTagToEngineer(tag: Tag, engineer: Engineer, onCreate?: boolean) {
-    if (onCreate && !engineer.tags.includes(tag)) {
-      this.project.engineers.find(eng => eng === engineer).tags.push(tag);
-      this.projectService.editProject(this.project.id, this.project).subscribe(() => this.engineerChanged.emit());
-    }
+  linkTagToEngineer(tag: Tag, engineer: Engineer) {
+    this.project.engineers.find(eng => eng === engineer).tags.push(tag);
+    this.projectService.editProject(this.project.id, this.project).subscribe(() => this.engineerChanged.emit());
   }
 
   linkRoleToEngineer($event, engineer: Engineer) {
@@ -199,7 +200,7 @@ export class EngineersTableComponent implements OnInit, OnChanges {
   createTag(engineer: Engineer) {
     this.tagService.addTag({name: this.newTagName}).subscribe(response => {
       this.getTags();
-      this.linkTagToEngineer(response, engineer, true);
+      this.linkTagToEngineer(response, engineer);
       this.getEngineers();
       this.newTagName = '';
     })
@@ -241,7 +242,7 @@ export class EngineersTableComponent implements OnInit, OnChanges {
   }
 
   getReportsTo(reportsTo: string) {
-    return this.engineers.find(eng => eng.id === reportsTo)?.name;
+    return this.project.engineers.find(eng => eng.id === reportsTo)?.name;
   }
 
   ignore() {
@@ -295,5 +296,13 @@ export class EngineersTableComponent implements OnInit, OnChanges {
       this.project.engineers.find(engineer => engineer.id === eng.id).name = this.mergeSuggestionService.cleanName(eng.name);
       this.projectService.editProject(this.project.id, this.project).subscribe(() => this.engineerChanged.emit());
     });
+  }
+
+  getUniqueTags(engineerTags: Tag[]) {
+    return engineerTags?.filter((value, index, self) =>
+      index === self.findIndex((t) => (
+        t.name === value.name
+      ))
+    )
   }
 }

@@ -183,11 +183,11 @@
             <mat-chip-list
               cdkDropList
               cdkDropListOrientation="horizontal">
-              <mat-chip *ngFor="let tag of engineer?.tags">
-                {{tag?.name}}
+              <mat-chip *ngFor="let tag of getUniqueTags(engineer?.tags)">
+                {{tag.name}}
               </mat-chip>
             </mat-chip-list>
-            <mat-select *ngIf=engineer [(ngModel)]="engineer.tags[engineer.tags?.length]"
+            <mat-select *ngIf=engineer [(ngModel)]="engineer?.tags[engineer?.tags?.length]"
                         (ngModelChange)="selectTag($event, engineer)">
               <mat-form-field appearance="fill" class="dropdown-input">
                 <input matInput placeholder="Search or create tag" [(ngModel)]="newTagName"
@@ -230,7 +230,7 @@
             {{getReportsTo(engineer.reportsTo)}}
             <mat-select *ngIf="engineer" [(ngModel)]="engineer.reportsTo"
                         (ngModelChange)="selectReportsTo($event, engineer)">
-              <mat-option *ngFor="let engineer of engineers" [value]="engineer">{{engineer.name}}</mat-option>
+              <mat-option *ngFor="let engineer of project.engineers" [value]="engineer">{{engineer.name}}</mat-option>
             </mat-select>
           </div>
         </td>

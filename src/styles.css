@@ -21,6 +21,10 @@ body {
   display: block !important;
 }
 
+.mb-2 {
+  margin-bottom: 2rem;
+}
+
 .mt-5 {
   margin-top: 5px;
 }
@@ -73,6 +77,10 @@ body {
   width: 80%;
 }
 
+.w-85p {
+  width: 85%;
+}
+
 .w-100p {
   width: 100%;
 }
@@ -120,6 +128,10 @@ body {
   display: flex;
 }
 
+.d-grid {
+  display: grid;
+}
+
 .jc-start {
   justify-content: start;
 }
@@ -129,7 +141,7 @@ body {
 }
 
 .jc-end {
-  justify-content: end!important;
+  justify-content: end !important;
 }
 
 .jc-around {
