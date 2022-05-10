@@ -20,7 +20,8 @@
             class="scroll-button"
             [class.selected]="urlPath.includes('teams')"
             (click)="scroll()">
-      {{getText()}}
+      <i class="pi pi-angle-double-down" *ngIf="!currentView || currentView === 'authors'"></i>
+      <i class="pi pi-angle-double-up" *ngIf="currentView === 'suggestions'"></i>
     </button>
   </div>
 </div>

@@ -1,14 +1,14 @@
-import {Component, Inject, OnInit} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {Engineer} from '../../data/engineer';
-import {Identity} from '../../data/identity';
-import {MatTableDataSource} from '@angular/material/table';
-import {SelectionModel} from '@angular/cdk/collections';
-import {EngineerService} from '../../services/engineer.service';
-import {Project} from '../../data/project';
-import {ProjectService} from '../../services/project.service';
-import {Characters} from '../../resources/characters';
-import {MergeSuggestionService} from '../../services/ToolsService/merge-suggestion.service';
+import { Component, Inject, OnInit } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { Engineer } from '../../data/engineer';
+import { Identity } from '../../data/identity';
+import { MatTableDataSource } from '@angular/material/table';
+import { SelectionModel } from '@angular/cdk/collections';
+import { EngineerService } from '../../services/engineer.service';
+import { Project } from '../../data/project';
+import { ProjectService } from '../../services/project.service';
+import { Characters } from '../../resources/characters';
+import { MergeSuggestionService } from '../../tools-services/merge-suggestion.service';
 
 @Component({
   selector: 'app-engineer-details-popup',
@@ -35,20 +35,8 @@ export class EngineerDetailsPopupComponent implements OnInit {
 
   ngOnInit(): void {
     this.selectedEngineer = this.data.engineer;
-    this.projectService.getById(this.data.project.id).subscribe(response => {
-      this.project = response;
-      this.identities = this.project.identities;
-    });
-    this.dataSource = new MatTableDataSource<Identity>(this.selectedEngineer.identities.reduce((accumalator, current) => {
-      if (
-        !accumalator.some(
-          (item) => item.id === current.id && this.mergeSuggestionService.identitiesAreEqual(item, current)
-        )
-      ) {
-        accumalator.push(current);
-      }
-      return accumalator;
-    }, []));
+    this.project = this.data.project;
+    this.dataSource = new MatTableDataSource<Identity>(this.projectService.getUniqueIdentities(this.selectedEngineer.identities));
   }
 
   onCancelClick(): void {
@@ -56,10 +44,9 @@ export class EngineerDetailsPopupComponent implements OnInit {
   }
 
   save() {
-    this.engineerService.edit(this.selectedEngineer).subscribe(() => {
-      this.projectService.editProject(this.project.id, this.identities).subscribe();
-      this.dialogRef.close({projectIdentities: this.identities})
-    });
+    this.identities = this.project.identities = this.project.identities.concat(this.selection.selected);
+    this.projectService.editProject(this.project.id, this.project).subscribe();
+    this.dialogRef.close({projectIdentities: this.identities})
   }
 
   isAllSelected() {

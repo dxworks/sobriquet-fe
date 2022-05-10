@@ -1,10 +1,7 @@
 <div class="h100p content">
   <div class="new-project-container grid">
     <div class="input">
-      <mat-form-field appearance="fill">
-        <mat-label>Project name</mat-label>
-        <input matInput [(ngModel)]="projectName">
-      </mat-form-field>
+      <input type="text" pInputText [(ngModel)]="projectName" placeholder="Project name..."/>
     </div>
     <div class="file-upload" appDragDropFileUpload (fileDropped)="fileDropped = true; upload($event)">
       <span class="info">Drag and drop files here</span>
@@ -18,6 +15,6 @@
     <button mat-button class="sortinghat-orange-bg save-button font-style-smaller" (click)="save()">SAVE</button>
   </div>
   <div class="block">
-    <app-project *ngFor="let project of projects" [project]="project" (projectDeleted)="getProjects()"></app-project>
+    <app-project *ngFor="let project of projects" [project]="project" (projectDeleted)="onDelete()"></app-project>
   </div>
 </div>

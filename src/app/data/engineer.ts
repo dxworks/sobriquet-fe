@@ -1,16 +1,16 @@
 import {Tag} from './tag';
 import {Identity} from './identity';
 
-export interface Engineer {
+export class Engineer {
   id?: string;
   name: string;
   senority: string;
-  teams: string[];
+  teams: any[];
   city: string;
   country: string;
   email: string;
   project: string;
-  tags: Tag[];
+  tags: any[];
   role: string;
   identities: Identity[];
   reportsTo: string;

@@ -14,11 +14,8 @@
   color: #FD8947;
 }
 
-.image {
-  display: grid;
-  margin-right: 40px;
+.icon {
+  font-size: 20px;
+  margin-right: 2rem;
   cursor: pointer;
-  width: 25px;
-  margin-left: auto;
-  margin-top: auto;
 }

@@ -1,5 +1,5 @@
 .header {
-  height: 80px;
+  height: 7rem;
   border-bottom: 2px solid #DBDDDD;
   width: 100%;
   padding-bottom: 40px;
@@ -46,10 +46,10 @@
 }
 
 .scroll-button {
-  border: 1px solid #FD8947;
-  border-radius: 5px;
-  color: #FD8947;
-  box-shadow: 2px 2px lightgray;
+  border: 1px solid #DBDDDD;
+  border-radius: 100%;
+  height: 2rem;
+  width: 2rem;
   text-align: center;
   font: normal normal bold 20px/70px Muli;
   letter-spacing: 0;
@@ -57,4 +57,7 @@
   background: white;
   margin-right: 25px;
   cursor: pointer;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
 }

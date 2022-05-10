@@ -1,176 +1,116 @@
 <h1 mat-dialog-title>Merge information</h1>
 <div mat-dialog-content class="grid">
   <div class="flex">
-    <mat-form-field appearance="fill" class="mr-10" style="width: 10rem">
-      <mat-label>Name</mat-label>
-      <input matInput [(ngModel)]="mergedEngineer.name" id="name">
-      <mat-select [(ngModel)]="name" (ngModelChange)="anonymize()" style="width: 10px">
-        <mat-option *ngFor="let character of characters" [value]="character">{{character}}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
+    <p-dropdown [options]="characters" [(ngModel)]="mergedEngineer.name" [editable]="true"
+                placeholder="Name"></p-dropdown>
 
-    <mat-form-field appearance="fill" class="mr-10" style="width: 10rem">
-      <mat-label>Email Address</mat-label>
-      <input matInput [(ngModel)]="mergedEngineer.email">
-    </mat-form-field>
+    <input type="text" [(ngModel)]="mergedEngineer.email" placeholder="Email" pInputText>
 
-    <mat-form-field appearance="fill" class="mr-10" style="width: 10rem">
-      <mat-label>Username</mat-label>
-      <input matInput [(ngModel)]="mergedEngineer.username">
-    </mat-form-field>
+    <input type="text" [(ngModel)]="mergedEngineer.username" placeholder="Username" pInputText>
 
-    <mat-form-field appearance="fill" class="mr-10" style="width: 10rem">
-      <mat-label>City</mat-label>
-      <input matInput [(ngModel)]="mergedEngineer.city">
-    </mat-form-field>
+    <input type="text" [(ngModel)]="mergedEngineer.city" placeholder="City" pInputText>
 
-    <mat-form-field appearance="fill" class="mr-10" style="width: 10rem">
-      <mat-label>Country</mat-label>
-      <input matInput [(ngModel)]="mergedEngineer.country">
-    </mat-form-field>
+    <input type="text" [(ngModel)]="mergedEngineer.country" placeholder="Country" pInputText>
 
-    <mat-form-field appearance="fill" class="mr-10" style="width: 10rem">
-      <mat-label>Position</mat-label>
-      <input matInput [(ngModel)]="mergedEngineer.senority">
-    </mat-form-field>
+    <input type="text" [(ngModel)]="mergedEngineer.senority" placeholder="Seniority" pInputText>
   </div>
   <div class="flex">
-    <mat-form-field appearance="fill" class="mr-10" style="width: 10rem">
-      <mat-label>Team</mat-label>
-      <mat-select [compareWith]="compareSimpleProperty" [formControl]="teamsFormControl" multiple>
-        <mat-option *ngFor="let team of teams" [value]="team">{{team.name}}</mat-option>
-      </mat-select>
-    </mat-form-field>
+    <p-dropdown [options]="teams" [(ngModel)]="mergedEngineer.teams" placeholder="Team"
+                optionLabel="name" id="team" optionValue="id"></p-dropdown>
 
-    <mat-form-field appearance="fill" class="mr-10" style="width: 10rem">
-      <mat-label>Role</mat-label>
-      <mat-select [compareWith]="compareSimpleProperty" [formControl]="rolesFormControl" multiple>
-        <mat-option *ngFor="let role of roles" [value]="role">{{role.name}}</mat-option>
-      </mat-select>
-    </mat-form-field>
+    <p-dropdown [options]="roles" [(ngModel)]="mergedEngineer.role" placeholder="Role" optionLabel="name"
+                optionValue="name"></p-dropdown>
 
-    <mat-form-field appearance="fill" class="mr-10" style="width: 10rem">
-      <mat-label>Tag</mat-label>
-      <mat-select [compareWith]="compareSimpleProperty" [formControl]="tagFormControl" multiple>
-        <mat-option *ngFor="let tag of tags" [value]="tag">{{tag.name}}</mat-option>
-      </mat-select>
-    </mat-form-field>
+    <p-dropdown [options]="tags" [(ngModel)]="mergedEngineer.tags" placeholder="Tag" optionLabel="name"></p-dropdown>
 
-    <mat-form-field appearance="fill" class="mr-10" style="width: 10rem">
-      <mat-label>Reports To</mat-label>
-      <mat-select [compareWith]="compareSimpleProperty" [formControl]="engineersFormControl" multiple>
-        <mat-option *ngFor="let engineer of engineers" [value]="engineer">{{engineer.name}}</mat-option>
-      </mat-select>
-    </mat-form-field>
+    <p-dropdown [options]="engineers" [(ngModel)]="mergedEngineer.reportsTo" placeholder="Superior"
+                optionLabel="name" optionValue="id"></p-dropdown>
 
-    <mat-form-field appearance="fill" class="mr-10" style="width: 10rem">
-      <mat-label>Status</mat-label>
-      <mat-select [compareWith]="compareSimpleProperty" [formControl]="statusFormControl" multiple>
-        <mat-option *ngFor="let status of statuses" [value]="status">{{status}}</mat-option>
-      </mat-select>
-    </mat-form-field>
+    <p-dropdown [options]="statuses" [(ngModel)]="mergedEngineer.status" placeholder="Status"></p-dropdown>
+
   </div>
 
   <div class="table">
-    <mat-table #table [dataSource]="dataSource" *ngIf="dataSource?.data.length > 0">
+    <mat-table [dataSource]="dataSource" *ngIf="dataSource?.data.length > 0">
       <ng-container matColumnDef="name">
         <mat-header-cell *matHeaderCellDef class="font-style-smaller">Name</mat-header-cell>
         <mat-cell *matCellDef="let engineer"
-                  class="font-style-smaller"> {{engineer?.name}}
-          <mat-icon class="icon sortinghat-cyan mlr-auto" *ngIf="engineer?.name"
-                    (click)="useProperty(engineer.name, 'name')">arrow_upward
-          </mat-icon>
+                  class="font-style-smaller">
+          <p (click)="useProperty(engineer.name, 'name')">{{engineer?.name}}</p>
         </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="email">
         <mat-header-cell *matHeaderCellDef class="font-style-smaller"> Email address</mat-header-cell>
-        <mat-cell *matCellDef="let engineer" class="font-style-smaller">{{engineer?.email}}
-          <mat-icon class="icon sortinghat-cyan mlr-auto" *ngIf="engineer?.email"
-                    (click)="useProperty(engineer.email, 'email')">arrow_upward
-          </mat-icon>
+        <mat-cell *matCellDef="let engineer" class="font-style-smaller">
+          <p (click)="useProperty(engineer.email, 'email')">{{engineer?.email}} </p>
         </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="username">
         <mat-header-cell *matHeaderCellDef class="font-style-smaller"> Username</mat-header-cell>
-        <mat-cell *matCellDef="let engineer" class="font-style-smaller">{{engineer?.username}}
-          <mat-icon class="icon sortinghat-cyan mlr-auto" *ngIf="engineer?.username"
-                    (click)="useProperty(engineer.username, 'username')">arrow_upward
-          </mat-icon>
+        <mat-cell *matCellDef="let engineer" class="font-style-smaller">
+          <p (click)="useProperty(engineer.username, 'username')">{{engineer?.username}}</p>
         </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="city">
         <mat-header-cell *matHeaderCellDef class="font-style-smaller"> City</mat-header-cell>
-        <mat-cell *matCellDef="let engineer" class="font-style-smaller">{{engineer?.city}}
-          <mat-icon class="icon sortinghat-cyan mlr-auto" *ngIf="engineer?.city"
-                    (click)="useProperty(engineer.city, 'city')">arrow_upward
-          </mat-icon>
+        <mat-cell *matCellDef="let engineer" class="font-style-smaller">
+          <p (click)="useProperty(engineer.city, 'city')">{{engineer?.city}}</p>
         </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="country">
         <mat-header-cell *matHeaderCellDef class="font-style-smaller"> Country</mat-header-cell>
-        <mat-cell *matCellDef="let engineer" class="font-style-smaller">{{engineer?.country}}
-          <mat-icon class="icon sortinghat-cyan mlr-auto" *ngIf="engineer?.country"
-                    (click)="useProperty(engineer.country, 'country')">arrow_upward
-          </mat-icon>
+        <mat-cell *matCellDef="let engineer" class="font-style-smaller">
+          <p (click)="useProperty(engineer.country, 'country')">{{engineer?.country}}</p>
         </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="senority">
         <mat-header-cell *matHeaderCellDef class="font-style-smaller"> Senority</mat-header-cell>
-        <mat-cell *matCellDef="let engineer" class="font-style-smaller">{{engineer?.senority}}
-          <mat-icon class="icon sortinghat-cyan mlr-auto" *ngIf="engineer?.senority"
-                    (click)="useProperty(engineer.senority, 'senority')">arrow_upward
-          </mat-icon>
+        <mat-cell *matCellDef="let engineer" class="font-style-smaller">
+          <p (click)="useProperty(engineer.senority, 'senority')">{{engineer?.senority}}</p>
         </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="role">
         <mat-header-cell *matHeaderCellDef class="font-style-smaller"> Role</mat-header-cell>
-        <mat-cell *matCellDef="let engineer" class="font-style-smaller">{{engineer?.role}}
-          <mat-icon class="icon sortinghat-cyan mlr-auto" *ngIf="engineer?.role"
-                    (click)="useProperty(engineer.role, 'role')">arrow_upward
-          </mat-icon>
+        <mat-cell *matCellDef="let engineer" class="font-style-smaller">
+          <p (click)="useProperty(engineer.role, 'role')">{{engineer?.role}}</p>
         </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="tags">
         <mat-header-cell *matHeaderCellDef class="font-style-smaller"> Tags</mat-header-cell>
-        <mat-cell *matCellDef="let engineer" class="font-style-smaller">{{getTags(engineer?.tags)}}
-          <mat-icon class="icon sortinghat-cyan mlr-auto" *ngIf="engineer?.tags"
-                    (click)="useProperty(engineer.tags, 'tags')">arrow_upward
-          </mat-icon>
+        <mat-cell *matCellDef="let engineer" class="font-style-smaller">
+          <p
+            (click)="useProperty(engineer.tags, 'tags')">{{getTags(engineer?.tags)}}</p>
         </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="teams">
         <mat-header-cell *matHeaderCellDef class="font-style-smaller"> Teams</mat-header-cell>
-        <mat-cell *matCellDef="let engineer" class="font-style-smaller">{{getTeams(engineer?.teams)}}
-          <mat-icon class="icon sortinghat-cyan mlr-auto" *ngIf="engineer?.teams"
-                    (click)="useProperty(engineer.teams, 'teams')">arrow_upward
-          </mat-icon>
+        <mat-cell *matCellDef="let engineer" class="font-style-smaller">
+          <p
+            (click)="useProperty(engineer.teams, 'teams')">{{getTeams(engineer?.teams)}}</p>
         </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="reportsTo">
         <mat-header-cell *matHeaderCellDef class="font-style-smaller"> Reports To</mat-header-cell>
         <mat-cell *matCellDef="let engineer" class="font-style-smaller">{{getReportsTo(engineer?.reportsTo)}}
-          <mat-icon class="icon sortinghat-cyan mlr-auto" *ngIf="engineer?.reportsTo"
-                    (click)="useProperty(engineer.reportsTo, 'reportsTo')">arrow_upward
-          </mat-icon>
+          <p
+            (click)="useProperty(engineer.reportsTo, 'reportsTo')">{{getReportsTo(engineer?.reportsTo)}}</p>
         </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="status">
         <mat-header-cell *matHeaderCellDef class="font-style-smaller"> Status</mat-header-cell>
-        <mat-cell *matCellDef="let engineer" class="font-style-smaller">{{engineer?.status}}
-          <mat-icon class="icon sortinghat-cyan mlr-auto" *ngIf="engineer?.status"
-                    (click)="useProperty(engineer.status, 'status')">arrow_upward
-          </mat-icon>
+        <mat-cell *matCellDef="let engineer" class="font-style-smaller">
+          <p
+            (click)="useProperty(engineer.status, 'status')">{{engineer?.status}}</p>
         </mat-cell>
       </ng-container>
 

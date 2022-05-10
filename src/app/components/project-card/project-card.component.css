@@ -9,8 +9,13 @@
   filter: drop-shadow(2px 4px 6px lightgray);
   cursor: pointer;
   width: 300px;
+  height: 5rem;
 }
 
 ._mat-animation-noopable.mat-card {
   justify-content: center;
+}
+
+.w-7 {
+  width: 7rem;
 }

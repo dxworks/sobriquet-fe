@@ -1,8 +1,8 @@
-import {RouterModule, Routes} from '@angular/router';
-import {NgModule} from '@angular/core';
-import {ProjectPageComponent} from './pages/project-page/project-page.component';
-import {TeamsPageComponent} from './pages/teams-page/teams-page.component';
-import {HomePageComponent} from './pages/home-page/home-page.component';
+import { RouterModule, Routes } from '@angular/router';
+import { NgModule } from '@angular/core';
+import { ProjectPageComponent } from './components/project-page/project-page.component';
+import { TeamsPageComponent } from './components/teams-page/teams-page.component';
+import { HomePageComponent } from './components/home-page/home-page.component';
 
 const routes: Routes = [
   {path: '', component: HomePageComponent},

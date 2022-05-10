@@ -1,14 +1,14 @@
-import {Component, Input, OnInit, Output, EventEmitter} from '@angular/core';
-import {Project} from '../../data/project';
-import {Router} from '@angular/router';
-import {ProjectService} from '../../services/project.service';
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
+import { Project } from '../../data/project';
+import { Router } from '@angular/router';
+import { ProjectService } from '../../services/project.service';
 
 @Component({
   selector: 'app-project',
-  templateUrl: './project.component.html',
-  styleUrls: ['./project.component.css']
+  templateUrl: './project-card.component.html',
+  styleUrls: ['./project-card.component.css']
 })
-export class ProjectComponent implements OnInit {
+export class ProjectCardComponent implements OnInit {
 
   @Input()
   project: Project;

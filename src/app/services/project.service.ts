@@ -1,35 +1,38 @@
-import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {environment} from '../../environments/environment';
-import {Project} from '../data/project';
-import {Identity} from '../data/identity';
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../environments/environment';
+import { Project } from '../data/project';
+import { MergeSuggestionService } from '../tools-services/merge-suggestion.service';
+import { Identity } from '../data/identity';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProjectService {
+  private allProjectsBehaviorSubject: BehaviorSubject<Project[]> = new BehaviorSubject<Project[]>([]);
 
-  constructor(private httpClient: HttpClient) {
+  allProjects$: Observable<Project[]> = this.allProjectsBehaviorSubject.asObservable();
+
+  constructor(private httpClient: HttpClient,
+              private mergeSuggestionService: MergeSuggestionService) {
+    this.getAllProjects();
   }
 
   getAllProjects() {
-    return this.httpClient.get<Project[]>(`${environment.apiUrl}/projects`);
+    return this.httpClient.get<Project[]>(`${environment.apiUrl}/projects`).subscribe(res => this.allProjectsBehaviorSubject.next(res));
   }
 
-  addProject(projectName: string, projectFiles: File | Identity[]) {
-    return this.httpClient.post<Project>(`${environment.apiUrl}/addProject/${projectName}`, projectFiles);
+  addProject(project: Project): Observable<Project> {
+    return this.httpClient.post<Project>(`${environment.apiUrl}/addProject`, project);
   }
 
-  delete(name: string) {
-    return this.httpClient.delete(`${environment.apiUrl}/deleteProject/${name}`);
+  delete(name: string): Observable<Project[]> {
+    return this.httpClient.delete<Project[]>(`${environment.apiUrl}/deleteProject/${name}`);
   }
 
-  editProject(id: string, suggestions: Identity[]) {
-    return this.httpClient.put(`${environment.apiUrl}/editProject/${id}`, suggestions);
-  }
-
-  getById(id: string) {
-    return this.httpClient.get<Project>(`${environment.apiUrl}/project/${id}`);
+  editProject(id: string, project: Project): Observable<Project> {
+    return this.httpClient.put<Project>(`${environment.apiUrl}/editProject/${id}`, project);
   }
 
   upload($event, fileDropped) {
@@ -42,7 +45,7 @@ export class ProjectService {
     return selectedJSON;
   }
 
-  transformIdentitiesName(identities) {
+  transformIdentitiesName(identities): Identity[] {
     identities?.forEach(identity => {
       if (identity.lenght > 0) {
         identity.forEach(id => {
@@ -57,5 +60,18 @@ export class ProjectService {
       }
     });
     return identities;
+  }
+
+  getUniqueIdentities(identities: Identity[]): Identity[] {
+    return identities?.reduce((accumalator, current) => {
+      if (
+        !accumalator.some(
+          (item) => item.id === current.id && this.mergeSuggestionService.identitiesAreEqual(item, current)
+        )
+      ) {
+        accumalator.push(current);
+      }
+      return accumalator;
+    }, []);
   }
 }

@@ -1,5 +1,5 @@
-import {Injectable} from '@angular/core';
-import {Identity} from '../../data/identity';
+import { Injectable } from '@angular/core';
+import { Identity } from '../data/identity';
 
 @Injectable({
   providedIn: 'root'
@@ -9,32 +9,36 @@ export class MergeSuggestionService {
   constructor() {
   }
 
-  checkBot(email: string) {
+  checkBot(email: string): boolean {
     return email.includes('newsletter') || email.includes('noreply') || email.includes('marketing') || email.includes('events') || email.includes('support');
   }
 
-  identitiesAreSimilar(firstIdentity: Identity, secondIdentity: Identity) {
+  identitiesAreSimilar(firstIdentity: Identity, secondIdentity: Identity): boolean {
     return this.firstNameIsSimilar(firstIdentity?.firstName, secondIdentity?.firstName) || this.lastNameIsSimilar(firstIdentity?.lastName, secondIdentity?.lastName) ||
       this.emailIsSimilar(firstIdentity?.email, secondIdentity?.email) || this.usernameIsSimilar(firstIdentity?.username, secondIdentity?.username);
   }
 
-  firstNameIsSimilar(firstname1: string, firstname2: string) {
+  fullNameIsSimilar(name1: string, name2: string): boolean {
+    return this.getCleanSortedName(name1) === this.getCleanSortedName(name2);
+  }
+
+  firstNameIsSimilar(firstname1: string, firstname2: string): boolean {
     return this.getCleanSortedName(firstname1) === this.getCleanSortedName(firstname2);
   }
 
-  lastNameIsSimilar(lastname1: string, lastname2: string) {
+  lastNameIsSimilar(lastname1: string, lastname2: string): boolean {
     return this.getCleanSortedName(lastname1) === this.getCleanSortedName(lastname2);
   }
 
-  emailIsSimilar(email1: string, email2: string) {
+  emailIsSimilar(email1: string, email2: string): boolean {
     return this.getCleanSortedEmail(email1) === this.getCleanSortedEmail(email2);
   }
 
-  usernameIsSimilar(username1: string, username2: string) {
+  usernameIsSimilar(username1: string, username2: string): boolean {
     return this.getCleanSortedUsername(username1) === this.getCleanSortedUsername(username2);
   }
 
-  getCleanSortedName(name: string) {
+  getCleanSortedName(name: string): string {
     return name?.toLowerCase();
   }
 
@@ -69,66 +73,25 @@ export class MergeSuggestionService {
     return cleanUsername;
   }
 
-  getMergeSuggestions(identities: Identity[]) {
-    identities = this.splitData(identities);
-    let smartMergeSuggestions = [];
-    identities.forEach(identity => identities.forEach(identity2 => {
-      if (this.identitiesAreSimilar(identity, identity2)) {
-        if (!smartMergeSuggestions.find(smartMergSugg => smartMergSugg === identity)) {
-          smartMergeSuggestions.push(identity);
-        }
-        if (!smartMergeSuggestions.find(smartMergSugg => smartMergSugg === identity2)) {
-          smartMergeSuggestions.push(identity2);
-        }
-      }
-    }));
-    return smartMergeSuggestions;
-  }
-
-  splitData(identities: Identity[]) {
-    if (identities) {
-      const modelIdentity = identities[0];
-      let partialIdentityArray = [modelIdentity];
-      identities.forEach(identity => {
-        if (this.identitiesAreSimilar(modelIdentity, identity)) {
-          partialIdentityArray.push(identity);
-        }
-      });
-      return partialIdentityArray;
-    }
-    return [];
-  }
-
-  buildCluster(identities) {
-    let cluster = [];
-    let identitiesByCluster = [];
-    for (let i = 0; i < identities?.length; i++) {
-      if (this.identitiesAreSimilar(identities[i], identities[i + 1])) {
-        if (!cluster.includes(identities[i])) {
-          cluster.push(identities[i]);
-        }
-        if (!cluster.includes(identities[i + 1])) {
-          cluster.push(identities[i + 1]);
-        }
-      } else if (!cluster.includes(identities[i])) {
-        cluster.push(identities[i]);
-        identitiesByCluster.push(cluster);
-        cluster = [];
+  buildCluster(identities: Identity[]) {
+    let cluster = new Map<string, Identity[]>();
+    identities?.forEach(identity => {
+      if (Array.from(cluster.keys()).find(key => this.fullNameIsSimilar(key, identity.firstName + ' ' + identity.lastName))) {
+        cluster.get(Array.from(cluster.keys()).find(key => this.fullNameIsSimilar(key, identity.firstName + ' ' + identity.lastName))).push(identity)
       } else {
-        identitiesByCluster.push(cluster);
-        cluster = [];
+        cluster.set(identity.firstName + ' ' + identity.lastName, [identity]);
       }
-    }
-    return identitiesByCluster;
+    })
+    return Array.from(cluster.values());
   }
 
   cleanName(name: string): string {
     name = name.replace(/[^a-zA-Z ]/g, '');
-    return name.split(' ')[0].substr(0, 1).toUpperCase() + name.split(' ')[0].substr(1) + ' ' +
-      name.split(' ')[1].substr(0, 1).toUpperCase() + name.split(' ')[1].substr(1);
+    return name.split(' ')[0].slice(0, 1).toUpperCase() + name.split(' ')[0].slice(1) + ' ' +
+      name.split(' ')[1].slice(0, 1).toUpperCase() + name.split(' ')[1].slice(1);
   }
 
-  identitiesAreEqual(firstIdentity: Identity, secondIdentity: Identity) {
+  identitiesAreEqual(firstIdentity: Identity, secondIdentity: Identity): boolean {
     return firstIdentity.firstName === secondIdentity.firstName &&
       firstIdentity.lastName === secondIdentity.lastName &&
       firstIdentity.email === secondIdentity.email &&
@@ -136,4 +99,26 @@ export class MergeSuggestionService {
       firstIdentity.source === secondIdentity.source;
   }
 
+  getSourceDisplayIcon(source: string): string {
+    switch (source) {
+      case 'jira' :
+        return 'assets/source/jira.png'
+      case 'github':
+        return 'assets/source/github.png'
+      case 'bitbucket':
+        return 'assets/source/bitbucket.png'
+      case 'circle':
+        return 'assets/source/circle.png'
+      case 'gitlab':
+        return 'assets/source/gitlab.png'
+      case 'jenkins':
+        return 'assets/source/jenkins.png'
+      case 'pivotal':
+        return 'assets/source/pivotal.png'
+      case 'travis':
+        return 'assets/source/travis.png'
+      default:
+        return 'assets/source/git.png'
+    }
+  }
 }

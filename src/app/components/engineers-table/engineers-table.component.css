@@ -1,54 +1,8 @@
 .container {
-  margin-left: 40px;
-  margin-right: 40px;
   margin-top: 30px;
   border-radius: 2px;
-}
-
-.mat-column-teamsAction, .mat-column-tagsAction, .mat-column-roleActions, .mat-column-statusAction, .mat-column-reportsToAction {
-  flex: 0 0 1% !important;
-}
-
-.mat-column-teams {
-  flex: 0 0 8% !important;
+  display: flex;
   justify-content: center;
-}
-
-.mat-column-firstname, .mat-column-lastname, .mat-column-city, .mat-column-country, .mat-column-username {
-  flex: 0 0 9% !important;
-}
-
-.mat-column-actions {
-  flex: 0.1;
-}
-
-.mat-column-city {
-  flex: 0 0 5%;
-}
-
-.mat-column-tags, .mat-column-role {
-  flex: 0 0 5%;
-  justify-content: center;
-}
-
-.mat-column-email {
-  flex: 0 0 15% !important;
-}
-
-.mat-column-reportsTo, .mat-column-status {
-  justify-content: center;
-}
-
-.mat-chip {
-  background: #1FAFA9;
-  color: white;
-  font-size: 12px;
-}
-
-.dropdown-input {
-  margin-top: 10px;
-  margin-left: 23px;
-  margin-bottom: 10px;
 }
 
 .action-button {
@@ -57,25 +11,6 @@
   height: 20px !important;
   min-width: auto;
   color: #1FAFA9;
-}
-
-.mat-input-element {
-  font: normal normal normal 14px/30px Muli !important;
-}
-
-th.mat-header-cell, td.mat-cell, td.mat-footer-cell {
-  border-bottom: unset !important;
-}
-
-.header {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  margin: 2px 10px;
-}
-
-::ng-deep.mat-form-field-type-mat-select:not(.mat-form-field-disabled) .mat-form-field-flex {
-  background: white;
 }
 
 .add-button {
@@ -98,22 +33,12 @@ th.mat-header-cell, td.mat-cell, td.mat-footer-cell {
   color: rgba(0, 0, 0, .54);
 }
 
-.search {
-  border-bottom: 1px solid rgba(148, 148, 148, 1);
-  height: 73%;
-  width: 20rem;
-}
-
-::ng-deep.mat-checkbox-layout .mat-checkbox-label {
-  color: rgba(148, 148, 148, 1);
-}
-
 .buttons-section {
   display: flex;
 }
 
 .grey {
-  color: rgba(0,0,0,.54);
+  color: rgba(0, 0, 0, .54);
   font-weight: 600;
 }
 
@@ -122,4 +47,160 @@ th.mat-header-cell, td.mat-cell, td.mat-footer-cell {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+
+.mat-input-element {
+  font-family: "Helvetica Neue","Segoe UI",helvetica,verdana,sans-serif!important;
+}
+
+.mat-chip {
+  background: #1FAFA9;
+  color: white;
+  font-size: 12px;
+}
+
+.mat-form-field {
+  display: block;
+}
+
+.mat-select {
+  width: 10%;
+}
+
+::ng-deep.mat-form-field-underline {
+  visibility: hidden
+}
+
+::ng-deep.mat-form-field-appearance-fill .mat-form-field-infix {
+  border: 1px solid #DBDDDD;
+  border-radius: 5px;
+  padding-top: 1rem;
+  padding-left: 0.5rem;
+}
+
+::ng-deep.mat-form-field-appearance-fill .mat-form-field-flex {
+  background: white;
+  height: 1rem;
+  padding: 0.5rem;
+}
+
+
+::ng-deep.p-datatable .p-datatable-header {
+  background: white;
+  color: #4A4343;
+  border: 1px solid #DBDDDD;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+}
+
+::ng-deep.p-inputtext, ::ng-deep.p-inputtext:enabled:hover, ::ng-deep.p-inputtext:enabled:focus, ::ng-deep.p-paginator .p-dropdown, ::ng-deep.p-paginator .p-dropdown:enabled:hover, ::ng-deep.p-paginator .p-dropdown:focus {
+  background: white;
+  border: 1px solid #DBDDDD;
+  border-radius: 5px;
+  box-shadow: unset;
+  color: #4A4343;
+}
+
+::ng-deep.p-input-icon-left > i:first-of-type, ::placeholder {
+  color: #DBDDDD !important;
+}
+
+::ng-deep.p-datatable .p-datatable-thead > tr > th, ::ng-deep.p-datatable .p-datatable-thead > tr > th:hover, ::ng-deep.p-datatable .p-datatable-tbody > tr > td, ::ng-deep.p-datatable .p-sortable-column.p-highlight {
+  background: white;
+  color: #4A4343;
+  border-color: #DBDDDD;
+  box-shadow: unset;
+}
+
+::ng-deep.p-datatable .p-datatable-thead > tr > th:first-child, ::ng-deep.p-datatable .p-datatable-tbody > tr > td:first-child {
+  border-left: 1px solid #DBDDDD;
+}
+
+::ng-deep.p-datatable .p-datatable-thead > tr > th:last-child, ::ng-deep.p-datatable .p-datatable-tbody > tr > td:last-child {
+  border-right: 1px solid #DBDDDD;
+}
+
+::ng-deep.pi-sort-alt:before, ::ng-deep.pi-filter:before, ::ng-deep.p-dropdown-panel .p-dropdown-items .p-dropdown-item.p-highlight,
+::ng-deep.p-dropdown-panel .p-dropdown-items .p-dropdown-item, ::ng-deep.p-dropdown-panel .p-dropdown-items .p-dropdown-item:hover{
+  color: #4A4343!important;
+}
+
+::ng-deep.p-checkbox .p-checkbox-box {
+  background: white !important;
+  border: 1px solid #4A4343 !important;
+}
+
+::ng-deep.p-datatable {
+  width: 95vw;
+  font-size: 14px;
+}
+
+::ng-deep.p-datatable .p-paginator-bottom {
+  background: white;
+  border: 1px solid #DBDDDD;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
+::ng-deep.p-paginator .p-paginator-current, ::ng-deep.p-paginator .p-paginator-pages .p-paginator-page, ::ng-deep.p-paginator .p-paginator-first, .p-paginator .p-paginator-prev, .p-paginator .p-paginator-next, .p-paginator .p-paginator-last, ::ng-deep.p-paginator .p-paginator-first, .p-paginator .p-paginator-prev, .p-paginator .p-paginator-next, .p-paginator .p-paginator-last,
+::ng-deep.p-paginator .p-paginator-first, .p-paginator .p-paginator-prev, .p-paginator .p-paginator-next, .p-paginator .p-paginator-last, ::ng-deep.pi,
+::ng-deep.p-datatable-thead > tr > th:hover {
+  color: #4A4343 !important;
+}
+
+::ng-deep.p-paginator .p-paginator-pages .p-paginator-page.p-highlight {
+  background: white;
+  color: #4A4343;
+  border: 1px solid #DBDDDD;
+}
+
+::ng-deep.p-link:focus {
+  box-shadow: unset;
+}
+
+::ng-deep.p-checkbox:not(.p-checkbox-disabled) .p-checkbox-box.p-focus, ::ng-deep.p-checkbox.p-checkbox-box:enabled:hover, ::ng-deep.p-checkbox .p-checkbox-box.p-highlight {
+  box-shadow: unset;
+  border: 1px solid #4A4343;
+  color: #4A4343;
+}
+
+::ng-deep.p-overlaypanel .p-overlaypanel-content, ::ng-deep.p-column-filter-add-button .p-button-label, .p-column-filter-remove-button .p-button-label {
+  background: white;
+  color: #4A4343;
+}
+
+::ng-deep.p-column-filter-overlay, ::ng-deep.p-column-filter-overlay-menu .p-column-filter-operator {
+  background: white !important;
+  border-color: white !important;
+}
+
+::ng-deep.p-dropdown, ::ng-deep.p-dropdown-items-wrapper, ::ng-deep.p-dropdown-panel .p-dropdown-items:not(.p-dropdown-virtualscroll),
+::ng-deep.p-dropdown:enabled:focus{
+  background: white!important;
+  color: #4A4343!important;
+  border-color: #DBDDDD!important;
+  box-shadow: unset!important;
+}
+
+::ng-deep.p-dropdown-panel .p-dropdown-items .p-dropdown-item.p-highlight {
+  background: #DBDDDD !important;
+}
+
+::ng-deep.p-column-filter-buttonbar .p-button {
+  border-color: #1FAFA9!important;
+  color: white!important;
+  background: #1FAFA9!important;
+  box-shadow: unset;
+}
+
+::ng-deep.p-button.p-button-outlined {
+  background: white!important;
+  border-color: #1FAFA9!important;
+  color: #1FAFA9!important;
+  box-shadow: unset;
+}
+
+::ng-deep.p-dropdown .p-dropdown-panel {
+  border-color: white;
 }

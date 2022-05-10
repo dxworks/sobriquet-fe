@@ -1,7 +1,7 @@
-import {Component, OnInit} from '@angular/core';
-import {MatDialogRef} from '@angular/material/dialog';
-import {Team} from '../../data/team';
-import {TeamsService} from '../../services/teams.service';
+import { Component, OnInit } from '@angular/core';
+import { MatDialogRef } from '@angular/material/dialog';
+import { Team } from '../../data/team';
+import { TeamsService } from '../../services/teams.service';
 
 @Component({
   selector: 'app-new-team-popup',
@@ -10,11 +10,7 @@ import {TeamsService} from '../../services/teams.service';
 })
 export class NewTeamPopupComponent implements OnInit {
 
-  newTeam: Team = new class implements Team {
-    description: string;
-    id: string;
-    name: string;
-  };
+  newTeam: Team = new Team();
 
   constructor(private dialogRef: MatDialogRef<NewTeamPopupComponent>,
               private teamsService: TeamsService) {

@@ -7,6 +7,7 @@
   margin-left: auto;
   margin-right: auto;
   display: grid;
+  padding-bottom: 200px;
 }
 
 input[type="file"] {
@@ -33,9 +34,7 @@ input[type="file"] {
 }
 
 .input {
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 30px;
+  margin: 2rem auto;
 }
 
 .save-button {
@@ -77,4 +76,15 @@ input[type="file"] {
 
 .content {
   margin-top: 5%;
+}
+
+:host::ng-deep.p-inputtext {
+  background: white !important;
+  border: 1px solid #DBDDDD !important;
+  color: #4A4343 !important;
+  box-shadow: unset !important;
+}
+
+::placeholder {
+  color: #DBDDDD;
 }

@@ -1,109 +1,114 @@
-<div class="container mat-elevation-z8" *ngIf="identities?.length > 0">
-  <div class="header">
-    <mat-form-field>
-      <input matInput (keyup)="handleInput($event)" placeholder="Filter">
-    </mat-form-field>
-    <div class="d-flex jc-between">
-      <div class="flex">
-        <mat-icon class="clean-name-icon sortinghat-orange" matTooltip="Sanitize" (click)="cleanName()"> format_size
-        </mat-icon>
-        <mat-form-field class="mr-10" style="width: 10rem">
-          <mat-label>Name</mat-label>
-          <input matInput [(ngModel)]="mergeResult.name" style="width: 90%">
-          <mat-select [(ngModel)]="name" (ngModelChange)="anonymize()" style="width: 10px">
-            <mat-option *ngFor="let character of characters" [value]="character">{{character}}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
+<div class="container">
+  <div class="d-grid">
+    <p-table
+      [value]="selectedIdentities"
+      [(selection)]="selectedIdentities"
+      responsiveLayout="scroll">
+      <ng-template pTemplate="caption">
+        <div class="d-flex jc-between">
+          <div class="mt-5" *ngIf="tableIdentities?.length > 0">
+            <button class="sortinghat-orange-bg mr-10" mat-button matTooltip="Reject"
+                    (click)="rejectMerge()">
+              <mat-icon>call_split</mat-icon>
+            </button>
+            <button class="sortinghat-cyan-bg" mat-button matTooltip="Merge"
+                    (click)="onMergeButtonClicked()">
+              <mat-icon>merge_type</mat-icon>
+            </button>
+          </div>
+          <div class="flex w-85p align-items-center jc-between" *ngIf="tableIdentities?.length > 0">
+            <mat-icon class="clean-name-icon sortinghat-orange" matTooltip="Sanitize" (click)="cleanName()"> format_size
+            </mat-icon>
+            <p-dropdown [options]="characters" [(ngModel)]="mergeResult.name" [editable]="true" placeholder="Name"></p-dropdown>
 
-        <mat-form-field class="mr-10" style="width: 10rem">
-          <mat-label>Email Address</mat-label>
-          <input matInput [(ngModel)]="mergeResult.email">
-        </mat-form-field>
+            <input type="text" [(ngModel)]="mergeResult.email" placeholder="Email" pInputText>
 
-        <mat-form-field class="mr-10" style="width: 10rem">
-          <mat-label>Username</mat-label>
-          <input matInput [(ngModel)]="mergeResult.username">
-        </mat-form-field>
+            <input type="text" [(ngModel)]="mergeResult.username" placeholder="Username" pInputText>
 
-        <mat-form-field class="mr-10" style="width: 10rem">
-          <mat-label>City</mat-label>
-          <input matInput [(ngModel)]="mergeResult.city">
-        </mat-form-field>
+            <input type="text" [(ngModel)]="mergeResult.city" placeholder="City" pInputText>
 
-        <mat-form-field class="mr-10" style="width: 10rem">
-          <mat-label>Country</mat-label>
-          <input matInput [(ngModel)]="mergeResult.country">
-        </mat-form-field>
+            <input type="text" [(ngModel)]="mergeResult.country" placeholder="Country" pInputText>
 
-        <mat-form-field class="mr-10" style="width: 10rem">
-          <mat-label>Senority</mat-label>
-          <input matInput [(ngModel)]="mergeResult.senority">
-        </mat-form-field>
-      </div>
-      <div class="mt-5">
-        <button class="sortinghat-orange-bg mr-10" mat-button matTooltip="Reject"
-                (click)="rejectMerge()">
-          <mat-icon>call_split</mat-icon>
-        </button>
-        <button class="sortinghat-cyan-bg" mat-button matTooltip="Merge"
-                (click)="onMergeButtonClicked()">
-          <mat-icon>merge_type</mat-icon>
-        </button>
-      </div>
+            <input type="text" [(ngModel)]="mergeResult.senority" placeholder="Senority" pInputText>
+          </div>
+        </div>
+      </ng-template>
+      <ng-template pTemplate="header">
+        <tr>
+          <th>
+            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+          </th>
+          <th pSortableColumn="firstName">
+            <div class="flex jc-between align-items-center">
+              First Name
+            </div>
+          </th>
+          <th pSortableColumn="lastName" [colSpan]="0.1">
+            <div class="flex jc-start align-items-center">
+              Last Name
+            </div>
+          </th>
+          <th pSortableColumn="username">
+            <div class="flex jc-between align-items-center">
+              Username
+            </div>
+          </th>
+          <th pSortableColumn="email">
+            <div class="flex jc-between align-items-center">
+              Email
+            </div>
+          </th>
+          <th pSortableColumn="source">
+            <div class="flex jc-between align-items-center">
+              Source
+            </div>
+          </th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-identity>
+        <tr class="p-selectable-row">
+          <td>
+            <p-tableCheckbox [value]="identity"></p-tableCheckbox>
+          </td>
+          <td>
+            <span class="p-column-title">First Name</span>
+            {{identity.firstName}}
+          </td>
+          <td>
+            <span class="p-column-title">Last Name</span>
+            <span class="image-text">{{identity.email}}</span>
+          </td>
+          <td>
+            <span class="p-column-title">Username</span>
+            <span class="image-text">{{identity.username}}</span>
+          </td>
+          <td>
+            <span class="p-column-title">Email</span>
+            {{identity.email}}
+          </td>
+          <td>
+            <span class="p-column-title">Source</span>
+            <img class="source-logo" src="{{getSourceDisplayIcon(identity.source)}}">
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="8">There are no suggestions for this project.</td>
+        </tr>
+      </ng-template>
+    </p-table>
+
+    <div class="paginator-info d-flex align-items-center jc-center" *ngIf="tableIdentities?.length > 0">
+      <p class="info"> Showing cluster {{current + 1}} of {{identitiesByCluster.length}}</p>
+      <button mat-button class="page-button" (click)="changePage(current - 1)"
+              [disabled]="current === 0">
+        <mat-icon>navigate_before</mat-icon>
+      </button>
+      <button mat-button class="page-button" (click)="changePage(current + 1)"
+              [disabled]="current === identitiesByCluster.length - 1">
+        <mat-icon>navigate_next</mat-icon>
+      </button>
     </div>
   </div>
-
-  <mat-table #table [dataSource]="dataSource" class="table">
-    <ng-container matColumnDef="firstname">
-      <mat-header-cell *matHeaderCellDef class="font-style-smaller" sticky="true"> First name</mat-header-cell>
-      <mat-cell *matCellDef="let identity" class="font-style-smaller"> {{identity.firstName}} </mat-cell>
-    </ng-container>
-
-    <ng-container matColumnDef="lastname">
-      <mat-header-cell *matHeaderCellDef class="font-style-smaller"> Last name</mat-header-cell>
-      <mat-cell *matCellDef="let identity" class="font-style-smaller"> {{identity.lastName}} </mat-cell>
-    </ng-container>
-
-    <ng-container matColumnDef="username">
-      <mat-header-cell *matHeaderCellDef class="font-style-smaller"> Username</mat-header-cell>
-      <mat-cell *matCellDef="let identity" class="font-style-smaller">{{identity.username}}</mat-cell>
-    </ng-container>
-
-    <ng-container matColumnDef="email">
-      <mat-header-cell *matHeaderCellDef class="font-style-smaller"> Email address</mat-header-cell>
-      <mat-cell *matCellDef="let identity" class="font-style-smaller">{{identity.email}}</mat-cell>
-    </ng-container>
-
-    <ng-container matColumnDef="source">
-      <mat-header-cell *matHeaderCellDef class="font-style-smaller"> Source</mat-header-cell>
-      <mat-cell *matCellDef="let identity" class="font-style-smaller">
-        <img src="{{getSourceDisplayIcon(identity.source)}}" class="source-logo"></mat-cell>
-    </ng-container>
-
-    <ng-container matColumnDef="actions">
-      <mat-header-cell *matHeaderCellDef alignment="center" class="font-style-smaller"></mat-header-cell>
-      <mat-cell *matCellDef="let identity">
-        <mat-checkbox [checked]="checkIdentity(identity)"
-                      (change)="manageCheckboxChange($event, identity)"></mat-checkbox>
-      </mat-cell>
-    </ng-container>
-
-    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-  </mat-table>
-  <mat-toolbar-row class="jc-end">
-    <div class="paginator-information">Cluster {{current}} of {{identitiesByCluster.length}}</div>
-    <button mat-button class="page-button" (click)="changePage({pageIndex: current - 2}, true)"
-            [disabled]="current === 1">
-      <mat-icon>navigate_before</mat-icon>
-    </button>
-    <button mat-button class="page-button" (click)="changePage({pageIndex: current}, true)"
-            [disabled]="current === identitiesByCluster.length">
-      <mat-icon>navigate_next</mat-icon>
-    </button>
-  </mat-toolbar-row>
 </div>
-
-
-<span *ngIf="identities?.length === 0" class="message">There are no suggestions for this project</span>

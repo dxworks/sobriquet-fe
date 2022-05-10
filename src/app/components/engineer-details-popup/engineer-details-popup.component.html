@@ -1,42 +1,20 @@
 <h1 mat-dialog-title>{{selectedEngineer.name}}</h1>
 <div mat-dialog-content class="grid">
-  <div class="d-flex jc-around">
-    <mat-form-field appearance="fill" class="mr-10">
-      <mat-label>Name</mat-label>
-      <input matInput [(ngModel)]="selectedEngineer.name">
-      <mat-select [(ngModel)]="name" (ngModelChange)="anonymize()" style="width: 10px">
-        <mat-option *ngFor="let character of characters" [value]="character">{{character}}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
+  <div class="d-flex mb-2">
+    <p-dropdown [options]="characters" [(ngModel)]="selectedEngineer.name" [editable]="true"
+                placeholder="Name"></p-dropdown>
 
-    <mat-form-field appearance="fill">
-      <mat-label>Username</mat-label>
-      <input matInput [(ngModel)]="selectedEngineer.username">
-    </mat-form-field>
+    <input type="text" [(ngModel)]="selectedEngineer.username" placeholder="Username" pInputText>
   </div>
+  <div class="d-flex mb-2">
+    <input type="text" [(ngModel)]="selectedEngineer.email" placeholder="Email" pInputText>
 
-  <div class="d-flex jc-around">
-    <mat-form-field appearance="fill" class="mr-10">
-      <mat-label>Senority</mat-label>
-      <input matInput [(ngModel)]="selectedEngineer.senority">
-    </mat-form-field>
-
-    <mat-form-field appearance="fill">
-      <mat-label>Email Address</mat-label>
-      <input matInput [(ngModel)]="selectedEngineer.email">
-    </mat-form-field>
+    <input type="text" [(ngModel)]="selectedEngineer.senority" placeholder="Seniority" pInputText>
   </div>
-  <div class="d-flex jc-around">
-    <mat-form-field appearance="fill" class="mr-10">
-      <mat-label>City</mat-label>
-      <input matInput [(ngModel)]="selectedEngineer.city">
-    </mat-form-field>
+  <div class="d-flex mb-2">
+    <input type="text" [(ngModel)]="selectedEngineer.city" placeholder="City" pInputText>
 
-    <mat-form-field appearance="fill">
-      <mat-label>Country</mat-label>
-      <input matInput [(ngModel)]="selectedEngineer.country">
-    </mat-form-field>
+    <input type="text" [(ngModel)]="selectedEngineer.country" placeholder="Country" pInputText>
   </div>
 
   <div class="table">

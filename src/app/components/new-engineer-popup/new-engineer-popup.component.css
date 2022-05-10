@@ -1,11 +1,27 @@
-::ng-deep.mat-form-field-appearance-fill .mat-form-field-flex {
-  background: white;
+:host::ng-deep.p-inputtext, :host::ng-deep.p-dropdown {
+  width: 10rem;
+  margin-right: 1rem;
 }
 
-::ng-deep.mat-form-field-wrapper {
-  margin-right: 20px;
+::ng-deep::placeholder {
+  color: #DBDDDD;
 }
 
-::ng-deep.mat-form-field-appearance-fill .mat-form-field-infix {
-  display: flex;
+::ng-deep.mat-dialog-title {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-size: 2rem;
+  font-weight: normal;
+}
+
+::ng-deep.p-dropdown .p-dropdown-label.p-placeholder {
+  color: #DBDDDD !important;
+}
+
+#team::ng-deep.p-dropdown {
+  width: 21rem;
+  margin: 0;
+}
+
+.w-13 {
+  width: 13rem;
 }

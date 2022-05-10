@@ -1,5 +1,5 @@
-import {Injectable} from '@angular/core';
-import {Engineer} from '../../data/engineer';
+import { Injectable } from '@angular/core';
+import { Engineer } from '../data/engineer';
 
 @Injectable({
   providedIn: 'root'
@@ -11,12 +11,12 @@ export class DiagramService {
 
   transformEngineersForSingleTeamSelection(engineers: Engineer[]) {
     const nodes = [];
-    engineers.forEach(engineer => {
+    engineers?.forEach(engineer => {
       nodes.push({
         id: engineer.id,
         type: 'ellipse',
         name: engineer.name,
-        parentID: engineer.reportsTo
+        parentID: engineer.reportsTo.toString()
       })
     })
     return nodes;
@@ -24,12 +24,12 @@ export class DiagramService {
 
   transformEngineersForHQ(engineers: Engineer[]) {
     const nodes = [];
-    engineers.forEach(engineer => {
+    engineers?.forEach(engineer => {
       nodes.push({
         id: engineer.id,
         type: 'ellipse',
         name: engineer.name,
-        parentID: engineer.reportsTo
+        parentID: engineer.reportsTo.toString()
       })
     })
     return nodes;

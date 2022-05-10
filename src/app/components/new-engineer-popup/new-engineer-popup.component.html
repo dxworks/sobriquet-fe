@@ -1,80 +1,36 @@
 <h1 mat-dialog-title>Add new engineer</h1>
 <div mat-dialog-content class="grid">
-  <div class="d-flex">
-    <mat-form-field appearance="fill">
-      <mat-label>Name</mat-label>
-      <input matInput [(ngModel)]="newEngineer.name">
-      <mat-select [(ngModel)]="name" (ngModelChange)="anonymize()" style="width: 10px">
-        <mat-option *ngFor="let character of characters" [value]="character">{{character}}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
+  <div class="d-flex mb-2">
+    <p-dropdown [options]="characters" [(ngModel)]="newEngineer.name" [editable]="true" placeholder="Name"></p-dropdown>
 
-    <mat-form-field appearance="fill">
-      <mat-label>Username</mat-label>
-      <input matInput [(ngModel)]="newEngineer.username">
-    </mat-form-field>
-
+    <input type="text" [(ngModel)]="newEngineer.username" placeholder="Username" pInputText>
   </div>
-  <div class="d-flex">
-    <mat-form-field appearance="fill">
-      <mat-label>Email Address</mat-label>
-      <input matInput [(ngModel)]="newEngineer.email">
-    </mat-form-field>
+  <div class="d-flex mb-2">
+    <input type="text" [(ngModel)]="newEngineer.email" placeholder="Email" pInputText>
 
-    <mat-form-field appearance="fill">
-      <mat-label>Senority</mat-label>
-      <input matInput [(ngModel)]="newEngineer.senority">
-    </mat-form-field>
+    <input type="text" [(ngModel)]="newEngineer.senority" placeholder="Seniority" pInputText>
   </div>
-  <div class="d-flex">
-    <mat-form-field appearance="fill">
-      <mat-label>City</mat-label>
-      <input matInput [(ngModel)]="newEngineer.city">
-    </mat-form-field>
+  <div class="d-flex mb-2">
+    <input type="text" [(ngModel)]="newEngineer.city" placeholder="City" pInputText>
 
-    <mat-form-field appearance="fill">
-      <mat-label>Country</mat-label>
-      <input matInput [(ngModel)]="newEngineer.country">
-    </mat-form-field>
+    <input type="text" [(ngModel)]="newEngineer.country" placeholder="Country" pInputText>
   </div>
-  <mat-form-field appearance="fill">
-    <mat-label>Team</mat-label>
-    <mat-select [formControl]="teamsFormControl" multiple>
-      <mat-option *ngFor="let team of teams" [value]="team">{{team.name}}</mat-option>
-    </mat-select>
-  </mat-form-field>
+  <div class="d-flex mb-2">
+    <p-dropdown [options]="teams" [(ngModel)]="newEngineer.teams" placeholder="Team"
+                optionLabel="name" id="team" optionValue="id"></p-dropdown>
+  </div>
+  <div class="d-flex mb-2">
+    <p-dropdown [options]="roles" [(ngModel)]="newEngineer.role" placeholder="Role" optionLabel="name"
+                optionValue="name"></p-dropdown>
 
-  <div class="d-flex">
-    <mat-form-field appearance="fill">
-      <mat-label>Role</mat-label>
-      <mat-select [formControl]="rolesFormControl" multiple>
-        <mat-option *ngFor="let role of roles" [value]="role">{{role.name}}</mat-option>
-      </mat-select>
-    </mat-form-field>
-
-    <mat-form-field appearance="fill">
-      <mat-label>Tag</mat-label>
-      <mat-select [formControl]="tagFormControl" multiple>
-        <mat-option *ngFor="let tag of tags" [value]="tag">{{tag.name}}</mat-option>
-      </mat-select>
-    </mat-form-field>
+    <p-dropdown [options]="tags" [(ngModel)]="newEngineer.tags" placeholder="Tag" optionLabel="name"></p-dropdown>
   </div>
 
-  <div class="d-flex">
-    <mat-form-field appearance="fill">
-      <mat-label>Reports To</mat-label>
-      <mat-select [formControl]="engineersFormControl" multiple>
-        <mat-option *ngFor="let engineer of engineers" [value]="engineer">{{engineer.name}}</mat-option>
-      </mat-select>
-    </mat-form-field>
+  <div class="d-flex mb-2">
+    <p-dropdown [options]="engineers" [(ngModel)]="newEngineer.reportsTo" placeholder="Superior"
+                optionLabel="name" optionValue="id"></p-dropdown>
 
-    <mat-form-field appearance="fill">
-      <mat-label>Status</mat-label>
-      <mat-select [formControl]="statusFormControl" multiple>
-        <mat-option *ngFor="let status of statuses" [value]="status">{{status}}</mat-option>
-      </mat-select>
-    </mat-form-field>
+    <p-dropdown [options]="statuses" [(ngModel)]="newEngineer.status" placeholder="Status"></p-dropdown>
   </div>
 </div>
 <div mat-dialog-actions class="jc-center">

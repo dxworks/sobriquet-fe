@@ -1,8 +1,8 @@
-import {Component, OnInit} from '@angular/core';
-import {Team} from '../../data/team';
-import {TeamsService} from '../../services/teams.service';
-import {MatDialog} from '@angular/material/dialog';
-import {NewTeamPopupComponent} from '../../components/new-team-popup/new-team-popup.component';
+import { Component, OnInit } from '@angular/core';
+import { Team } from '../../data/team';
+import { TeamsService } from '../../services/teams.service';
+import { MatDialog } from '@angular/material/dialog';
+import { NewTeamPopupComponent } from '../new-team-popup/new-team-popup.component';
 
 @Component({
   selector: 'app-teams-page',
@@ -32,7 +32,6 @@ export class TeamsPageComponent implements OnInit {
 
   openDialog() {
     const dialogRef = this.dialog.open(NewTeamPopupComponent);
-
     dialogRef.afterClosed().subscribe(() => this.getData());
   }
 

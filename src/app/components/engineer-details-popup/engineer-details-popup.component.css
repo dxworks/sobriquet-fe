@@ -3,7 +3,9 @@
 }
 
 ::ng-deep.mat-dialog-container {
-  width: 600px;
+  width: 450px;
+  display: flex;
+  justify-content: center;
 }
 
 .icon {
@@ -14,14 +16,12 @@
   flex: 0.12;
 }
 
-::ng-deep .mat-form-field-appearance-fill .mat-form-field-flex {
-  background: white;
+:host::ng-deep.p-inputtext, :host::ng-deep.p-dropdown {
+  width: 10rem;
+  margin-right: 0.5rem;
+  margin-left: 0.5rem;
 }
 
-::ng-deep.mat-form-field {
-  width: 50%;
-}
-
-::ng-deep.mat-form-field-appearance-fill .mat-form-field-infix {
-  display: flex;
+::ng-deep::placeholder {
+  color: #DBDDDD;
 }
