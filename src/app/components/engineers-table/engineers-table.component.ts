@@ -127,7 +127,7 @@ export class EngineersTableComponent implements OnInit, OnChanges {
     this.roleService.getAllRoles().subscribe(response => this.filteredRoles = this.roles = response.filter((v, i, a) => a.findIndex(t => ['name'].every(k => t[k] === v[k])) === i));
   }
 
-  getTeamName(teamId: string) {
+  getTeamName(teamId: string): string {
     return this.teams.find(team => team.id === teamId)?.name;
   }
 
@@ -171,17 +171,17 @@ export class EngineersTableComponent implements OnInit, OnChanges {
     this.projectService.editProject(this.project.id, this.project).subscribe(() => this.engineerChanged.emit());
   }
 
-  searchTeam() {
+  searchTeam(): Team[] {
     let filter = this.newTeamName.toLowerCase();
     return this.teams.filter(option => option.name.toLowerCase().includes(filter));
   }
 
-  searchTag() {
+  searchTag(): Tag[] {
     let filter = this.newTagName.toLowerCase();
     return this.tags.filter(option => option.name.toLowerCase().includes(filter));
   }
 
-  searchRole() {
+  searchRole(): Role[] {
     let filter = this.newRoleName.toLowerCase();
     return this.roles.filter(option => option.name.toLowerCase().includes(filter));
   }
@@ -241,8 +241,8 @@ export class EngineersTableComponent implements OnInit, OnChanges {
     });
   }
 
-  getReportsTo(reportsTo: string) {
-    return this.project.engineers.find(eng => eng.id === reportsTo)?.name;
+  getReportsTo(reportsTo: string): Engineer[] {
+    return this.project.engineers.find(eng => eng.id === Number(reportsTo))?.name;
   }
 
   ignore() {
@@ -298,7 +298,7 @@ export class EngineersTableComponent implements OnInit, OnChanges {
     });
   }
 
-  getUniqueTags(engineerTags: Tag[]) {
+  getUniqueTags(engineerTags: Tag[]): Tag[] {
     return engineerTags?.filter((value, index, self) =>
       index === self.findIndex((t) => (
         t.name === value.name

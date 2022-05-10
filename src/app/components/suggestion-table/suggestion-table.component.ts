@@ -61,17 +61,19 @@ export class SuggestionTableComponent implements OnInit, OnChanges {
   }
 
   ngOnInit(): void {
-    this.engineers = this.project?.engineers;
+    this.allEngineers = this.engineers = this.project?.engineers;
     this.identities = this.projectService.getUniqueIdentities(this.project?.identities);
     this.prepareData();
-    this.getMergedEngineerDetails();
+    if (this.suggestions) {
+      this.getMergedEngineerDetails();
+    }
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (!changes.project?.firstChange) {
       this.identities = this.projectService.getUniqueIdentities(this.project.identities);
-      this.prepareData();
       this.allEngineers = this.engineers = this.project.engineers;
+      this.prepareData();
       this.getMergedEngineerDetails();
     }
     if (changes.demergedIdentities && this.demergedIdentities.length > 0) {
@@ -81,9 +83,9 @@ export class SuggestionTableComponent implements OnInit, OnChanges {
           this.identities.push(identity);
         }
       });
+      this.engineers = this.project.engineers;
       this.project.identities = this.identities;
       this.prepareData();
-      this.engineers = this.project.engineers;
       this.getMergedEngineerDetails();
     }
   }
@@ -107,7 +109,7 @@ export class SuggestionTableComponent implements OnInit, OnChanges {
     }
   }
 
-  getUsername() {
+  getUsername(): string {
     if (this.suggestions[0]?.username) {
       return this.suggestions[0].username
     } else {
@@ -117,20 +119,14 @@ export class SuggestionTableComponent implements OnInit, OnChanges {
 
   prepareData() {
     this.identitiesByCluster = this.mergeSuggestionService.buildCluster(this.identities);
-    this.getSuggestions(this.identities);
-    this.tableIdentities = this.identitiesByCluster[this.current];
-    this.selectedIdentities = this.tableIdentities;
+    if (this.current >= this.identitiesByCluster.length) {
+      this.current = 0;
+    }
+    this.suggestions = this.selectedIdentities = this.tableIdentities = this.identitiesByCluster[this.current];
+
   }
 
-  getSuggestions(identities: Identity[]) {
-    this.suggestions = this.mergeSuggestionService.getMergeSuggestions(identities);
-  }
-
-  checkIdentity(identity: Identity) {
-    return !!this.suggestions.find(suggestion => suggestion === identity);
-  }
-
-  getSimilar() {
+  getSimilar(): Engineer[] {
     const engForDelete = [];
     for (let i = 0; i < this.suggestions.length; i++) {
       engForDelete.push(this.allEngineers.find(eng => eng.email === this.suggestions[i].email));
@@ -176,18 +172,17 @@ export class SuggestionTableComponent implements OnInit, OnChanges {
   }
 
   manageMerge(data) {
-    console.log(this.project.identities);
     this.engineerEmitter.emit(data);
     this.manageIdentities();
     this.demergedIdentities.length === 0 ? this.updateProjectIdentities(this.getSimilar()) : this.updateProjectIdentities(null);
     this.identitiesByCluster = this.mergeSuggestionService.buildCluster(this.identities);
-    this.getSuggestions(this.identitiesByCluster[this.current - 1]);
+    this.suggestions = this.identitiesByCluster[this.current - 1];
   }
 
   rejectMerge() {
     this.updateProjectIdentities(null);
     this.splitCluster(this.identitiesByCluster.find(cluster => cluster[0] === this.suggestions[0]));
-    this.getSuggestions(this.identitiesByCluster[this.current - 1]);
+    this.suggestions = this.identitiesByCluster[this.current - 1];
   }
 
   splitCluster(cluster) {
@@ -197,18 +192,18 @@ export class SuggestionTableComponent implements OnInit, OnChanges {
     }
   }
 
-  checkBotIdentity() {
+  checkBotIdentity(): boolean {
     return !!this.suggestions.every(identity => this.mergeSuggestionService.checkBot(identity.email) === true);
   }
 
-  buildData(bot: boolean) {
+  buildData(bot: boolean): Engineer {
     if (bot) {
       return this.buildBot();
     }
     return this.buildEngineer();
   }
 
-  getMergeResultIdentities() {
+  getMergeResultIdentities(): Identity[] {
     this.engineers.find(eng => {
       if (eng?.email === this.mergeResult.email && eng.identities.length > 0) {
         this.mergeResult.identities = this.suggestions.concat(eng.identities);
@@ -246,6 +241,7 @@ export class SuggestionTableComponent implements OnInit, OnChanges {
   }
 
   updateProjectIdentities(engineers) {
+    this.suggestions.forEach(suggestion => this.project.identities = this.project.identities.filter(identity => identity !== suggestion));
     this.projectService.editProject(this.project.id, this.project).subscribe(() => this.projectEmitter.emit({
       projectIdentities: this.project.identities,
       engineers: engineers
@@ -255,11 +251,11 @@ export class SuggestionTableComponent implements OnInit, OnChanges {
   changePage(pageIndex: number) {
     this.current = pageIndex;
     this.prepareData();
-    this.getSuggestions(this.identitiesByCluster[this.current]);
+    this.suggestions = this.identitiesByCluster[this.current];
     this.getMergedEngineerDetails();
   }
 
-  getSourceDisplayIcon(source: string) {
+  getSourceDisplayIcon(source: string): string {
     return this.mergeSuggestionService.getSourceDisplayIcon(source);
   }
 
@@ -269,11 +265,5 @@ export class SuggestionTableComponent implements OnInit, OnChanges {
 
   anonymize() {
     this.mergeResult = this.engineersService.anonymize(this.mergeResult, this.name);
-  }
-
-  loadIdentities($event) {
-    this.identities = this.projectService.getUniqueIdentities(this.project?.identities);
-    this.prepareData();
-    this.tableIdentities = this.identitiesByCluster[$event.first];
   }
 }

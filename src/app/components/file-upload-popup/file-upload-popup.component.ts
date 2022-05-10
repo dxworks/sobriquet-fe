@@ -87,7 +87,7 @@ export class FileUploadPopupComponent implements OnInit {
     reader.readAsText(file);
   }
 
-  changeIdentityToEngineer(identities: Identity[]) {
+  changeIdentityToEngineer(identities: Identity[]): Engineer[] {
     const engineers = [];
     identities?.forEach(identity => {
       let engineer = new Engineer();

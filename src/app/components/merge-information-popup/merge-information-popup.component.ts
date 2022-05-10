@@ -113,7 +113,7 @@ export class MergeInformationPopupComponent implements OnInit {
     this.selectValue(value, property);
   }
 
-  selectValue(value, property) {
+  selectValue(value, property: string) {
     switch (property) {
       case 'tags': {
         this.tagFormControl.setValue(value);
@@ -137,7 +137,7 @@ export class MergeInformationPopupComponent implements OnInit {
     }
   }
 
-  getSelectedTeams(value: string[]) {
+  getSelectedTeams(value: string[]): Team[] {
     const teams = [];
     value.forEach(val => {
       if (this.teams.find(team => team.id === val)) {

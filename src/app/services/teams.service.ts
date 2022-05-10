@@ -1,7 +1,8 @@
-import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {environment} from '../../environments/environment';
-import {Team} from '../data/team';
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../environments/environment';
+import { Team } from '../data/team';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -11,15 +12,11 @@ export class TeamsService {
   constructor(private httpClient: HttpClient) {
   }
 
-  getAllTeams() {
-    return this.httpClient.get<any>(`${environment.apiUrl}/teams`);
+  getAllTeams(): Observable<Team[]> {
+    return this.httpClient.get<Team[]>(`${environment.apiUrl}/teams`);
   }
 
-  addTeam(team: Team) {
-    return this.httpClient.post(`${environment.apiUrl}/addTeam`, team);
-  }
-
-  deleteTeam(id: string) {
-    return this.httpClient.delete(`${environment.apiUrl}/deleteTeam/${id}`);
+  addTeam(team: Team): Observable<Team> {
+    return this.httpClient.post<Team>(`${environment.apiUrl}/addTeam`, team);
   }
 }

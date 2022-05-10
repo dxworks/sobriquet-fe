@@ -23,16 +23,16 @@ export class ProjectService {
     return this.httpClient.get<Project[]>(`${environment.apiUrl}/projects`).subscribe(res => this.allProjectsBehaviorSubject.next(res));
   }
 
-  addProject(project: Project) {
+  addProject(project: Project): Observable<Project> {
     return this.httpClient.post<Project>(`${environment.apiUrl}/addProject`, project);
   }
 
-  delete(name: string) {
-    return this.httpClient.delete(`${environment.apiUrl}/deleteProject/${name}`);
+  delete(name: string): Observable<Project[]> {
+    return this.httpClient.delete<Project[]>(`${environment.apiUrl}/deleteProject/${name}`);
   }
 
-  editProject(id: string, project: Project) {
-    return this.httpClient.put(`${environment.apiUrl}/editProject/${id}`, project);
+  editProject(id: string, project: Project): Observable<Project> {
+    return this.httpClient.put<Project>(`${environment.apiUrl}/editProject/${id}`, project);
   }
 
   upload($event, fileDropped) {
@@ -45,7 +45,7 @@ export class ProjectService {
     return selectedJSON;
   }
 
-  transformIdentitiesName(identities) {
+  transformIdentitiesName(identities): Identity[] {
     identities?.forEach(identity => {
       if (identity.lenght > 0) {
         identity.forEach(id => {
@@ -62,7 +62,7 @@ export class ProjectService {
     return identities;
   }
 
-  getUniqueIdentities(identities: Identity[]) {
+  getUniqueIdentities(identities: Identity[]): Identity[] {
     return identities?.reduce((accumalator, current) => {
       if (
         !accumalator.some(

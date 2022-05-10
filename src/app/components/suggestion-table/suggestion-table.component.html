@@ -3,8 +3,6 @@
     <p-table
       [value]="selectedIdentities"
       [(selection)]="selectedIdentities"
-      [lazy]="true"
-      (onLazyLoad)="loadIdentities($event)"
       responsiveLayout="scroll">
       <ng-template pTemplate="caption">
         <div class="d-flex jc-between">

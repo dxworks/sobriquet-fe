@@ -4,6 +4,7 @@ import { Project } from '../../data/project';
 import { Router } from '@angular/router';
 import { Engineer } from '../../data/engineer';
 import { EngineerService } from '../../services/engineer.service';
+import { Identity } from '../../data/identity';
 
 @Component({
   selector: 'app-home-page',
@@ -92,7 +93,7 @@ export class HomePageComponent implements OnInit {
     reader.readAsText(file);
   }
 
-  changeIdentityToEngineer(identities) {
+  changeIdentityToEngineer(identities: Identity[]) {
     identities?.forEach(identity => {
       let engineer = new Engineer();
       if (identity.username) {

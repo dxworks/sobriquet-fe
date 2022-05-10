@@ -57,6 +57,7 @@ export class ProjectPageComponent implements OnInit {
       this.projectService.editProject(this.project.id, this.project).subscribe(() => this.getProjectDetails());
       this.identities = identities;
       this.engineers = this.project.engineers;
+      this.removeDuplicate(engineers);
     } else {
       this.updateIdentities(identities);
     }
@@ -91,7 +92,7 @@ export class ProjectPageComponent implements OnInit {
     const allIdentities = [];
     this.identities.forEach(identity => {
       this.allEngineers.forEach(engineer => {
-        if (engineer.identities.find(id => id.email === identity.email) && !allIdentities.includes(identity)) {
+        if (engineer.identities?.find(id => id.email === identity.email) && !allIdentities.includes(identity)) {
           allIdentities.push(identity);
         }
       })

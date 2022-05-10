@@ -1,6 +1,6 @@
-import {AfterViewInit, Component, ElementRef, OnInit} from '@angular/core';
-import {LoadingService} from './services/request.service';
-import {delay} from 'rxjs/operators';
+import { AfterViewInit, Component, ElementRef, OnInit } from '@angular/core';
+import { LoadingService } from './services/request.service';
+import { delay } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
