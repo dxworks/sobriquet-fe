@@ -1,6 +1,6 @@
 .header {
   height: 7rem;
-  border-bottom: 2px solid #DBDDDD;
+  border-bottom: 1px solid #DBDDDD;
   width: 100%;
   padding-bottom: 40px;
   display: flex;
@@ -12,11 +12,12 @@
 }
 
 .logo {
-  left: 0;
-  top: 0;
-  height: 125px;
-  width: 185px;
+  height: 100px;
+  width: 210px;
   cursor: pointer;
+  object-fit: none;
+  zoom: 0.9;
+  margin-top: 0.5rem;
 }
 
 .buttons-container {
@@ -39,9 +40,8 @@
 }
 
 .menu-button:hover {
-  background: #FD8947;
-  border-radius: 5px;
-  color: white;
+  background: white;
+  color: #FD8947;
   cursor: pointer;
 }
 

@@ -1,5 +1,5 @@
 <h1 mat-dialog-title>Add new engineer</h1>
-<div mat-dialog-content class="grid">
+<div mat-dialog-content class="d-grid">
   <div class="d-flex mb-2">
     <p-dropdown [options]="characters" [(ngModel)]="newEngineer.name" [editable]="true" placeholder="Name"></p-dropdown>
 
@@ -16,14 +16,14 @@
     <input type="text" [(ngModel)]="newEngineer.country" placeholder="Country" pInputText>
   </div>
   <div class="d-flex mb-2">
-    <p-dropdown [options]="teams" [(ngModel)]="newEngineer.teams" placeholder="Team"
-                optionLabel="name" id="team" optionValue="id"></p-dropdown>
+    <p-multiSelect [options]="teams" [(ngModel)]="newEngineer.teams" placeholder="Team"
+                optionLabel="name" id="team" optionValue="id"></p-multiSelect>
   </div>
   <div class="d-flex mb-2">
     <p-dropdown [options]="roles" [(ngModel)]="newEngineer.role" placeholder="Role" optionLabel="name"
                 optionValue="name"></p-dropdown>
 
-    <p-dropdown [options]="tags" [(ngModel)]="newEngineer.tags" placeholder="Tag" optionLabel="name"></p-dropdown>
+    <p-multiSelect [options]="tags" [(ngModel)]="newEngineer.tags" placeholder="Tag" optionLabel="name"></p-multiSelect>
   </div>
 
   <div class="d-flex mb-2">

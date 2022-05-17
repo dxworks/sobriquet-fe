@@ -1,12 +1,14 @@
 <div (click)="showProjectIdentities()">
-  <mat-card class="flex card">
-    <div class="grid">
-      <span class="font-style-smaller">{{project.name}}</span>
-      <span class="w-7"> {{project.identities.length}} suggestions</span>
+  <div class="card d-flex jc-between align-items-center">
+    <div class="d-grid w-85p">
+      <span class="font-style">{{project.name}}</span>
+      <span> {{project.identities.length}} suggestions</span>
     </div>
-    <button mat-button class="sortinghat-cyan-bg font-style-smaller delete-button ml-40p"
-            (click)="buttonClicked = true; delete()">
-      <mat-icon>delete</mat-icon>
-    </button>
-  </mat-card>
+    <div class="d-flex">
+      <button mat-button class="delete-btn sortinghat-cyan-bg font-style"
+              (click)="buttonClicked = true; delete()">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
+  </div>
 </div>

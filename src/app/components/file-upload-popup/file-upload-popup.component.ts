@@ -4,6 +4,7 @@ import { ProjectService } from '../../services/project.service';
 import { Project } from '../../data/project';
 import { Identity } from '../../data/identity';
 import { Engineer } from '../../data/engineer';
+import { EngineerService } from '../../services/engineer.service';
 
 @Component({
   selector: 'app-file-upload-popup',
@@ -20,6 +21,7 @@ export class FileUploadPopupComponent implements OnInit {
 
   constructor(public dialogRef: MatDialogRef<FileUploadPopupComponent>,
               private projectService: ProjectService,
+              private engineerService: EngineerService,
               @Inject(MAT_DIALOG_DATA) public data) {
   }
 
@@ -88,24 +90,6 @@ export class FileUploadPopupComponent implements OnInit {
   }
 
   changeIdentityToEngineer(identities: Identity[]): Engineer[] {
-    const engineers = [];
-    identities?.forEach(identity => {
-      let engineer = new Engineer();
-      if (identity.username) {
-        engineer.username = identity.username;
-      }
-      if (identity.firstName) {
-        identity.lastName ? engineer.name = identity.firstName + ' ' + identity.lastName : engineer.name = identity.firstName;
-      } else {
-        if (identity.lastName) {
-          engineer.name = identity.lastName;
-        }
-      }
-      if (identity.email) {
-        engineer.email = identity.email;
-      }
-      engineers.push(engineer);
-    });
-    return engineers;
+    return this.engineerService.changeIdentityToEngineer(identities);
   }
 }

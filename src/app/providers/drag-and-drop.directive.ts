@@ -1,4 +1,4 @@
-import {Directive, EventEmitter, Output, HostListener, HostBinding} from '@angular/core';
+import { Directive, EventEmitter, Output, HostListener, HostBinding } from '@angular/core';
 
 @Directive({
   selector: '[appDragDropFileUpload]'

@@ -5,7 +5,7 @@
            [rows]="10" [showCurrentPageReport]="true" [rowsPerPageOptions]="[10,25,50]" [loading]="loading"
            responsiveLayout="scroll"
            [paginator]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-           [filterDelay]="0" [globalFilterFields]="['name','country','representative.name','status']">
+           [filterDelay]="0" [globalFilterFields]="['name', 'email', 'username', 'city', 'country','role','status', 'senority']">
     <ng-template pTemplate="caption">
       <div class="d-flex jc-between align-items-center">
         <div class="d-flex">
@@ -54,78 +54,78 @@
           <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
         </th>
         <th pSortableColumn="name">
-          <div class="flex jc-between align-items-center">
+          <div class="d-flex jc-between align-items-center">
             Name
             <p-sortIcon field="name"></p-sortIcon>
           </div>
         </th>
         <th pSortableColumn="email">
-          <div class="flex jc-start align-items-center">
+          <div class="d-flex jc-start align-items-center">
             Email
             <p-sortIcon field="email"></p-sortIcon>
           </div>
         </th>
         <th pSortableColumn="username">
-          <div class="flex jc-between align-items-center">
+          <div class="d-flex jc-between align-items-center">
             Username
             <p-sortIcon field="username"></p-sortIcon>
           </div>
         </th>
         <th pSortableColumn="city">
-          <div class="flex jc-between align-items-center">
+          <div class="d-flex jc-between align-items-center">
             City
             <p-sortIcon field="city"></p-sortIcon>
           </div>
         </th>
         <th pSortableColumn="country">
-          <div class="flex jc-between align-items-center">
+          <div class="d-flex jc-between align-items-center">
             Country
             <p-sortIcon field="country"></p-sortIcon>
           </div>
         </th>
         <th pSortableColumn="seniority">
-          <div class="flex jc-between align-items-center">
+          <div class="d-flex jc-between align-items-center">
             Seniority
             <p-sortIcon field="seniority"></p-sortIcon>
           </div>
         </th>
         <th pSortableColumn="role">
-          <div class="flex jc-between align-items-center">
+          <div class="d-flex jc-between align-items-center">
             Role
             <p-sortIcon field="role"></p-sortIcon>
             <p-columnFilter type="text" field="role" display="menu" class="ml-auto"></p-columnFilter>
           </div>
         </th>
         <th pSortableColumn="tags">
-          <div class="flex jc-between align-items-center">
+          <div class="d-flex jc-between align-items-center">
             Tags
             <p-sortIcon field="tags"></p-sortIcon>
             <p-columnFilter type="text" field="tags" display="menu" class="ml-auto"></p-columnFilter>
           </div>
         </th>
         <th pSortableColumn="teams">
-          <div class="flex jc-between align-items-center">
+          <div class="d-flex jc-between align-items-center">
             Teams
             <p-sortIcon field="teams"></p-sortIcon>
             <p-columnFilter type="text" field="teams" display="menu" class="ml-auto"></p-columnFilter>
           </div>
         </th>
         <th pSortableColumn="reportsTo">
-          <div class="flex jc-between align-items-center">
+          <div class="d-flex jc-between align-items-center">
             Superior
             <p-sortIcon field="reportsTo"></p-sortIcon>
             <p-columnFilter type="text" field="reportsTo" display="menu" class="ml-auto"></p-columnFilter>
           </div>
         </th>
         <th pSortableColumn="status">
-          <div class="flex jc-between align-items-center">
+          <div class="d-flex jc-between align-items-center">
             Status
             <p-sortIcon field="status"></p-sortIcon>
             <p-columnFilter type="text" field="status" display="menu" class="ml-auto"></p-columnFilter>
           </div>
         </th>
         <th pSortableColumn="actions">
-          <div class="flex jc-between align-items-center">
+          <div class="d-flex jc-between align-items-center">
             Actions
           </div>
         </th>

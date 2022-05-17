@@ -44,6 +44,7 @@ import { TableModule } from 'primeng/table';
 import { InputTextModule } from 'primeng/inputtext';
 import { CheckboxModule } from 'primeng/checkbox';
 import { DropdownModule } from 'primeng/dropdown';
+import { MultiSelectModule } from 'primeng/multiselect';
 
 @NgModule({
   declarations: [
@@ -94,7 +95,8 @@ import { DropdownModule } from 'primeng/dropdown';
     TableModule,
     InputTextModule,
     CheckboxModule,
-    DropdownModule
+    DropdownModule,
+    MultiSelectModule,
   ],
   providers: [{provide: HTTP_INTERCEPTORS, useClass: RequestInterceptor, multi: true}],
   bootstrap: [AppComponent]

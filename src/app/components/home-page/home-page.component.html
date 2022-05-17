@@ -1,5 +1,5 @@
 <div class="h100p content">
-  <div class="new-project-container grid">
+  <div class="new-project-container d-grid">
     <div class="input">
       <input type="text" pInputText [(ngModel)]="projectName" placeholder="Project name..."/>
     </div>
@@ -12,9 +12,9 @@
         <p class="filename">{{getFileNames()}}</p>
       </div>
     </div>
-    <button mat-button class="sortinghat-orange-bg save-button font-style-smaller" (click)="save()">SAVE</button>
+    <button mat-button class="save-button font-style" (click)="save()">SAVE</button>
   </div>
-  <div class="block">
+  <div class="d-block">
     <app-project *ngFor="let project of projects" [project]="project" (projectDeleted)="onDelete()"></app-project>
   </div>
 </div>

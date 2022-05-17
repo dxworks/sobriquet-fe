@@ -94,23 +94,7 @@ export class HomePageComponent implements OnInit {
   }
 
   changeIdentityToEngineer(identities: Identity[]) {
-    identities?.forEach(identity => {
-      let engineer = new Engineer();
-      if (identity.username) {
-        engineer.username = identity.username;
-      }
-      if (identity.firstName) {
-        identity.lastName ? engineer.name = identity.firstName + ' ' + identity.lastName : engineer.name = identity.firstName;
-      } else {
-        if (identity.lastName) {
-          engineer.name = identity.lastName;
-        }
-      }
-      if (identity.email) {
-        engineer.email = identity.email;
-      }
-      this.engineers.push(engineer);
-    });
+    this.engineers = this.engineerService.changeIdentityToEngineer(identities);
   }
 
   onDelete() {

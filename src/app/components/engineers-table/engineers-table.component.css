@@ -55,9 +55,10 @@
 }
 
 .mat-chip {
-  background: #1FAFA9;
-  color: white;
+  background: white;
+  color: #4A4343;
   font-size: 12px;
+  border: 1px solid #1FAFA9;
 }
 
 .mat-form-field {

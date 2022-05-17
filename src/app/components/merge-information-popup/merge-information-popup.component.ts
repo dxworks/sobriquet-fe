@@ -110,31 +110,6 @@ export class MergeInformationPopupComponent implements OnInit {
 
   useProperty(value, property: string) {
     this.mergedEngineer[property] = value;
-    this.selectValue(value, property);
-  }
-
-  selectValue(value, property: string) {
-    switch (property) {
-      case 'tags': {
-        this.tagFormControl.setValue(value);
-        break;
-      }
-      case 'role': {
-        this.rolesFormControl.setValue([value]);
-        break;
-      }
-      case 'status': {
-        this.statusFormControl.setValue([value]);
-        break;
-      }
-      case 'teams': {
-        this.teamsFormControl.setValue(this.getSelectedTeams(value));
-        break;
-      }
-      case 'reportsTo': {
-        this.engineersFormControl.setValue([this.engineers.find(eng => eng.id === value)]);
-      }
-    }
   }
 
   getSelectedTeams(value: string[]): Team[] {
@@ -210,5 +185,13 @@ export class MergeInformationPopupComponent implements OnInit {
 
   anonymize() {
     this.mergedEngineer = this.engineerService.anonymize(this.mergedEngineer, this.name);
+  }
+
+  getUniqueTags(engineerTags: Tag[]): Tag[] {
+    return engineerTags?.filter((value, index, self) =>
+      index === self.findIndex((t) => (
+        t.name === value.name
+      ))
+    )
   }
 }

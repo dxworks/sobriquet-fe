@@ -1,5 +1,5 @@
 <h1 mat-dialog-title>{{selectedEngineer.name}}</h1>
-<div mat-dialog-content class="grid">
+<div mat-dialog-content class="d-grid">
   <div class="d-flex mb-2">
     <p-dropdown [options]="characters" [(ngModel)]="selectedEngineer.name" [editable]="true"
                 placeholder="Name"></p-dropdown>
@@ -34,21 +34,21 @@
         </td>
       </ng-container>
       <ng-container matColumnDef="name">
-        <mat-header-cell *matHeaderCellDef class="font-style-smaller">Name</mat-header-cell>
+        <mat-header-cell *matHeaderCellDef class="font-style">Name</mat-header-cell>
         <mat-cell *matCellDef="let engineer"
-                  class="font-style-smaller"> {{engineer?.firstName}} {{engineer?.lastName}}</mat-cell>
+                  class="font-style"> {{engineer?.firstName}} {{engineer?.lastName}}</mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="email">
-        <mat-header-cell *matHeaderCellDef class="font-style-smaller"> Email address</mat-header-cell>
-        <mat-cell *matCellDef="let engineer" class="font-style-smaller">{{engineer?.email}}
+        <mat-header-cell *matHeaderCellDef class="font-style"> Email address</mat-header-cell>
+        <mat-cell *matCellDef="let engineer" class="font-style">{{engineer?.email}}
           <mat-icon class="icon sortinghat-cyan ml-10" (click)="useEmail(engineer.email)">import_export</mat-icon>
         </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="actions">
-        <mat-header-cell *matHeaderCellDef class="font-style-smaller"> Reject</mat-header-cell>
-        <mat-cell *matCellDef="let engineer" class="font-style-smaller">
+        <mat-header-cell *matHeaderCellDef class="font-style"> Reject</mat-header-cell>
+        <mat-cell *matCellDef="let engineer" class="font-style">
           <mat-icon class="icon sortinghat-orange" (click)="identities.push(engineer); this.rejectIdentity(engineer)">call_split</mat-icon>
         </mat-cell>
       </ng-container>

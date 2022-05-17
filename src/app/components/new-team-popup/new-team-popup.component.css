@@ -1,0 +1,26 @@
+::ng-deep.mat-dialog-title {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-size: 2rem;
+  font-weight: normal;
+}
+
+:host::ng-deep.p-inputtext {
+  width: 100%;
+  margin-bottom: 0.5rem;
+  background: white !important;
+  border: 1px solid #DBDDDD !important;
+  color: #4A4343;
+  box-shadow: unset;
+}
+
+::ng-deep::placeholder {
+  color: #DBDDDD;
+}
+
+::ng-deep.p-inputtext, ::ng-deep.p-inputtext:enabled:hover {
+  background: white;
+  border: 1px solid #DBDDDD;
+  border-radius: 5px;
+  box-shadow: unset;
+  color: #4A4343;
+}

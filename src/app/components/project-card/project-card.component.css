@@ -1,21 +1,21 @@
-::ng-deep .mat-card{
-  border: 1px solid #FD8947;
+.card{
+  border: 1px solid #DBDDDD;
   float: left;
-  margin: 1px;
   padding: 10px 30px;
-  margin-left: 5%;
+  margin-left: 40px;
   margin-top: 20px;
   margin-right: 40px;
   filter: drop-shadow(2px 4px 6px lightgray);
   cursor: pointer;
   width: 300px;
   height: 5rem;
+  border-radius: 5px;
 }
 
-._mat-animation-noopable.mat-card {
-  justify-content: center;
-}
-
-.w-7 {
-  width: 7rem;
+.delete-btn {
+  min-width: 40px;
+  width: 40px;
+  height: 40px;
+  font-size: 20px;
+  padding: 5px;
 }

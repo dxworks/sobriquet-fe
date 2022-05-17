@@ -1,5 +1,3 @@
-/* You can add global styles to this file, and also import other style files */
-
 html, body {
   height: 100%;
 }
@@ -7,82 +5,6 @@ html, body {
 body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
-}
-
-.flex {
-  display: flex !important;
-}
-
-.grid {
-  display: grid !important;
-}
-
-.block {
-  display: block !important;
-}
-
-.mb-2 {
-  margin-bottom: 2rem;
-}
-
-.mt-5 {
-  margin-top: 5px;
-}
-
-.mb-5 {
-  margin-bottom: 5px;
-}
-
-.mb-40 {
-  margin-bottom: 40px !important;
-}
-
-.mr-auto {
-  margin-right: auto !important;
-}
-
-.mr-10 {
-  margin-right: 10px !important;
-}
-
-.ml-auto {
-  margin-left: auto !important;
-}
-
-.ml-10 {
-  margin-left: 10px !important;
-}
-
-.ml-10p {
-  margin-left: 10% !important;
-}
-
-.ml-25p {
-  margin-left: 25% !important;
-}
-
-.ml-40p {
-  margin-left: 40% !important;
-}
-
-.ml-80p {
-  margin-left: 80% !important;
-}
-
-.h100p {
-  min-height: 100%;
-}
-
-.w-80p {
-  width: 80%;
-}
-
-.w-85p {
-  width: 85%;
-}
-
-.w-100p {
-  width: 100%;
 }
 
 .sortinghat-orange {
@@ -103,25 +25,57 @@ body {
   color: white;
 }
 
+.mb-2 {
+  margin-bottom: 2rem;
+}
+
+.mb-5 {
+  margin-bottom: 5px;
+}
+
+.mb-40 {
+  margin-bottom: 40px !important;
+}
+
+.mt-5 {
+  margin-top: 5px;
+}
+
+.mr-10 {
+  margin-right: 10px !important;
+}
+
+.ml-auto {
+  margin-left: auto !important;
+}
+
+.ml-10 {
+  margin-left: 10px !important;
+}
+
+.ml-40p {
+  margin-left: 40% !important;
+}
+
+.h100p {
+  min-height: 100%;
+}
+
+.w-85p {
+  width: 85%;
+}
+
+.w-100p {
+  width: 100%;
+}
+
 .add-button {
   color: white;
   margin-left: 45% !important;
 }
 
-.font-style-smaller {
-  font: normal normal normal 14px/30px Muli !important;
-}
-
 .font-style {
-  font: normal normal normal 25px/75px Muli;
-}
-
-.font-style-bigger {
-  font: normal normal bold 30px/35px GT Walsheim Pro;
-}
-
-.fs-12 {
-  font-size: 12px !important;
+  font: normal normal normal 14px/30px Muli !important;
 }
 
 .d-flex {
@@ -130,6 +84,10 @@ body {
 
 .d-grid {
   display: grid;
+}
+
+.d-block {
+  display: block !important;
 }
 
 .jc-start {
@@ -154,4 +112,8 @@ body {
 
 .align-items-center {
   align-items: center;
+}
+
+.f-wrap {
+  flex-wrap: wrap
 }

@@ -1,7 +1,7 @@
 <app-header [project]="project" [currentView]="currentView" (scrollButtonClicked)="scroll($event)"></app-header>
-<div class="flex h100p content">
+<div class="d-flex h100p content">
   <div class="w-100p">
-    <div class="grid">
+    <div class="d-grid">
       <div class="d-flex align-items-center">
         <p class="title">{{project?.name}}</p>
         <i class="pi pi-upload icon" (click)="openFileUploadDialog()"></i>

@@ -1,16 +1,10 @@
 <h1 mat-dialog-title>Create a new team</h1>
-<div mat-dialog-content class="grid">
-  <mat-form-field appearance="fill">
-    <mat-label>Team name</mat-label>
-    <input matInput [(ngModel)]="newTeam.name">
-  </mat-form-field>
+<div mat-dialog-content class="d-grid">
+    <input type="text" [(ngModel)]="newTeam.name" pInputText placeholder="Name">
 
-  <mat-form-field appearance="fill">
-    <mat-label>Team description</mat-label>
-    <input matInput [(ngModel)]="newTeam.description">
-  </mat-form-field>
+    <input type="text" [(ngModel)]="newTeam.description" pInputText placeholder="Description">
 </div>
-<div mat-dialog-actions>
+<div mat-dialog-actions class="jc-center">
   <button mat-button (click)="onCancelClick()">CANCEL</button>
-  <button mat-button cdkFocusInitial (click)="createTeam()" class="ml-auto">SAVE</button>
+  <button mat-button cdkFocusInitial (click)="createTeam()">SAVE</button>
 </div>

@@ -74,12 +74,6 @@ export class NewEngineerPopupComponent implements OnInit {
   addEngineer() {
     this.newEngineer.project = this.project.id;
     this.newEngineer.identities = [];
-    if (this.newEngineer.teams.length > 0) {
-      this.newEngineer.teams = [this.newEngineer.teams];
-    }
-    if (this.newEngineer.tags.length > 0) {
-      this.newEngineer.tags = [this.newEngineer.tags];
-    }
     this.project.engineers.push(this.newEngineer);
     this.projectService.editProject(this.project.id, this.project).subscribe(() => this.onCancelClick());
   }

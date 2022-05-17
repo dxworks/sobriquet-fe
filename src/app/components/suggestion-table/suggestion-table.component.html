@@ -1,7 +1,7 @@
 <div class="container">
   <div class="d-grid">
     <p-table
-      [value]="selectedIdentities"
+      [value]="suggestions"
       [(selection)]="selectedIdentities"
       responsiveLayout="scroll">
       <ng-template pTemplate="caption">
@@ -16,7 +16,7 @@
               <mat-icon>merge_type</mat-icon>
             </button>
           </div>
-          <div class="flex w-85p align-items-center jc-between" *ngIf="tableIdentities?.length > 0">
+          <div class="d-flex w-85p align-items-center jc-between" *ngIf="tableIdentities?.length > 0">
             <mat-icon class="clean-name-icon sortinghat-orange" matTooltip="Sanitize" (click)="cleanName()"> format_size
             </mat-icon>
             <p-dropdown [options]="characters" [(ngModel)]="mergeResult.name" [editable]="true" placeholder="Name"></p-dropdown>
@@ -39,27 +39,27 @@
             <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
           </th>
           <th pSortableColumn="firstName">
-            <div class="flex jc-between align-items-center">
+            <div class="d-flex jc-between align-items-center">
               First Name
             </div>
           </th>
           <th pSortableColumn="lastName" [colSpan]="0.1">
-            <div class="flex jc-start align-items-center">
+            <div class="d-flex jc-start align-items-center">
               Last Name
             </div>
           </th>
           <th pSortableColumn="username">
-            <div class="flex jc-between align-items-center">
+            <div class="d-flex jc-between align-items-center">
               Username
             </div>
           </th>
           <th pSortableColumn="email">
-            <div class="flex jc-between align-items-center">
+            <div class="d-flex jc-between align-items-center">
               Email
             </div>
           </th>
           <th pSortableColumn="source">
-            <div class="flex jc-between align-items-center">
+            <div class="d-flex jc-between align-items-center">
               Source
             </div>
           </th>

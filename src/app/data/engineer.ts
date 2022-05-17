@@ -1,4 +1,3 @@
-import {Tag} from './tag';
 import {Identity} from './identity';
 
 export class Engineer {

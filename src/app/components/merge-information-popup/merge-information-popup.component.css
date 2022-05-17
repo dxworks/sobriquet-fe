@@ -41,7 +41,24 @@
   justify-content: center;
 }
 
-:host::ng-deep.p-inputtext, :host::ng-deep.p-dropdown {
+::ng-deep.p-multiselect {
+  background: white!important;
+  border: 1px solid #DBDDDD!important;
+  height: 3.5rem;
+  display: flex;
+  align-items: center;
+}
+
+::ng-deep.p-multiselect .p-multiselect-panel, ::ng-deep.p-multiselect-panel .p-multiselect-header {
+  background: white!important;
+  border: 1px solid #DBDDDD!important;
+}
+
+::ng-deep.p-multiselect-panel .p-multiselect-items .p-multiselect-item {
+  color: #4A4343!important;
+}
+
+:host::ng-deep.p-inputtext, :host::ng-deep.p-dropdown, :host::ng-deep.p-multiselect {
   width: 10rem;
   margin: 0.5rem;
 }
@@ -57,7 +74,7 @@
   max-width: unset !important;
 }
 
-::ng-deep.p-dropdown .p-dropdown-label.p-placeholder {
+::ng-deep.p-dropdown .p-dropdown-label.p-placeholder, ::ng-deep.p-multiselect .p-multiselect-label.p-placeholder {
   color: #DBDDDD !important;
 }
 

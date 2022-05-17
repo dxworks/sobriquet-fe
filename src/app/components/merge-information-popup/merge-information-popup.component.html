@@ -1,6 +1,6 @@
 <h1 mat-dialog-title>Merge information</h1>
-<div mat-dialog-content class="grid">
-  <div class="flex">
+<div mat-dialog-content class="d-grid">
+  <div class="d-flex">
     <p-dropdown [options]="characters" [(ngModel)]="mergedEngineer.name" [editable]="true"
                 placeholder="Name"></p-dropdown>
 
@@ -14,14 +14,14 @@
 
     <input type="text" [(ngModel)]="mergedEngineer.senority" placeholder="Seniority" pInputText>
   </div>
-  <div class="flex">
-    <p-dropdown [options]="teams" [(ngModel)]="mergedEngineer.teams" placeholder="Team"
-                optionLabel="name" id="team" optionValue="id"></p-dropdown>
+  <div class="d-flex">
+    <p-multiSelect [options]="teams" [(ngModel)]="mergedEngineer.teams" placeholder="Team"
+                optionLabel="name" id="team" optionValue="id"></p-multiSelect>
 
     <p-dropdown [options]="roles" [(ngModel)]="mergedEngineer.role" placeholder="Role" optionLabel="name"
                 optionValue="name"></p-dropdown>
 
-    <p-dropdown [options]="tags" [(ngModel)]="mergedEngineer.tags" placeholder="Tag" optionLabel="name"></p-dropdown>
+    <p-multiSelect [options]="tags" [(ngModel)]="mergedEngineer.tags" placeholder="Tag" optionLabel="name"></p-multiSelect>
 
     <p-dropdown [options]="engineers" [(ngModel)]="mergedEngineer.reportsTo" placeholder="Superior"
                 optionLabel="name" optionValue="id"></p-dropdown>
@@ -33,82 +33,82 @@
   <div class="table">
     <mat-table [dataSource]="dataSource" *ngIf="dataSource?.data.length > 0">
       <ng-container matColumnDef="name">
-        <mat-header-cell *matHeaderCellDef class="font-style-smaller">Name</mat-header-cell>
+        <mat-header-cell *matHeaderCellDef class="font-style">Name</mat-header-cell>
         <mat-cell *matCellDef="let engineer"
-                  class="font-style-smaller">
+                  class="font-style">
           <p (click)="useProperty(engineer.name, 'name')">{{engineer?.name}}</p>
         </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="email">
-        <mat-header-cell *matHeaderCellDef class="font-style-smaller"> Email address</mat-header-cell>
-        <mat-cell *matCellDef="let engineer" class="font-style-smaller">
+        <mat-header-cell *matHeaderCellDef class="font-style"> Email address</mat-header-cell>
+        <mat-cell *matCellDef="let engineer" class="font-style">
           <p (click)="useProperty(engineer.email, 'email')">{{engineer?.email}} </p>
         </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="username">
-        <mat-header-cell *matHeaderCellDef class="font-style-smaller"> Username</mat-header-cell>
-        <mat-cell *matCellDef="let engineer" class="font-style-smaller">
+        <mat-header-cell *matHeaderCellDef class="font-style"> Username</mat-header-cell>
+        <mat-cell *matCellDef="let engineer" class="font-style">
           <p (click)="useProperty(engineer.username, 'username')">{{engineer?.username}}</p>
         </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="city">
-        <mat-header-cell *matHeaderCellDef class="font-style-smaller"> City</mat-header-cell>
-        <mat-cell *matCellDef="let engineer" class="font-style-smaller">
+        <mat-header-cell *matHeaderCellDef class="font-style"> City</mat-header-cell>
+        <mat-cell *matCellDef="let engineer" class="font-style">
           <p (click)="useProperty(engineer.city, 'city')">{{engineer?.city}}</p>
         </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="country">
-        <mat-header-cell *matHeaderCellDef class="font-style-smaller"> Country</mat-header-cell>
-        <mat-cell *matCellDef="let engineer" class="font-style-smaller">
+        <mat-header-cell *matHeaderCellDef class="font-style"> Country</mat-header-cell>
+        <mat-cell *matCellDef="let engineer" class="font-style">
           <p (click)="useProperty(engineer.country, 'country')">{{engineer?.country}}</p>
         </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="senority">
-        <mat-header-cell *matHeaderCellDef class="font-style-smaller"> Senority</mat-header-cell>
-        <mat-cell *matCellDef="let engineer" class="font-style-smaller">
+        <mat-header-cell *matHeaderCellDef class="font-style"> Senority</mat-header-cell>
+        <mat-cell *matCellDef="let engineer" class="font-style">
           <p (click)="useProperty(engineer.senority, 'senority')">{{engineer?.senority}}</p>
         </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="role">
-        <mat-header-cell *matHeaderCellDef class="font-style-smaller"> Role</mat-header-cell>
-        <mat-cell *matCellDef="let engineer" class="font-style-smaller">
+        <mat-header-cell *matHeaderCellDef class="font-style"> Role</mat-header-cell>
+        <mat-cell *matCellDef="let engineer" class="font-style">
           <p (click)="useProperty(engineer.role, 'role')">{{engineer?.role}}</p>
         </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="tags">
-        <mat-header-cell *matHeaderCellDef class="font-style-smaller"> Tags</mat-header-cell>
-        <mat-cell *matCellDef="let engineer" class="font-style-smaller">
+        <mat-header-cell *matHeaderCellDef class="font-style"> Tags</mat-header-cell>
+        <mat-cell *matCellDef="let engineer" class="font-style">
           <p
-            (click)="useProperty(engineer.tags, 'tags')">{{getTags(engineer?.tags)}}</p>
+            (click)="useProperty(engineer.tags, 'tags')">{{getTags(getUniqueTags(engineer?.tags))}}</p>
         </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="teams">
-        <mat-header-cell *matHeaderCellDef class="font-style-smaller"> Teams</mat-header-cell>
-        <mat-cell *matCellDef="let engineer" class="font-style-smaller">
+        <mat-header-cell *matHeaderCellDef class="font-style"> Teams</mat-header-cell>
+        <mat-cell *matCellDef="let engineer" class="font-style">
           <p
             (click)="useProperty(engineer.teams, 'teams')">{{getTeams(engineer?.teams)}}</p>
         </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="reportsTo">
-        <mat-header-cell *matHeaderCellDef class="font-style-smaller"> Reports To</mat-header-cell>
-        <mat-cell *matCellDef="let engineer" class="font-style-smaller">{{getReportsTo(engineer?.reportsTo)}}
+        <mat-header-cell *matHeaderCellDef class="font-style"> Reports To</mat-header-cell>
+        <mat-cell *matCellDef="let engineer" class="font-style">{{getReportsTo(engineer?.reportsTo)}}
           <p
             (click)="useProperty(engineer.reportsTo, 'reportsTo')">{{getReportsTo(engineer?.reportsTo)}}</p>
         </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="status">
-        <mat-header-cell *matHeaderCellDef class="font-style-smaller"> Status</mat-header-cell>
-        <mat-cell *matCellDef="let engineer" class="font-style-smaller">
+        <mat-header-cell *matHeaderCellDef class="font-style"> Status</mat-header-cell>
+        <mat-cell *matCellDef="let engineer" class="font-style">
           <p
             (click)="useProperty(engineer.status, 'status')">{{engineer?.status}}</p>
         </mat-cell>
