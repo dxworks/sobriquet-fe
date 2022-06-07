@@ -16,10 +16,6 @@ body {
   color: white;
 }
 
-.sortinghat-cyan {
-  color: #1FAFA9 !important;
-}
-
 .sortinghat-cyan-bg {
   background: #1FAFA9;
   color: white;
@@ -51,10 +47,6 @@ body {
 
 .ml-10 {
   margin-left: 10px !important;
-}
-
-.ml-40p {
-  margin-left: 40% !important;
 }
 
 .h100p {
@@ -98,14 +90,6 @@ body {
   justify-content: center;
 }
 
-.jc-end {
-  justify-content: end !important;
-}
-
-.jc-around {
-  justify-content: space-around;
-}
-
 .jc-between {
   justify-content: space-between;
 }
@@ -114,6 +98,6 @@ body {
   align-items: center;
 }
 
-.f-wrap {
-  flex-wrap: wrap
+.cursor-pointer {
+  cursor: pointer;
 }

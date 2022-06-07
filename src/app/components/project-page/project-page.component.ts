@@ -7,6 +7,7 @@ import { ProjectService } from '../../services/project.service';
 import { FileUploadPopupComponent } from '../file-upload-popup/file-upload-popup.component';
 import { MatDialog } from '@angular/material/dialog';
 import { EngineerService } from '../../services/engineer.service';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-project-page',
@@ -120,5 +121,11 @@ export class ProjectPageComponent implements OnInit {
   scroll($event) {
     this.currentView = $event;
     document.getElementById($event).scrollIntoView();
+  }
+
+  exportToJson() {
+    return saveAs(
+      new Blob([JSON.stringify(this.engineers, null, 2)], {type: 'JSON'}), `${this.project.name}.json`
+    );
   }
 }

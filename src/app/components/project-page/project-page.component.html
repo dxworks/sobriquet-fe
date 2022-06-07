@@ -5,6 +5,7 @@
       <div class="d-flex align-items-center">
         <p class="title">{{project?.name}}</p>
         <i class="pi pi-upload icon" (click)="openFileUploadDialog()"></i>
+        <i class="pi pi-download icon" (click)="exportToJson()"></i>
       </div>
       <app-engineers-table id="authors"
                            [engineers]="engineers"

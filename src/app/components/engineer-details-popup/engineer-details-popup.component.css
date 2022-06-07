@@ -9,9 +9,12 @@
 }
 
 ::ng-deep.mat-dialog-container {
-  width: 450px;
+  width: 500px;
   display: flex;
   justify-content: center;
+}
+:host::ng-deep.mat-dialog-content{
+  width: 500px;
 }
 
 .icon {

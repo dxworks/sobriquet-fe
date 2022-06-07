@@ -1,17 +1,17 @@
 <h1 mat-dialog-title>{{selectedEngineer.name}}</h1>
 <div mat-dialog-content class="d-grid">
-  <div class="d-flex mb-2">
+  <div class="d-flex mb-2 jc-center">
     <p-dropdown [options]="characters" [(ngModel)]="selectedEngineer.name" [editable]="true"
                 placeholder="Name"></p-dropdown>
 
     <input type="text" [(ngModel)]="selectedEngineer.username" placeholder="Username" pInputText>
   </div>
-  <div class="d-flex mb-2">
+  <div class="d-flex mb-2 jc-center">
     <input type="text" [(ngModel)]="selectedEngineer.email" placeholder="Email" pInputText>
 
     <input type="text" [(ngModel)]="selectedEngineer.senority" placeholder="Seniority" pInputText>
   </div>
-  <div class="d-flex mb-2">
+  <div class="d-flex mb-2 jc-center">
     <input type="text" [(ngModel)]="selectedEngineer.city" placeholder="City" pInputText>
 
     <input type="text" [(ngModel)]="selectedEngineer.country" placeholder="Country" pInputText>
@@ -41,15 +41,16 @@
 
       <ng-container matColumnDef="email">
         <mat-header-cell *matHeaderCellDef class="font-style"> Email address</mat-header-cell>
-        <mat-cell *matCellDef="let engineer" class="font-style">{{engineer?.email}}
-          <mat-icon class="icon sortinghat-cyan ml-10" (click)="useEmail(engineer.email)">import_export</mat-icon>
+        <mat-cell *matCellDef="let engineer" class="font-style cursor-pointer" (click)="useEmail(engineer.email)">{{engineer?.email}}
         </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="actions">
         <mat-header-cell *matHeaderCellDef class="font-style"> Reject</mat-header-cell>
         <mat-cell *matCellDef="let engineer" class="font-style">
-          <mat-icon class="icon sortinghat-orange" (click)="identities.push(engineer); this.rejectIdentity(engineer)">call_split</mat-icon>
+          <mat-icon class="icon sortinghat-orange" (click)="identities.push(engineer); this.rejectIdentity(engineer)">
+            call_split
+          </mat-icon>
         </mat-cell>
       </ng-container>
 

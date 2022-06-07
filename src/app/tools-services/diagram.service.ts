@@ -16,7 +16,7 @@ export class DiagramService {
         id: engineer.id,
         type: 'ellipse',
         name: engineer.name,
-        parentID: engineer.reportsTo.toString()
+        parentID: Number(engineer.reportsTo)
       })
     })
     return nodes;
@@ -29,7 +29,7 @@ export class DiagramService {
         id: engineer.id,
         type: 'ellipse',
         name: engineer.name,
-        parentID: engineer.reportsTo.toString()
+        parentID: Number(engineer.reportsTo)
       })
     })
     return nodes;

@@ -18,24 +18,32 @@ export class MergeSuggestionService {
       this.emailIsSimilar(firstIdentity?.email, secondIdentity?.email) || this.usernameIsSimilar(firstIdentity?.username, secondIdentity?.username);
   }
 
-  fullNameIsSimilar(name1: string, name2: string): boolean {
-    return this.getCleanSortedName(name1) === this.getCleanSortedName(name2);
-  }
-
   firstNameIsSimilar(firstname1: string, firstname2: string): boolean {
-    return this.getCleanSortedName(firstname1) === this.getCleanSortedName(firstname2);
+    if (firstname1 !== null || firstname2 !== null) {
+      return this.getCleanSortedName(firstname1) === this.getCleanSortedName(firstname2);
+    }
+    return false;
   }
 
   lastNameIsSimilar(lastname1: string, lastname2: string): boolean {
-    return this.getCleanSortedName(lastname1) === this.getCleanSortedName(lastname2);
+    if (lastname1 !== null || lastname2 !== null) {
+      return this.getCleanSortedName(lastname1) === this.getCleanSortedName(lastname2);
+    }
+    return false;
   }
 
   emailIsSimilar(email1: string, email2: string): boolean {
-    return this.getCleanSortedEmail(email1) === this.getCleanSortedEmail(email2);
+    if (email1 !== null || email2 !== null) {
+      return this.getCleanSortedEmail(email1) === this.getCleanSortedEmail(email2);
+    }
+    return false;
   }
 
   usernameIsSimilar(username1: string, username2: string): boolean {
-    return this.getCleanSortedUsername(username1) === this.getCleanSortedUsername(username2);
+    if (username1 !== null || username2 !== null) {
+      return this.getCleanSortedUsername(username1) === this.getCleanSortedUsername(username2);
+    }
+    return false;
   }
 
   getCleanSortedName(name: string): string {
@@ -74,12 +82,12 @@ export class MergeSuggestionService {
   }
 
   buildCluster(identities: Identity[]) {
-    let cluster = new Map<string, Identity[]>();
-    identities?.forEach(identity => {
-      if (Array.from(cluster.keys()).find(key => this.fullNameIsSimilar(key, identity.firstName + ' ' + identity.lastName))) {
-        cluster.get(Array.from(cluster.keys()).find(key => this.fullNameIsSimilar(key, identity.firstName + ' ' + identity.lastName))).push(identity)
+    let cluster = new Map<Identity, Identity[]>();
+    identities.forEach(identity => {
+      if (Array.from(cluster.keys()).find(key => this.identitiesAreSimilar(key, identity))) {
+        cluster.get(Array.from(cluster.keys()).find(key => this.identitiesAreSimilar(key, identity))).push(identity)
       } else {
-        cluster.set(identity.firstName + ' ' + identity.lastName, [identity]);
+        cluster.set(identity, [identity]);
       }
     })
     return Array.from(cluster.values());
