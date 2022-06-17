@@ -44,7 +44,7 @@ export class EngineerDetailsPopupComponent implements OnInit {
   }
 
   save() {
-    this.identities = this.project.identities = this.project.identities.concat(this.selection.selected);
+    this.project.identities = this.identities.concat(this.project.identities);
     this.projectService.editProject(this.project.id, this.project).subscribe();
     this.dialogRef.close({projectIdentities: this.identities})
   }

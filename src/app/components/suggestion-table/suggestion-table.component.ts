@@ -98,10 +98,10 @@ export class SuggestionTableComponent implements OnInit, OnChanges {
     this.mergeResult = {
       city: '',
       country: '',
-      email: this.suggestions[0]?.email,
+      email: this.selectedIdentities[0]?.email,
       identities: [],
       ignorable: false,
-      name: this.suggestions[0]?.firstName + ' ' + this.suggestions[0]?.lastName,
+      name: this.selectedIdentities[0]?.firstName + ' ' + this.selectedIdentities[0]?.lastName,
       project: this.project?.id,
       reportsTo: '',
       role: '',
@@ -114,8 +114,8 @@ export class SuggestionTableComponent implements OnInit, OnChanges {
   }
 
   getUsername(): string {
-    if (this.suggestions[0]?.username) {
-      return this.suggestions[0].username
+    if (this.selectedIdentities[0]?.username) {
+      return this.selectedIdentities[0].username
     } else {
       return '';
     }
@@ -247,10 +247,13 @@ export class SuggestionTableComponent implements OnInit, OnChanges {
 
   updateProjectIdentities(engineers) {
     this.selectedIdentities.forEach(suggestion => this.project.identities = this.project.identities.filter(identity => identity !== suggestion));
-    this.projectService.editProject(this.project.id, this.project).subscribe(() => this.projectEmitter.emit({
-      projectIdentities: this.project.identities,
-      engineers: engineers
-    }));
+    this.projectService.editProject(this.project.id, this.project).subscribe(() => {
+      this.projectEmitter.emit({
+        projectIdentities: this.project.identities,
+        engineers: engineers
+      });
+      this.demergedIdentities = [];
+    });
   }
 
   changePage(pageIndex: number) {

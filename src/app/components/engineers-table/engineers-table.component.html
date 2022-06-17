@@ -24,24 +24,24 @@
           </span>
         </div>
         <div class="buttons-section">
-          <button mat-button class="sortinghat-cyan-bg add-button mr-10" matTooltip="Sanitize Names"
+          <button mat-button class="sobriquet-cyan-bg add-button mr-10" matTooltip="Sanitize Names"
                   (click)="sanitizeNames()" *ngIf="selectedEngineers.length > 0">
             <mat-icon>text_fields</mat-icon>
           </button>
-          <button mat-button class="sortinghat-orange-bg add-button mr-10" matTooltip="Anonymize"
+          <button mat-button class="sobriquet-orange-bg add-button mr-10" matTooltip="Anonymize"
                   (click)="anonymize()" *ngIf="selectedEngineers.length > 0">
             <mat-icon>perm_identity</mat-icon>
           </button>
-          <button mat-button class="sortinghat-cyan-bg add-button mr-10" matTooltip="Mark as ignored"
+          <button mat-button class="sobriquet-cyan-bg add-button mr-10" matTooltip="Mark as ignored"
                   (click)="ignore()" *ngIf="selectedEngineers.length > 0">
             <mat-icon *ngIf="!showIgnored">block</mat-icon>
             <mat-icon *ngIf="showIgnored">check</mat-icon>
           </button>
-          <button mat-button class="sortinghat-orange-bg add-button mr-10" matTooltip="Merge"
+          <button mat-button class="sobriquet-orange-bg add-button mr-10" matTooltip="Merge"
                   (click)="mergeEngineers()">
             <mat-icon>merge_type</mat-icon>
           </button>
-          <button mat-button class="sortinghat-cyan-bg add-button" matTooltip="Add"
+          <button mat-button class="sobriquet-cyan-bg add-button" matTooltip="Add"
                   (click)="openDialog()">
             <mat-icon>add</mat-icon>
           </button>
@@ -254,7 +254,7 @@
           <button mat-button class="action-button" id="edit-button"
                   matTooltip="Edit"
                   (click)="selectedEngineer = engineer; openInfoDialog()">
-            <mat-icon class="edit-icon sortinghat-orange">edit</mat-icon>
+            <mat-icon class="edit-icon sogriquet-orange">edit</mat-icon>
           </button>
           <span class="button-number">{{engineer.identities?.length}}</span>
         </td>

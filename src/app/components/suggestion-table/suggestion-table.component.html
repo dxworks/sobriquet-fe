@@ -3,21 +3,22 @@
     <p-table
       [value]="suggestions"
       [(selection)]="selectedIdentities"
+      (selectionChange)="getMergedEngineerDetails();"
       responsiveLayout="scroll">
       <ng-template pTemplate="caption">
         <div class="d-flex jc-between">
           <div class="mt-5" *ngIf="tableIdentities?.length > 0">
-            <button class="sortinghat-orange-bg mr-10" mat-button matTooltip="Reject"
+            <button class="sobriquet-orange-bg mr-10" mat-button matTooltip="Reject"
                     (click)="rejectMerge()">
               <mat-icon>call_split</mat-icon>
             </button>
-            <button class="sortinghat-cyan-bg" mat-button matTooltip="Merge"
+            <button class="sobriquet-cyan-bg" mat-button matTooltip="Merge"
                     (click)="onMergeButtonClicked()">
               <mat-icon>merge_type</mat-icon>
             </button>
           </div>
           <div class="d-flex w-85p align-items-center jc-between" *ngIf="tableIdentities?.length > 0">
-            <mat-icon class="clean-name-icon sortinghat-orange" matTooltip="Sanitize" (click)="cleanName()"> format_size
+            <mat-icon class="clean-name-icon sogriquet-orange" matTooltip="Sanitize" (click)="cleanName()"> format_size
             </mat-icon>
             <p-dropdown [options]="characters" [(ngModel)]="mergeResult.name" [editable]="true" placeholder="Name"></p-dropdown>
 
